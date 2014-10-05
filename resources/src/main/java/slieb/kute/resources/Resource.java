@@ -36,7 +36,7 @@ public interface Resource extends Serializable {
     public static interface Writeable extends Resource {
 
         /**
-         * @return A writer that will write to resource.
+         * @return A writer that will write to resource.g
          * @throws IOException
          */
         public Writer getWriter() throws IOException;
