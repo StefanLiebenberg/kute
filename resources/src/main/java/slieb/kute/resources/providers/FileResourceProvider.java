@@ -16,8 +16,8 @@ public class FileResourceProvider implements ResourceProvider<FileResource>, Ite
     }
 
     @Override
-    public FileResource getResourceByNamespace(String namespace) {
-        return new FileResource(new File(directory, namespace));
+    public FileResource getResourceByName(String path) {
+        return new FileResource(new File(directory, path));
     }
 
     @Override

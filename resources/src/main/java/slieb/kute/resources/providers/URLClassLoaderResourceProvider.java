@@ -21,11 +21,11 @@ public class URLClassLoaderResourceProvider implements ResourceProvider<Resource
         this.urlClassLoader = urlClassLoader;
     }
 
-    public Resource.Readable getResourceByNamespace(String namespace) {
+    public Resource.Readable getResourceByName(String path) {
         for (URL url : urlClassLoader.getURLs()) {
             try {
                 ResourceProvider<? extends Resource.Readable> resourceProvider = FACTORY.create(url);
-                Resource.Readable readable = resourceProvider.getResourceByNamespace(namespace);
+                Resource.Readable readable = resourceProvider.getResourceByName(path);
                 if (readable != null) {
                     return readable;
                 }

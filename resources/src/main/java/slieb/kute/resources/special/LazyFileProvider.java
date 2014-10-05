@@ -10,6 +10,16 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * The LazyFileProvider takes a {@link slieb.kute.resources.Resource.Readable} and copies it into a
+ * temporary file location. This is to deal with interfaces that
+ * specifically require File instances of things you have available on the classpath.
+ *
+ * <pre><code>
+ *      Resource.Readable readable = resourceProvider.getResourceByPath("/slieb/kute/resources/example.txt");
+ *      File file = LazyFileProvider(readable).getFile();
+ * </code></pre>
+ */
 public class LazyFileProvider {
 
     private final static File directory = getDirectory();

@@ -21,10 +21,10 @@ public class RenamedNamespaceProvider<A extends Resource> implements ResourcePro
     }
 
     @Override
-    public RenamedPathResource<A> getResourceByNamespace(String namespace) {
-        String origPath = getRenamedPath(namespace, renamedRoot, originalRoot);
-        A origResource = resourceProvider.getResourceByNamespace(origPath);
-        return new RenamedPathResource<>(origResource, namespace);
+    public RenamedPathResource<A> getResourceByName(String path) {
+        String origPath = getRenamedPath(path, renamedRoot, originalRoot);
+        A origResource = resourceProvider.getResourceByName(origPath);
+        return new RenamedPathResource<>(origResource, path);
     }
 
     @Override

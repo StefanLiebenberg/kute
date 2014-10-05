@@ -16,8 +16,8 @@ public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResourc
     }
 
     @Override
-    public ZipEntryResource getResourceByNamespace(String namespace) {
-        return getResource(zipFile, zipFile.getEntry(namespace));
+    public ZipEntryResource getResourceByName(String path) {
+        return getResource(zipFile, zipFile.getEntry(path));
     }
 
     @Override

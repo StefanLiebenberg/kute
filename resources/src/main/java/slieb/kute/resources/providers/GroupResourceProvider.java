@@ -15,9 +15,9 @@ public class GroupResourceProvider<A extends Resource> implements ResourceProvid
     }
 
     @Override
-    public A getResourceByNamespace(String namespace) {
+    public A getResourceByName(String path) {
         for (ResourceProvider<A> resourceProvider : resourceProviders) {
-            A resource = resourceProvider.getResourceByNamespace(namespace);
+            A resource = resourceProvider.getResourceByName(path);
             if (resource != null) {
                 return resource;
             }

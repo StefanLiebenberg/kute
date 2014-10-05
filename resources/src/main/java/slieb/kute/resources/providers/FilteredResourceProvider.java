@@ -18,8 +18,8 @@ public class FilteredResourceProvider<A extends Resource> implements ResourcePro
     }
 
     @Override
-    public A getResourceByNamespace(String namespace) {
-        A resource = resourceProvider.getResourceByNamespace(namespace);
+    public A getResourceByName(String path) {
+        A resource = resourceProvider.getResourceByName(path);
         if (resource != null && resourceFilter.accepts(resource)) {
             return resource;
         } else {
