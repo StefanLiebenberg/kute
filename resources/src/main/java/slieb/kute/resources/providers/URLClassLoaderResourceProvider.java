@@ -1,9 +1,9 @@
 package slieb.kute.resources.providers;
 
 
-import slieb.kute.resources.Resource;
-import slieb.kute.resources.ResourceProvider;
-import slieb.kute.resources.special.URLToResourceProviderFactory;
+import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceProvider;
+import slieb.kute.resources.ResourceProviderFactory;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,7 +13,6 @@ import java.util.Iterator;
 
 public class URLClassLoaderResourceProvider implements ResourceProvider<Resource.Readable> {
 
-    private static final URLToResourceProviderFactory FACTORY = new URLToResourceProviderFactory();
 
     private final URLClassLoader urlClassLoader;
 
@@ -24,7 +23,7 @@ public class URLClassLoaderResourceProvider implements ResourceProvider<Resource
     public Resource.Readable getResourceByName(String path) {
         for (URL url : urlClassLoader.getURLs()) {
             try {
-                ResourceProvider<? extends Resource.Readable> resourceProvider = FACTORY.create(url);
+                ResourceProvider<? extends Resource.Readable> resourceProvider = ResourceProviderFactory.create(url);
                 Resource.Readable readable = resourceProvider.getResourceByName(path);
                 if (readable != null) {
                     return readable;
@@ -79,7 +78,7 @@ public class URLClassLoaderResourceProvider implements ResourceProvider<Resource
             if (currentResourceIterator != null) {
                 return currentResourceIterator.next();
             } else {
-                return null;
+                throw new IllegalStateException("Cannot return nothing.");
             }
         }
 
@@ -89,10 +88,10 @@ public class URLClassLoaderResourceProvider implements ResourceProvider<Resource
         }
 
         private void cycleToNext() {
-            while (!(currentResourceIterator != null && currentResourceIterator.hasNext()) && urlIterator.hasNext()) {
+            while ((currentResourceIterator == null || !currentResourceIterator.hasNext()) && urlIterator.hasNext()) {
                 URL nextURL = urlIterator.next();
                 try {
-                    currentResourceIterator = FACTORY.create(nextURL).getResources().iterator();
+                    currentResourceIterator = ResourceProviderFactory.create(nextURL).getResources().iterator();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

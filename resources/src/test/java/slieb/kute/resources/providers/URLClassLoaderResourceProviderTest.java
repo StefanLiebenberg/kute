@@ -2,8 +2,8 @@ package slieb.kute.resources.providers;
 
 import org.junit.Before;
 import org.junit.Test;
-import slieb.kute.resources.Resource;
-import slieb.kute.resources.ResourceFilter;
+import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceFilter;
 import slieb.kute.resources.filters.AnyFilter;
 import slieb.kute.resources.filters.PatternFilter;
 
@@ -30,7 +30,7 @@ public class URLClassLoaderResourceProviderTest {
         ResourceFilter classFilter = new PatternFilter(Pattern.compile("org/.*\\.class"));
         ResourceFilter anyFilter = new AnyFilter(filter, classFilter);
         FilteredResourceProvider<Resource.Readable> filtered = new FilteredResourceProvider<>(urlClassLoader, anyFilter);
-        for (Resource resource : filtered.getResources()) {
+        for (Resource resource : urlClassLoader.getResources()) {
             System.out.println(resource.getPath());
         }
     }

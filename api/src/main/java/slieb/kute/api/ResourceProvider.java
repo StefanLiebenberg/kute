@@ -1,8 +1,6 @@
-
-package slieb.kute.resources;
+package slieb.kute.api;
 
 /**
- *
  * <p>The resource provider supplies a {@link java.lang.Iterable} of {@link slieb.kute.resources.Resource}.</p>
  * <p/>
  * <p>An example would be a directory resource that supplies its contents as resource objects.</p>
@@ -13,7 +11,7 @@ package slieb.kute.resources;
  *     ResourceProvider<Resource.Readable> resourceProvider = new FileResourceProvider(sourceDirectory);
  *     ResourceFilter filter = new PatternFilter(Pattern.compile(".*\\.txt"));
  *     ResourceProvider<Resource.Readable> filtered = new FilteredResourceProvider(resourceProvider, filter);
- *
+ * <p/>
  *     for(Resource.Readable resource : filtered.getResources()) {
  *        // iterate through all .txt files in directory
  *         String path = resource.getPath();

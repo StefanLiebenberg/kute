@@ -1,8 +1,11 @@
-package slieb.kute.resources.api;
+package slieb.kute.resources.implementations;
 
-import slieb.kute.resources.Resource;
+import slieb.kute.api.Resource;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class FileResource implements Resource.Writeable, Resource.Readable {
 
@@ -34,6 +37,9 @@ public class FileResource implements Resource.Writeable, Resource.Readable {
         return new FileWriter(this.file);
     }
 
+    public File getFile() {
+        return file;
+    }
 
     @Override
     public boolean equals(Object o) {

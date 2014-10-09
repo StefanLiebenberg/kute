@@ -1,13 +1,14 @@
 package slieb.kute.resources.providers;
 
-import slieb.kute.resources.ResourceProvider;
-import slieb.kute.resources.api.FileResource;
-import slieb.kute.resources.internal.RecursiveDirectoryIterable;
+import slieb.kute.api.ResourceProvider;
+import slieb.kute.resources.Resources;
+import slieb.kute.resources.implementations.FileResource;
+import slieb.kute.utilities.fs.DirectoryIterable;
 
 import java.io.File;
 import java.util.Iterator;
 
-public class FileResourceProvider implements ResourceProvider<FileResource>, Iterable<FileResource> {
+public class FileResourceProvider implements ResourceProvider<FileResource> {
 
     public final File directory;
 
@@ -17,25 +18,46 @@ public class FileResourceProvider implements ResourceProvider<FileResource>, Ite
 
     @Override
     public FileResource getResourceByName(String path) {
-        return new FileResource(new File(directory, path));
+        File file = new File(directory, path);
+        if (file.exists()) {
+            return Resources.fileResource(file, path);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public Iterable<FileResource> getResources() {
-        return this;
+        return new FileResourceIteratable(new DirectoryIterable(directory), directory.getPath());
     }
 
-    @Override
-    public Iterator<FileResource> iterator() {
-        return new FileResourceIterator(new RecursiveDirectoryIterable(directory).iterator());
+
+    private static class FileResourceIteratable implements Iterable<FileResource> {
+
+        private final Iterable<File> fileIterable;
+
+        private final String rootPath;
+
+        private FileResourceIteratable(Iterable<File> fileIterable, String rootPath) {
+            this.fileIterable = fileIterable;
+            this.rootPath = rootPath;
+        }
+
+        @Override
+        public Iterator<FileResource> iterator() {
+            return new FileResourceIterator(fileIterable.iterator(), rootPath);
+        }
     }
 
-    private class FileResourceIterator implements Iterator<FileResource> {
+    private static class FileResourceIterator implements Iterator<FileResource> {
 
         private final Iterator<File> fileIterator;
 
-        private FileResourceIterator(Iterator<File> fileIterator) {
+        private final String rootPath;
+
+        private FileResourceIterator(Iterator<File> fileIterator, String rootPath) {
             this.fileIterator = fileIterator;
+            this.rootPath = rootPath;
         }
 
         @Override
@@ -45,8 +67,10 @@ public class FileResourceProvider implements ResourceProvider<FileResource>, Ite
 
         @Override
         public FileResource next() {
-            final File file = fileIterator.next();
-            return new FileResource(file, file.getPath());
+            File file = fileIterator.next();
+            String path = file.getPath();
+            String newPath = path.replaceFirst(rootPath, "");
+            return Resources.fileResource(file, newPath);
         }
 
         @Override

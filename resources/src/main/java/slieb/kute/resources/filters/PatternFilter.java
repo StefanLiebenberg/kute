@@ -1,7 +1,7 @@
 package slieb.kute.resources.filters;
 
-import slieb.kute.resources.Resource;
-import slieb.kute.resources.ResourceFilter;
+import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceFilter;
 
 import java.util.regex.Pattern;
 

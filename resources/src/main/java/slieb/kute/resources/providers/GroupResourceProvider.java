@@ -1,7 +1,7 @@
 package slieb.kute.resources.providers;
 
-import slieb.kute.resources.Resource;
-import slieb.kute.resources.ResourceProvider;
+import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceProvider;
 
 import java.util.Iterator;
 

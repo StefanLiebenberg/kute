@@ -1,7 +1,7 @@
 package slieb.kute.resources.filters;
 
-import slieb.kute.resources.Resource;
-import slieb.kute.resources.ResourceFilter;
+import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceFilter;
 
 public class AllFilter implements ResourceFilter {
     private final ResourceFilter[] filters;
@@ -12,8 +12,8 @@ public class AllFilter implements ResourceFilter {
 
     @Override
     public Boolean accepts(Resource resource) {
-        for(ResourceFilter filter : filters) {
-            if(!filter.accepts(resource)) {
+        for (ResourceFilter filter : filters) {
+            if (!filter.accepts(resource)) {
                 return false;
             }
         }

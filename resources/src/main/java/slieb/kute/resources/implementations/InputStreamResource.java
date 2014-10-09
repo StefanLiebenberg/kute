@@ -1,13 +1,10 @@
-package slieb.kute.resources.api;
+package slieb.kute.resources.implementations;
 
-import slieb.kute.resources.Resource;
+import slieb.kute.api.Resource;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 
-public class InputStreamResource implements Resource.Readable {
+public class InputStreamResource implements Resource.Readable, Closeable {
 
     private final InputStream inputStream;
     private final String path;
@@ -15,6 +12,11 @@ public class InputStreamResource implements Resource.Readable {
     public InputStreamResource(InputStream inputStream, String path) {
         this.inputStream = inputStream;
         this.path = path;
+    }
+
+    @Override
+    public void close() throws IOException {
+        inputStream.close();
     }
 
     @Override

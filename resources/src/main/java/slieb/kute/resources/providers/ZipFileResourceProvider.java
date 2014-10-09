@@ -1,7 +1,7 @@
 package slieb.kute.resources.providers;
 
-import slieb.kute.resources.ResourceProvider;
-import slieb.kute.resources.api.ZipEntryResource;
+import slieb.kute.api.ResourceProvider;
+import slieb.kute.resources.implementations.ZipEntryResource;
 
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -25,7 +25,7 @@ public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResourc
         return new ZipEntryIterable(zipFile);
     }
 
-    private static class ZipEntryIterable implements Iterable<ZipEntryResource> {
+    public static class ZipEntryIterable implements Iterable<ZipEntryResource> {
 
         private final ZipFile zipFile;
 
@@ -40,7 +40,7 @@ public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResourc
     }
 
 
-    private static class ZipEntryIterator implements Iterator<ZipEntryResource> {
+    public static class ZipEntryIterator implements Iterator<ZipEntryResource> {
         private final ZipFile zipFile;
 
         private final Enumeration<? extends ZipEntry> enumeration;

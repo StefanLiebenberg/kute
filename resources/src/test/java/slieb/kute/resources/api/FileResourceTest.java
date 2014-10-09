@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.resources.Resources;
+import slieb.kute.resources.implementations.FileResource;
 
 import java.io.File;
 import java.nio.file.Files;

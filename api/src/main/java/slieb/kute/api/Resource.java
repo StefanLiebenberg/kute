@@ -1,4 +1,4 @@
-package slieb.kute.resources;
+package slieb.kute.api;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -41,4 +41,5 @@ public interface Resource extends Serializable {
          */
         public Writer getWriter() throws IOException;
     }
+
 }
