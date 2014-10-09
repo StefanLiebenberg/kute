@@ -1,7 +1,6 @@
 kute
 ====
 
-
 kute provides a way to get resource content from different locations in the java/maven environment.
 
 # Examples
