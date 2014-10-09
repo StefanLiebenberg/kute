@@ -11,12 +11,12 @@
     <dependencies>
         <dependency>
             <groupId>stefanliebenberg.github.com</groupId>
-            <artifactId>kute-utilities</artifactId>
+            <artifactId>kute-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>stefanliebenberg.github.com</groupId>
-            <artifactId>kute-api</artifactId>
+            <artifactId>kute-utilities</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

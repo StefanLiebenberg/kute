@@ -1,7 +1,7 @@
 package slieb.kute.api;
 
 /**
- * <p>The resource provider supplies a {@link java.lang.Iterable} of {@link slieb.kute.resources.Resource}.</p>
+ * <p>The resource provider supplies a {@link java.lang.Iterable} of {@link slieb.kute.api.Resource}.</p>
  * <p/>
  * <p>An example would be a directory resource that supplies its contents as resource objects.</p>
  * <p/>
@@ -21,7 +21,7 @@ package slieb.kute.api;
  *     }
  * </code></pre>
  *
- * @param <A> A instance of {@link slieb.kute.resources.Resource}, usually {@link slieb.kute.resources.Resource.Readable}
+ * @param <A> A instance of {@link slieb.kute.api.Resource}, usually {@link slieb.kute.api.Resource.Readable}
  */
 public interface ResourceProvider<A extends Resource> {
 
