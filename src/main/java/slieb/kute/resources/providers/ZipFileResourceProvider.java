@@ -69,6 +69,10 @@ public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResourc
 
 
     private static ZipEntryResource getResource(ZipFile zipFile, ZipEntry zipEntry) {
-        return new ZipEntryResource(zipFile, zipEntry);
+        if (zipEntry != null) {
+            return new ZipEntryResource(zipFile, zipEntry);
+        } else {
+            return null;
+        }
     }
 }

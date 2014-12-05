@@ -42,7 +42,7 @@ public class URLClassLoaderResourceProvider implements ResourceProvider<Resource
     }
 
 
-    private static class URLResourceIterable implements Iterable<Resource.Readable> {
+    public static class URLResourceIterable implements Iterable<Resource.Readable> {
 
         private final URL[] urls;
 
@@ -56,7 +56,7 @@ public class URLClassLoaderResourceProvider implements ResourceProvider<Resource
         }
     }
 
-    private static class URLResourceIterator implements Iterator<Resource.Readable> {
+    public static class URLResourceIterator implements Iterator<Resource.Readable> {
 
         private final Iterator<URL> urlIterator;
 
