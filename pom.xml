@@ -7,8 +7,8 @@
     <description>A library that provides a easy way to get resource multiple locations</description>
     <groupId>com.github.stefanliebenberg</groupId>
     <artifactId>kute</artifactId>
+    <version>0.2</version>
     <packaging>jar</packaging>
-    <version>0.1</version>
 
 
     <licenses>
@@ -44,21 +44,13 @@
     </properties>
 
     <distributionManagement>
-        <!--<repository>-->
-        <!--<name>Github - Stefan Liebenberg</name>-->
-        <!--<id>github-StefanLiebenberg</id>-->
-        <!--<url>git:releases://git@github.com:StefanLiebenberg/maven.git</url>-->
-        <!--</repository>-->
-        <!--<snapshotRepository>-->
-        <!--<id>Github - Stefan Liebenberg - Snapshots</id>-->
-        <!--<name>github-StefanLiebenberg-Snapshots</name>-->
-        <!--<url>git:snapshots://git@github.com:StefanLiebenberg/maven.git</url>-->
-        <!--</snapshotRepository>-->
-        <site>
-            <id>${project.artifactId}-site</id>
-            <name>Deployment through GitHub's site deployment plugin</name>
-            <url>http://stefanliebenberg.github.com/kute</url>
-        </site>
+        <repository>
+            <id>betgenius</id>
+            <name>betgenius-repo</name>
+            <url>
+                http://vm-pnetbuild01.betgenius.net:8080/nexus/content/repositories/thirdparty
+            </url>
+        </repository>
     </distributionManagement>
 
     <build>

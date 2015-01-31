@@ -9,6 +9,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResource> {
+
     private final ZipFile zipFile;
 
     public ZipFileResourceProvider(ZipFile zipFile) {
