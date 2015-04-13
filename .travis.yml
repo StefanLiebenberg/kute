@@ -1,7 +1,4 @@
 language: java
 jdk:
   - oraclejdk8
-script: mvn clean package site
-env:
-  global:
-    secure: LptiG22gcvyYpg9P2SFxKes4EV1wfHyaoONaAtTUQ36Mg97AdUst8ypBzX7IFJKUTAOMzyXAsRguPx3zKMzwaFAsHaIYR6oBd66J1a61+nuO/QXlx7c6Civks4P0xfU0G9dN1G9ju+odyhTjIcBE+Wqw/hjJR1VuwaIB3HiooZM=
+script: mvn clean test
