@@ -7,10 +7,14 @@ import slieb.kute.resources.implementations.*;
 
 import java.io.*;
 import java.net.URL;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 public class Resources {
     private Resources() {
@@ -73,11 +77,28 @@ public class Resources {
     }
 
 
-    public static <R extends Resource> Collection<R> collect(ResourceProvider<R> resourceProvider) {
-        HashSet<R> collection = new HashSet<>();
+    /**
+     * Builds a stream
+     * <p>
+     * Note: This copies the entries into a stream via Stream.builder(), so its lazy.
+     *
+     * @param resourceProvider the resource provider.
+     * @param <R>              the resource interface
+     * @return a Stream interface build from the resource provider
+     */
+    public static <R extends Resource> Stream<R> resourceProviderToStream(ResourceProvider<R> resourceProvider) {
+        Stream.Builder<R> builder = Stream.builder();
         for (R resource : resourceProvider.getResources()) {
-            collection.add(resource);
+            builder.add(resource);
         }
-        return collection;
+        return builder.build();
+    }
+
+    public static <R extends Resource> List<R> resourceProviderToList(ResourceProvider<R> resourceProvider) {
+        return resourceProviderToStream(resourceProvider).collect(toList());
+    }
+
+    public static <R extends Resource> Set<R> resourceProviderToSet(ResourceProvider<R> resourceProvider) {
+        return resourceProviderToStream(resourceProvider).collect(toSet());
     }
 }
