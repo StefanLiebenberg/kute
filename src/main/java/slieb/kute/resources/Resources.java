@@ -2,8 +2,10 @@ package slieb.kute.resources;
 
 import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceFilter;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.implementations.*;
+import slieb.kute.resources.providers.FilteredResourceProvider;
 import slieb.kute.resources.providers.MappedResourceProvider;
 
 import java.io.*;
@@ -11,7 +13,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -89,11 +93,7 @@ public class Resources {
      * @return a Stream interface build from the resource provider
      */
     public static <R extends Resource> Stream<R> resourceProviderToStream(ResourceProvider<R> resourceProvider) {
-        Stream.Builder<R> builder = Stream.builder();
-        for (R resource : resourceProvider.getResources()) {
-            builder.add(resource);
-        }
-        return builder.build();
+        return StreamSupport.stream(resourceProvider.getResources().spliterator(), false);
     }
 
     public static <R extends Resource> List<R> resourceProviderToList(ResourceProvider<R> resourceProvider) {
@@ -108,4 +108,15 @@ public class Resources {
             ResourceProvider<A> provider, Function<A, B> function) {
         return new MappedResourceProvider<>(provider, function);
     }
+
+
+    public static <A extends Resource> ResourceProvider<A> filterResources(ResourceProvider<A> provider, ResourceFilter filter) {
+        return new FilteredResourceProvider<>(provider, filter);
+    }
+
+    public static <A extends Resource> ResourceProvider<A> filterResources(ResourceProvider<A> provider, Predicate<Resource> predicate) {
+        return filterResources(provider, (ResourceFilter) predicate::test);
+    }
+
+
 }

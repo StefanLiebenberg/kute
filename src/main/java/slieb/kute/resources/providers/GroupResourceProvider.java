@@ -3,14 +3,15 @@ package slieb.kute.resources.providers;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 
 public class GroupResourceProvider<A extends Resource> implements ResourceProvider<A> {
 
-    private final Iterable<ResourceProvider<A>> resourceProviders;
+    private final Collection<ResourceProvider<A>> resourceProviders;
 
-    public GroupResourceProvider(Iterable<ResourceProvider<A>> resourceProviders) {
+    public GroupResourceProvider(Collection<ResourceProvider<A>> resourceProviders) {
         this.resourceProviders = resourceProviders;
     }
 

@@ -1,7 +1,8 @@
 package slieb.kute.resources;
 
 import slieb.kute.api.ResourceFilter;
-import slieb.kute.resources.filters.*;
+import slieb.kute.resources.filters.ExtensionFilter;
+import slieb.kute.resources.filters.PatternFilter;
 
 import java.util.regex.Pattern;
 
@@ -10,12 +11,33 @@ public class ResourceFilters {
     private ResourceFilters() {
     }
 
-    public static AllFilter allFilter(ResourceFilter... filters) {
-        return new AllFilter(filters);
+
+    public static ResourceFilter or(ResourceFilter left, ResourceFilter right) {
+        return resource -> left.accepts(resource) || right.accepts(resource);
     }
 
-    public static AnyFilter anyFilter(ResourceFilter... filters) {
-        return new AnyFilter(filters);
+    public static ResourceFilter and(ResourceFilter left, ResourceFilter right) {
+        return resource -> left.accepts(resource) || right.accepts(resource);
+    }
+
+    public static ResourceFilter all(ResourceFilter first, ResourceFilter... filters) {
+        ResourceFilter returnFilter = first;
+        for (ResourceFilter f : filters) {
+            returnFilter = and(returnFilter, f);
+        }
+        return returnFilter;
+    }
+
+    public static ResourceFilter any(ResourceFilter first, ResourceFilter... filters) {
+        ResourceFilter returnFilter = first;
+        for (ResourceFilter f : filters) {
+            returnFilter = or(returnFilter, f);
+        }
+        return returnFilter;
+    }
+
+    public static ResourceFilter not(ResourceFilter filter) {
+        return resource -> !filter.accepts(resource);
     }
 
     public static ExtensionFilter extensionFilter(String... extensions) {
@@ -30,8 +52,5 @@ public class ResourceFilters {
         return patternFilter(Pattern.compile(pattern));
     }
 
-    public static NegatedFilter negatedFilter(ResourceFilter filter) {
-        return new NegatedFilter(filter);
-    }
 
 }
