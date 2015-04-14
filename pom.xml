@@ -9,7 +9,7 @@
     <artifactId>kute</artifactId>
     <version>0.3</version>
     <packaging>jar</packaging>
-
+    <url>https://stefanliebenberg.github.io/kute</url>
     <licenses>
         <license>
             <name>MIT License</name>
@@ -34,7 +34,7 @@
             scm:git:git://github.com/${github}.git
         </connection>
         <developerConnection>
-            scm:git:git@github.com:StefanLiebenberg/StefanLiebenberg.git
+            scm:git:git@github.com:StefanLiebenberg/kute.git
         </developerConnection>
     </scm>
 

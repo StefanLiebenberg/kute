@@ -1,12 +1,11 @@
 package slieb.kute.api;
 
+import java.util.function.Supplier;
+
 /**
  * <p>The resource provider supplies a {@link java.lang.Iterable} of {@link slieb.kute.api.Resource}.</p>
- *
  * <p>An example would be a directory resource that supplies its contents as resource objects.</p>
- *
  * <p>Its possible to compose resource providers in each other to get complex functionality, for example:</p>
- *
  * <pre><code>
  *     ResourceProvider&lt;Resource.Readable&gt; resourceProvider = new FileResourceProvider(sourceDirectory);
  *     ResourceFilter filter = new PatternFilter(Pattern.compile(".*\\.txt"));
@@ -23,9 +22,14 @@ package slieb.kute.api;
  *
  * @param <A> A instance of {@link slieb.kute.api.Resource}, usually {@link slieb.kute.api.Resource.Readable}
  */
-public interface ResourceProvider<A extends Resource> {
+public interface ResourceProvider<A extends Resource> extends Supplier<Iterable<A>> {
 
-    public A getResourceByName(String path);
+    A getResourceByName(String path);
 
-    public Iterable<A> getResources();
+    Iterable<A> getResources();
+
+    @Override
+    default Iterable<A> get() {
+        return getResources();
+    }
 }

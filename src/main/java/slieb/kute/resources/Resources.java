@@ -4,11 +4,13 @@ import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.implementations.*;
+import slieb.kute.resources.providers.MappedResourceProvider;
 
 import java.io.*;
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -100,5 +102,10 @@ public class Resources {
 
     public static <R extends Resource> Set<R> resourceProviderToSet(ResourceProvider<R> resourceProvider) {
         return resourceProviderToStream(resourceProvider).collect(toSet());
+    }
+
+    public static <A extends Resource, B extends Resource> ResourceProvider<B> mapResources(
+            ResourceProvider<A> provider, Function<A, B> function) {
+        return new MappedResourceProvider<>(provider, function);
     }
 }
