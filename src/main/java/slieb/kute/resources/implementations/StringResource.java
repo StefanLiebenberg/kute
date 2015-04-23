@@ -4,6 +4,7 @@ import slieb.kute.api.Resource;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 
 public class StringResource implements Resource.Readable {
@@ -16,10 +17,13 @@ public class StringResource implements Resource.Readable {
         this.path = path;
     }
 
+    private StringWriter writer;
+
     @Override
     public StringReader getReader() throws IOException {
         return new StringReader(string);
     }
+
 
     @Override
     public String getPath() {

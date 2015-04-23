@@ -35,11 +35,13 @@ kute provides a way to get resource content from different locations in the java
 
 ## ResourceProvider
 
+The ResourceProvider class implements Iterable and exposes a stream() method. This allows for easy management of resources. 
+
 ### Create File resource Provider
 
     File directory = ...;
     ResourceProvider<? extends Resource.Readable> provider = new FileResourceProvider(directory);
-    for(Resource.Readable resource : provider.getResources()) {
+    for(Resource.Readable resource : provider) {
         ... // get files inside directory as readable resources.
     }
 
@@ -53,7 +55,14 @@ kute provides a way to get resource content from different locations in the java
     ResourceProvider<R> provider = ...; // R extends Resource, mostly Resource.Readable.
     ResourceFilter filter = new ExtensionFilter(".txt", ".class");
     ResourceProvider<R> filtered = new FilteredResourceProvider<R>(provider, filter);
-    for(R resource : provider.getResources()) {
+    for(R resource : provider) {
         ... // only .txt or .class resources 
     }
+    
+### Use Java 8 stream on Resource Providers
+
+    ResourceProvider<R> provider = Kute.getDefaultProvider();
+    provider.stream().forEach(resource -> {
+       
+    });
     

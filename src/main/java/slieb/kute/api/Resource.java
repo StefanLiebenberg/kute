@@ -7,7 +7,7 @@ import java.io.Writer;
 
 /**
  * The Resource class represents a entry on the class path.
- *
+ * <p>
  * Resources can also implement one of the interfaces @code {Readable} or @code {Writeable}
  */
 public interface Resource extends Serializable {
@@ -17,29 +17,31 @@ public interface Resource extends Serializable {
      *
      * @return The resource path.
      */
-    public String getPath();
+    String getPath();
+
 
     /**
      * The readable version of Resource. Includes a getReader method.
      */
-    public static interface Readable extends Resource {
+    interface Readable extends Resource {
         /**
          * @return A reader that will give you the contents of resource.
          * @throws IOException an IO exception.
          */
-        public Reader getReader() throws IOException;
+        Reader getReader() throws IOException;
     }
 
     /**
      * The readable version of Resource. Includes a getWriter method.
      */
-    public static interface Writeable extends Resource {
+    interface Writeable extends Resource {
 
         /**
          * @return A writer that will write to resource.g
          * @throws IOException an IO exception.
          */
-        public Writer getWriter() throws IOException;
+        Writer getWriter() throws IOException;
     }
+
 
 }

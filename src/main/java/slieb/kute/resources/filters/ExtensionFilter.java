@@ -3,6 +3,9 @@ package slieb.kute.resources.filters;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceFilter;
 
+/**
+ *
+ */
 public class ExtensionFilter implements ResourceFilter {
 
     private final String[] extensions;

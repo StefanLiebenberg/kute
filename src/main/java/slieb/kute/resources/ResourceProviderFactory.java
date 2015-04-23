@@ -33,8 +33,7 @@ public class ResourceProviderFactory {
         }
         throw new IllegalStateException("Unknown url type. " + url.toString());
     }
-
-
+    
     public static FileResourceProvider createFileResourceProvider(File directory) {
         return new FileResourceProvider(directory);
     }

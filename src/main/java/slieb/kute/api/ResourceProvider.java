@@ -1,6 +1,7 @@
 package slieb.kute.api;
 
-import java.util.function.Supplier;
+import java.util.Iterator;
+import java.util.stream.Stream;
 
 /**
  * <p>The resource provider supplies a {@link java.lang.Iterable} of {@link slieb.kute.api.Resource}.</p>
@@ -10,7 +11,6 @@ import java.util.function.Supplier;
  *     ResourceProvider&lt;Resource.Readable&gt; resourceProvider = new FileResourceProvider(sourceDirectory);
  *     ResourceFilter filter = new PatternFilter(Pattern.compile(".*\\.txt"));
  *     ResourceProvider&lt;Resource.Readable&gt; filtered = new FilteredResourceProvider(resourceProvider, filter);
- *
  *     for(Resource.Readable resource : filtered.getResources()) {
  *        // iterate through all .txt files in directory
  *         String path = resource.getPath();
@@ -22,14 +22,15 @@ import java.util.function.Supplier;
  *
  * @param <A> A instance of {@link slieb.kute.api.Resource}, usually {@link slieb.kute.api.Resource.Readable}
  */
-public interface ResourceProvider<A extends Resource> extends Supplier<Iterable<A>> {
+public interface ResourceProvider<A extends Resource> extends Iterable<A> {
 
     A getResourceByName(String path);
 
-    Iterable<A> getResources();
-
     @Override
-    default Iterable<A> get() {
-        return getResources();
+    default Iterator<A> iterator() {
+        return stream().iterator();
     }
+
+    Stream<A> stream();
+
 }

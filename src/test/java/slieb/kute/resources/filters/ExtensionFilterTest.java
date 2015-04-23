@@ -33,4 +33,5 @@ public class ExtensionFilterTest {
         Mockito.when(mockResource.getPath()).thenReturn("/the/path/to.class");
         Assert.assertTrue(extensionFilter.accepts(mockResource));
     }
+
 }

@@ -47,4 +47,9 @@ public class ZipEntryResource implements Resource.Readable {
         result = 31 * result + zipEntry.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "[zip entry: " + zipFile + "/" + getPath() + "]";
+    }
 }

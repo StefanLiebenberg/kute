@@ -1,12 +1,15 @@
 package slieb.kute.resources.providers;
 
+import com.google.common.base.Preconditions;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.Resources;
 import slieb.kute.resources.implementations.FileResource;
-import slieb.kute.utilities.fs.DirectoryIterable;
 
 import java.io.File;
-import java.util.Iterator;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class FileResourceProvider implements ResourceProvider<FileResource> {
 
@@ -27,55 +30,21 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
     }
 
     @Override
-    public Iterable<FileResource> getResources() {
-        return new FileResourceIteratable(new DirectoryIterable(directory), directory.getPath());
-    }
-
-
-    private static class FileResourceIteratable implements Iterable<FileResource> {
-
-        private final Iterable<File> fileIterable;
-
-        private final String rootPath;
-
-        private FileResourceIteratable(Iterable<File> fileIterable, String rootPath) {
-            this.fileIterable = fileIterable;
-            this.rootPath = rootPath;
-        }
-
-        @Override
-        public Iterator<FileResource> iterator() {
-            return new FileResourceIterator(fileIterable.iterator(), rootPath);
+    public Stream<FileResource> stream() {
+        try {
+            return Files.walk(directory.toPath()).map(Path::toString).map(File::new).map(this::createFileResource);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private static class FileResourceIterator implements Iterator<FileResource> {
+    private FileResource createFileResource(File file) {
+        String rootPath = directory.getAbsolutePath();
+        String path = file.getAbsolutePath();
+        Preconditions.checkState(path.startsWith(rootPath));
+        return new FileResource(file, path.substring(rootPath.length()));
 
-        private final Iterator<File> fileIterator;
-
-        private final String rootPath;
-
-        private FileResourceIterator(Iterator<File> fileIterator, String rootPath) {
-            this.fileIterator = fileIterator;
-            this.rootPath = rootPath;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return fileIterator.hasNext();
-        }
-
-        @Override
-        public FileResource next() {
-            File file = fileIterator.next();
-            String path = file.getPath();
-            String newPath = path.replaceFirst(rootPath, "");
-            return Resources.fileResource(file, newPath);
-        }
-
-        @Override
-        public void remove() {
-            fileIterator.remove();
-        }
     }
+
+
 }

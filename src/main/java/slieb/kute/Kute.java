@@ -8,18 +8,16 @@ import slieb.kute.resources.providers.URLArrayResourceProvider;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Kute {
 
-    private Kute() {
-    }
-
-
     public static ResourceProvider<Resource.Readable> getDefaultProvider() {
+
         try {
             return getProvider(Thread.currentThread().getContextClassLoader());
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
         return getProvider(Kute.class.getClassLoader());
@@ -29,9 +27,7 @@ public class Kute {
         List<URL> urls = new ArrayList<>();
         while (classLoader != null) {
             if (classLoader instanceof URLClassLoader) {
-                for (URL url : ((URLClassLoader) classLoader).getURLs()) {
-                    urls.add(url);
-                }
+                Collections.addAll(urls, ((URLClassLoader) classLoader).getURLs());
             }
             classLoader = classLoader.getParent();
         }

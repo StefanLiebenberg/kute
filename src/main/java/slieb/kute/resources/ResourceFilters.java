@@ -1,23 +1,22 @@
 package slieb.kute.resources;
 
+import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceFilter;
 import slieb.kute.resources.filters.ExtensionFilter;
 import slieb.kute.resources.filters.PatternFilter;
+import slieb.kute.resources.filters.PredicateFilter;
 
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class ResourceFilters {
-
-    private ResourceFilters() {
-    }
-
 
     public static ResourceFilter or(ResourceFilter left, ResourceFilter right) {
         return resource -> left.accepts(resource) || right.accepts(resource);
     }
 
     public static ResourceFilter and(ResourceFilter left, ResourceFilter right) {
-        return resource -> left.accepts(resource) || right.accepts(resource);
+        return resource -> left.accepts(resource) && right.accepts(resource);
     }
 
     public static ResourceFilter all(ResourceFilter first, ResourceFilter... filters) {
@@ -52,5 +51,8 @@ public class ResourceFilters {
         return patternFilter(Pattern.compile(pattern));
     }
 
+    public static PredicateFilter filter(Predicate<Resource> predicate) {
+        return new PredicateFilter(predicate);
+    }
 
 }

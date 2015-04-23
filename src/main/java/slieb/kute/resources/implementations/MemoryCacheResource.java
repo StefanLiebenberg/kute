@@ -5,26 +5,31 @@ import slieb.kute.api.Resource;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 
 import static slieb.kute.resources.Resources.readResource;
 
 public class MemoryCacheResource implements Resource.Readable {
 
     private final Readable readable;
-    private StringResource stringResource;
+    private String cachedValue;
+    private boolean cached;
 
     public MemoryCacheResource(Readable readable) {
         this.readable = readable;
+        this.cached = false;
     }
 
 
     @Override
-    public Reader getReader() throws IOException {
-        if (stringResource == null) {
-            this.stringResource = new StringResource(readResource(readable), readable.getPath());
+    public synchronized Reader getReader() throws IOException {
+        if (!cached) {
+            cached = true;
+            cachedValue = readResource(readable);
         }
-        return stringResource.getReader();
+        return new StringReader(cachedValue);
     }
+
 
     @Override
     public String getPath() {
