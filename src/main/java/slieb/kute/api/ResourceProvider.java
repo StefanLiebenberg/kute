@@ -11,13 +11,26 @@ import java.util.stream.Stream;
  *     ResourceProvider&lt;Resource.Readable&gt; resourceProvider = new FileResourceProvider(sourceDirectory);
  *     ResourceFilter filter = new PatternFilter(Pattern.compile(".*\\.txt"));
  *     ResourceProvider&lt;Resource.Readable&gt; filtered = new FilteredResourceProvider(resourceProvider, filter);
- *     for(Resource.Readable resource : filtered.getResources()) {
+ *     for(Resource.Readable resource : filtered) {
  *        // iterate through all .txt files in directory
  *         String path = resource.getPath();
  *         try(Reader reader = resource.getReader()) {
  *             ... // do stuff with reader.
  *         }
  *     }
+ * </code></pre>
+ * <p>Or using java 8 streams:</p>
+ * <pre><code>
+ *     ResourceProvider&lt;Resource.Readable&gt; resourceProvider = new FileResourceProvider(sourceDirectory);
+ *     ResourceFilter filter = new PatternFilter(Pattern.compile(".*\\.txt"));
+ *     ResourceProvider&lt;Resource.Readable&gt; filtered = new FilteredResourceProvider(resourceProvider, filter);
+ *     filtered.stream().forEach( resource -&lt; {
+ *        // iterate through all .txt files in directory
+ *         String path = resource.getPath();
+ *         try(Reader reader = resource.getReader()) {
+ *             ... // do stuff with reader.
+ *         }
+ *     });
  * </code></pre>
  *
  * @param <A> A instance of {@link slieb.kute.api.Resource}, usually {@link slieb.kute.api.Resource.Readable}
@@ -32,5 +45,4 @@ public interface ResourceProvider<A extends Resource> extends Iterable<A> {
     }
 
     Stream<A> stream();
-
 }

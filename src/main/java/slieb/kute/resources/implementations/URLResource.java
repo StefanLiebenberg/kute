@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 
-public class URLResource implements Resource.Readable {
+public class URLResource
+        extends AbstractResource
+        implements Resource.Readable {
 
     private final URL url;
 
@@ -26,25 +28,5 @@ public class URLResource implements Resource.Readable {
     @Override
     public String getPath() {
         return path;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof URLResource)) return false;
-
-        URLResource that = (URLResource) o;
-
-        if (!path.equals(that.path)) return false;
-        if (!url.equals(that.url)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = url.hashCode();
-        result = 31 * result + path.hashCode();
-        return result;
     }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -103,12 +104,12 @@ public class Resources {
     /**
      * Create resources from input stream.
      *
-     * @param inputStream The input stream to supply content.
-     * @param path        The path name for this resource.
+     * @param supplier The input stream to supply content.
+     * @param path     The path name for this resource.
      * @return a readable resource that reads from provided input stream.
      */
-    public static InputStreamResource inputStreamResource(InputStream inputStream, String path) {
-        return new InputStreamResource(inputStream, path);
+    public static InputStreamResource inputStreamResource(Supplier<InputStream> supplier, String path) {
+        return new InputStreamResource(supplier, path);
     }
 
     /**

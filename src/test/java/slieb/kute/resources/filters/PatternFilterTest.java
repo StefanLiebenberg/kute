@@ -11,6 +11,11 @@ import slieb.kute.api.Resource;
 
 import java.util.regex.Pattern;
 
+import static java.util.stream.IntStream.range;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static slieb.kute.resources.Resources.stringResource;
+
 @RunWith(MockitoJUnitRunner.class)
 public class PatternFilterTest {
 
@@ -41,5 +46,16 @@ public class PatternFilterTest {
     public void testNotMatchingPattern() throws Exception {
         Mockito.when(mockResource.getPath()).thenReturn("/file/path/file.class");
         Assert.assertFalse(patternFilter.accepts(mockResource));
+    }
+
+    @Test
+    public void testThreadSafe() throws Exception {
+        range(0, 1000)
+                .parallel()
+                .forEach(i -> {
+                    assertTrue(patternFilter.accepts(stringResource("content", "/my/Car.java")));
+                    assertFalse(patternFilter.accepts(stringResource("content", "/my/passwords.txt")));
+                    assertFalse(patternFilter.accepts(stringResource("content", "/my/pictures/cat.png")));
+                });
     }
 }

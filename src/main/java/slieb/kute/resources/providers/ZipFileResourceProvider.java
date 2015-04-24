@@ -1,6 +1,7 @@
 package slieb.kute.resources.providers;
 
 import slieb.kute.api.ResourceProvider;
+import slieb.kute.resources.ResourceException;
 import slieb.kute.resources.implementations.ZipEntryResource;
 
 import java.util.Enumeration;
@@ -57,7 +58,7 @@ public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResourc
 
         @Override
         public void remove() {
-            throw new RuntimeException("cannot remove");
+            throw new ResourceException("cannot remove from iterator");
         }
     }
 

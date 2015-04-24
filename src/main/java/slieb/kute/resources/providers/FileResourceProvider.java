@@ -2,6 +2,7 @@ package slieb.kute.resources.providers;
 
 import com.google.common.base.Preconditions;
 import slieb.kute.api.ResourceProvider;
+import slieb.kute.resources.ResourceException;
 import slieb.kute.resources.Resources;
 import slieb.kute.resources.implementations.FileResource;
 
@@ -34,7 +35,7 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
         try {
             return Files.walk(directory.toPath()).map(Path::toString).map(File::new).map(this::createFileResource);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ResourceException(e);
         }
     }
 
@@ -43,8 +44,6 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
         String path = file.getAbsolutePath();
         Preconditions.checkState(path.startsWith(rootPath));
         return new FileResource(file, path.substring(rootPath.length()));
-
     }
-
 
 }

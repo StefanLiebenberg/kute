@@ -17,6 +17,7 @@ public class ProviderUtils {
 
     public static <R extends Resource> Stream<R> distinct(Stream<R> stream) {
         return stream.map((Function<R, Wrapper<R>>) Wrapper::new).distinct().map(Wrapper::getResource);
+//        return stream.distinct();
     }
 
 

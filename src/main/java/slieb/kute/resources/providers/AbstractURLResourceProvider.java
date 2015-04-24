@@ -26,8 +26,7 @@ public abstract class AbstractURLResourceProvider implements ResourceProvider<Re
     private ResourceProvider<? extends Resource.Readable> safeCreate(URL url) {
         try {
             return ResourceProviderFactory.create(url);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
             return null;
         }
     }

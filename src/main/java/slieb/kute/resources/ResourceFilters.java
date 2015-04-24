@@ -6,6 +6,7 @@ import slieb.kute.resources.filters.ExtensionFilter;
 import slieb.kute.resources.filters.PatternFilter;
 import slieb.kute.resources.filters.PredicateFilter;
 
+import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -25,6 +26,14 @@ public class ResourceFilters {
             returnFilter = and(returnFilter, f);
         }
         return returnFilter;
+    }
+
+    public static ResourceFilter all(Collection<ResourceFilter> filters) {
+        return filter(r -> filters.stream().allMatch(f -> f.accepts(r)));
+    }
+
+    public static ResourceFilter any(Collection<ResourceFilter> filters) {
+        return filter(r -> filters.stream().anyMatch(f -> f.accepts(r)));
     }
 
     public static ResourceFilter any(ResourceFilter first, ResourceFilter... filters) {

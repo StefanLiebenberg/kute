@@ -9,7 +9,9 @@ import java.io.Reader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ZipEntryResource implements Resource.Readable {
+public class ZipEntryResource
+        extends AbstractResource
+        implements Resource.Readable {
     private final ZipFile zipFile;
     private final ZipEntry zipEntry;
 
@@ -26,30 +28,5 @@ public class ZipEntryResource implements Resource.Readable {
     @Override
     public String getPath() {
         return zipEntry.getName();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ZipEntryResource)) return false;
-
-        ZipEntryResource resource = (ZipEntryResource) o;
-
-        if (!zipEntry.equals(resource.zipEntry)) return false;
-        if (!zipFile.equals(resource.zipFile)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = zipFile.hashCode();
-        result = 31 * result + zipEntry.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "[zip entry: " + zipFile + "/" + getPath() + "]";
     }
 }

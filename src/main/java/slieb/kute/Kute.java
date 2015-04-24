@@ -14,12 +14,10 @@ import java.util.List;
 public class Kute {
 
     public static ResourceProvider<Resource.Readable> getDefaultProvider() {
-
         try {
             return getProvider(Thread.currentThread().getContextClassLoader());
         } catch (Exception ignored) {
         }
-
         return getProvider(Kute.class.getClassLoader());
     }
 

@@ -3,55 +3,35 @@ package slieb.kute.resources.implementations;
 
 import slieb.kute.api.Resource;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.function.Supplier;
 
 /**
  * Warning, this is a use once resource. Avoid if possible.
  */
-public class OutputStreamResource implements Resource.Writeable, Closeable {
+public class OutputStreamResource
+        extends AbstractResource
+        implements Resource.Writeable {
 
-    private final OutputStream outputStream;
+    private final Supplier<OutputStream> outputStream;
 
     private final String path;
 
-    public OutputStreamResource(OutputStream outputStream, String path) {
+    public OutputStreamResource(Supplier<OutputStream> outputStream, String path) {
         this.outputStream = outputStream;
         this.path = path;
     }
 
     @Override
     public Writer getWriter() throws IOException {
-        return new OutputStreamWriter(outputStream);
+        return new OutputStreamWriter(outputStream.get());
     }
 
     @Override
     public String getPath() {
         return path;
     }
-
-    @Override
-    public void close() throws IOException {
-        outputStream.close();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OutputStreamResource)) return false;
-
-        OutputStreamResource that = (OutputStreamResource) o;
-
-        if (!outputStream.equals(that.outputStream)) return false;
-        if (!path.equals(that.path)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = outputStream.hashCode();
-        result = 31 * result + path.hashCode();
-        return result;
-    }
-
 }

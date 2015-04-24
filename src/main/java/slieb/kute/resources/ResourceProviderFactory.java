@@ -14,12 +14,8 @@ import java.util.zip.ZipFile;
 
 public class ResourceProviderFactory {
 
-    private ResourceProviderFactory() {
-    }
-
-
     public static ResourceProvider<? extends Resource.Readable> create(URL url) throws IOException {
-
+        
         File urlFile = new File(url.getFile());
         if (urlFile.exists()) {
             if (urlFile.isDirectory()) {
@@ -31,14 +27,17 @@ public class ResourceProviderFactory {
                 return createZipFileResourceProvider(new JarFile(urlFile));
             }
         }
+
         throw new IllegalStateException("Unknown url type. " + url.toString());
     }
-    
+
+    public static ZipFileResourceProvider createZipFileResourceProvider(ZipFile zipFile) {
+
+        return new ZipFileResourceProvider(zipFile);
+    }
+
     public static FileResourceProvider createFileResourceProvider(File directory) {
         return new FileResourceProvider(directory);
     }
 
-    public static ZipFileResourceProvider createZipFileResourceProvider(ZipFile zipFile) {
-        return new ZipFileResourceProvider(zipFile);
-    }
 }

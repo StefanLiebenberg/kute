@@ -9,7 +9,9 @@ import java.io.StringReader;
 
 import static slieb.kute.resources.Resources.readResource;
 
-public class MemoryCacheResource implements Resource.Readable {
+public class MemoryCacheResource
+        extends AbstractResource
+        implements Resource.Readable {
 
     private final Readable readable;
     private String cachedValue;
@@ -34,5 +36,10 @@ public class MemoryCacheResource implements Resource.Readable {
     @Override
     public String getPath() {
         return readable.getPath();
+    }
+
+    public void clear() {
+        cached = false;
+        cachedValue = null;
     }
 }

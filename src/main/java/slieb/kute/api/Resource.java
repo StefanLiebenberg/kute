@@ -20,6 +20,8 @@ public interface Resource extends Serializable {
     String getPath();
 
 
+
+
     /**
      * The readable version of Resource. Includes a getReader method.
      */

@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class FileResource implements Resource.Writeable, Resource.Readable {
+public class FileResource
+        extends AbstractResource
+        implements Resource.Writeable, Resource.Readable {
 
     private final File file;
 
@@ -27,6 +29,10 @@ public class FileResource implements Resource.Writeable, Resource.Readable {
         return path;
     }
 
+    public File getFile() {
+        return file;
+    }
+
     @Override
     public FileReader getReader() throws IOException {
         return new FileReader(this.file);
@@ -37,32 +43,4 @@ public class FileResource implements Resource.Writeable, Resource.Readable {
         return new FileWriter(this.file);
     }
 
-    public File getFile() {
-        return file;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + " (" + file.getPath() + ")";
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FileResource that = (FileResource) o;
-
-        if (!file.equals(that.file)) return false;
-        if (!path.equals(that.path)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = file.hashCode();
-        result = 31 * result + path.hashCode();
-        return result;
-    }
 }
