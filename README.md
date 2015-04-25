@@ -5,6 +5,52 @@ kute provides a way to get resource content from different locations in the java
 
 # Examples
 
+
+## ResourceProvider
+
+The ResourceProvider class implements Iterable and exposes a stream() method. This allows for easy management of resources.
+ 
+### Getting Resource Providers
+
+Getting the default provider
+
+    ResourceProvider<Resource.Readable> readableProvider = Kute.getDefaultProvider();
+    
+Getting a provider for specific class:
+ 
+    ResourceProvider<Resource.Readable> readableProvider = Kute.getProvider(getClass().getClassLoader())
+        
+
+### Create File resource Provider
+
+    File directory = ...;
+    ResourceProvider<? extends Resource.Readable> provider = new FileResourceProvider(directory);
+    for(Resource.Readable resource : provider) {
+        ... // get files inside directory as readable resources.
+    }
+
+### Get class path resource provider
+
+    ResourceProvider<Resource.Readable> provider = new URLClassLoaderResourceProvider((URLClassLoader) getClass().getClassLoader());
+    
+
+### Filter Resource Provider by extension
+
+    ResourceProvider<R> provider = ...; // R extends Resource, mostly Resource.Readable.
+    ResourceFilter filter = ResourceFilters.extensionFilters(".txt", ".class");
+    ResourceProvider<R> filtered = new FilteredResourceProvider<R>(provider, filter);
+    for(R resource : provider) {
+        ... // only .txt or .class resources 
+    }
+    
+### Use Java 8 stream on Resource Providers
+
+    ResourceProvider<R> provider = Kute.getDefaultProvider();
+    provider.stream().forEach(resource -> {
+       
+    });
+    
+
 ## Resource
 
 ### Reading a Resource.Readable with Reader
@@ -33,36 +79,3 @@ kute provides a way to get resource content from different locations in the java
     Resources.writeResource(readable, content);
 
 
-## ResourceProvider
-
-The ResourceProvider class implements Iterable and exposes a stream() method. This allows for easy management of resources. 
-
-### Create File resource Provider
-
-    File directory = ...;
-    ResourceProvider<? extends Resource.Readable> provider = new FileResourceProvider(directory);
-    for(Resource.Readable resource : provider) {
-        ... // get files inside directory as readable resources.
-    }
-
-### Get class path resource provider
-
-    ResourceProvider<Resource.Readable> provider = new URLClassLoaderResourceProvider((URLClassLoader) getClass().getClassLoader());
-    
-
-### Filter Resource Provider by extension
-
-    ResourceProvider<R> provider = ...; // R extends Resource, mostly Resource.Readable.
-    ResourceFilter filter = new ExtensionFilter(".txt", ".class");
-    ResourceProvider<R> filtered = new FilteredResourceProvider<R>(provider, filter);
-    for(R resource : provider) {
-        ... // only .txt or .class resources 
-    }
-    
-### Use Java 8 stream on Resource Providers
-
-    ResourceProvider<R> provider = Kute.getDefaultProvider();
-    provider.stream().forEach(resource -> {
-       
-    });
-    
