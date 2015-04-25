@@ -6,11 +6,16 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceFilter;
+import slieb.kute.resources.ResourceFilters;
+
+import java.io.IOException;
 
 import static java.util.stream.IntStream.range;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
+import static slieb.kute.resources.Resources.readResource;
 import static slieb.kute.resources.Resources.stringResource;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,6 +45,9 @@ public class ExtensionFilterTest {
 
     @Test
     public void testThreadSafe() throws Exception {
+
+
+
         range(0, 1000)
                 .parallel()
                 .forEach(i -> {

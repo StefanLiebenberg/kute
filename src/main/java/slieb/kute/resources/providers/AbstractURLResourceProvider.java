@@ -27,6 +27,7 @@ public abstract class AbstractURLResourceProvider implements ResourceProvider<Re
         try {
             return ResourceProviderFactory.create(url);
         } catch (IOException ignored) {
+            ignored.printStackTrace();
             return null;
         }
     }

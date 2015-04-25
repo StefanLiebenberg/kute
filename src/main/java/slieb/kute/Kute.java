@@ -13,14 +13,6 @@ import java.util.List;
 
 public class Kute {
 
-    public static ResourceProvider<Resource.Readable> getDefaultProvider() {
-        try {
-            return getProvider(Thread.currentThread().getContextClassLoader());
-        } catch (Exception ignored) {
-        }
-        return getProvider(Kute.class.getClassLoader());
-    }
-
     public static ResourceProvider<Resource.Readable> getProvider(ClassLoader classLoader) {
         List<URL> urls = new ArrayList<>();
         while (classLoader != null) {
@@ -30,5 +22,13 @@ public class Kute {
             classLoader = classLoader.getParent();
         }
         return new URLArrayResourceProvider(urls);
+    }
+
+    public static ResourceProvider<Resource.Readable> getDefaultProvider() {
+        try {
+            return getProvider(Thread.currentThread().getContextClassLoader());
+        } catch (Exception ignored) {
+        }
+        return getProvider(Kute.class.getClassLoader());
     }
 }
