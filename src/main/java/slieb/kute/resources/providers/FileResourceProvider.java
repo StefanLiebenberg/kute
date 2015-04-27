@@ -33,7 +33,11 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
     @Override
     public Stream<FileResource> stream() {
         try {
-            return Files.walk(directory.toPath()).map(Path::toString).map(File::new).map(this::createFileResource);
+            return Files.walk(directory.toPath()).map(Path::toString)
+                    .map(File::new)
+                    .filter(File::exists)
+                    .filter(File::isFile)
+                    .map(this::createFileResource);
         } catch (IOException e) {
             throw new ResourceException(e);
         }
