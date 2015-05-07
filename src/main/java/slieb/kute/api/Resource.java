@@ -1,9 +1,8 @@
 package slieb.kute.api;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Serializable;
-import java.io.Writer;
+import java.io.*;
+
+import static slieb.kute.resources.Resources.getResourceAs;
 
 /**
  * The Resource class represents a entry on the class path.
@@ -20,8 +19,6 @@ public interface Resource extends Serializable {
     String getPath();
 
 
-
-
     /**
      * The readable version of Resource. Includes a getReader method.
      */
@@ -31,7 +28,9 @@ public interface Resource extends Serializable {
          * @throws IOException an IO exception.
          */
         Reader getReader() throws IOException;
+
     }
+
 
     /**
      * The readable version of Resource. Includes a getWriter method.
@@ -43,7 +42,61 @@ public interface Resource extends Serializable {
          * @throws IOException an IO exception.
          */
         Writer getWriter() throws IOException;
+
     }
 
+    /**
+     *
+     */
+    interface InputStreaming extends Resource.Readable {
+
+        @Override
+        default Reader getReader() throws IOException {
+            return new InputStreamReader(getInputStream());
+        }
+
+        InputStream getInputStream() throws IOException;
+    }
+
+    /**
+     *
+     */
+    interface OutputStreaming extends Resource.Writeable {
+
+        @Override
+        default Writer getWriter() throws IOException {
+            return new OutputStreamWriter(getOutputStream());
+        }
+
+        OutputStream getOutputStream() throws IOException;
+    }
+
+    /**
+     * @param <A>
+     */
+    interface Proxy<A extends Resource> extends Resource, Readable, Writeable, OutputStreaming, InputStreaming {
+
+        A getResource();
+
+        @Override
+        default Reader getReader() throws IOException {
+            return getResourceAs(getResource(), Readable.class).getReader();
+        }
+
+        @Override
+        default Writer getWriter() throws IOException {
+            return getResourceAs(getResource(), Writeable.class).getWriter();
+        }
+
+        @Override
+        default InputStream getInputStream() throws IOException {
+            return getResourceAs(getResource(), InputStreaming.class).getInputStream();
+        }
+
+        @Override
+        default OutputStream getOutputStream() throws IOException {
+            return getResourceAs(getResource(), OutputStreaming.class).getOutputStream();
+        }
+    }
 
 }

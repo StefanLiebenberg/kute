@@ -1,5 +1,6 @@
 package slieb.kute.resources;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
@@ -176,5 +177,9 @@ public class Resources {
         return new GroupResourceProvider<>(ImmutableList.copyOf(providers));
     }
 
-
+    @SuppressWarnings("unchecked")
+    public static <A extends Resource, B> B getResourceAs(A resource, Class<B> classObject) {
+        Preconditions.checkState(resource.getClass().isAssignableFrom(classObject));
+        return (B) resource;
+    }
 }

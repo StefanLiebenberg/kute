@@ -2,7 +2,6 @@ package slieb.kute.resources.implementations;
 
 import slieb.kute.api.Resource;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -10,7 +9,7 @@ import java.util.function.Supplier;
 
 
 public class InputStreamResource extends AbstractResource
-        implements Resource.Readable {
+        implements Resource.Readable, Resource.InputStreaming {
 
     private final Supplier<InputStream> inputStream;
     private final String path;
@@ -21,8 +20,13 @@ public class InputStreamResource extends AbstractResource
     }
 
     @Override
-    public Reader getReader() throws IOException {
-        return new InputStreamReader(this.inputStream.get());
+    public Reader getReader() {
+        return new InputStreamReader(getInputStream());
+    }
+
+    @Override
+    public InputStream getInputStream() {
+        return inputStream.get();
     }
 
     @Override

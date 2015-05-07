@@ -3,7 +3,6 @@ package slieb.kute.resources.implementations;
 
 import slieb.kute.api.Resource;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -14,7 +13,7 @@ import java.util.function.Supplier;
  */
 public class OutputStreamResource
         extends AbstractResource
-        implements Resource.Writeable {
+        implements Resource.Writeable, Resource.OutputStreaming {
 
     private final Supplier<OutputStream> outputStream;
 
@@ -26,8 +25,13 @@ public class OutputStreamResource
     }
 
     @Override
-    public Writer getWriter() throws IOException {
-        return new OutputStreamWriter(outputStream.get());
+    public Writer getWriter() {
+        return new OutputStreamWriter(getOutputStream());
+    }
+
+    @Override
+    public OutputStream getOutputStream() {
+        return outputStream.get();
     }
 
     @Override

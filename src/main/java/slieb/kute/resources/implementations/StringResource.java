@@ -7,9 +7,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 
-public class StringResource
-        extends AbstractResource
-        implements Resource.Readable {
+public class StringResource extends AbstractResource implements Resource.Readable {
     private final String string;
 
     private final String path;

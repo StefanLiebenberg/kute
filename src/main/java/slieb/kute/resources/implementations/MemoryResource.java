@@ -31,6 +31,7 @@ public class MemoryResource
         return writer;
     }
 
+
     @Override
     public String getPath() {
         return path;

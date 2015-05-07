@@ -2,14 +2,11 @@ package slieb.kute.resources.implementations;
 
 import slieb.kute.api.Resource;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class FileResource
         extends AbstractResource
-        implements Resource.Writeable, Resource.Readable {
+        implements Resource.Writeable, Resource.Readable, Resource.InputStreaming, Resource.OutputStreaming {
 
     private final File file;
 
@@ -43,4 +40,14 @@ public class FileResource
         return new FileWriter(this.file);
     }
 
+
+    @Override
+    public FileOutputStream getOutputStream() throws IOException {
+        return new FileOutputStream(this.file);
+    }
+
+    @Override
+    public InputStream getInputStream() throws IOException {
+        return new FileInputStream(this.file);
+    }
 }

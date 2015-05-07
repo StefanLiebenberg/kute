@@ -23,7 +23,7 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
     @Override
     public FileResource getResourceByName(String path) {
         File file = new File(directory, path);
-        if (file.exists()) {
+        if (shouldProvideFile(file)) {
             return Resources.fileResource(file, path);
         } else {
             return null;
@@ -35,12 +35,15 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
         try {
             return Files.walk(directory.toPath()).map(Path::toString)
                     .map(File::new)
-                    .filter(File::exists)
-                    .filter(File::isFile)
+                    .filter(this::shouldProvideFile)
                     .map(this::createFileResource);
         } catch (IOException e) {
             throw new ResourceException(e);
         }
+    }
+
+    private boolean shouldProvideFile(File file) {
+        return file != null && file.exists() && file.isFile();
     }
 
     private FileResource createFileResource(File file) {
