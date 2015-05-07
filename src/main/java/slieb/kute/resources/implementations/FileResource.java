@@ -4,9 +4,7 @@ import slieb.kute.api.Resource;
 
 import java.io.*;
 
-public class FileResource
-        extends AbstractResource
-        implements Resource.Writeable, Resource.Readable, Resource.InputStreaming, Resource.OutputStreaming {
+public class FileResource extends AbstractResource implements Resource.InputStreaming, Resource.OutputStreaming {
 
     private final File file;
 

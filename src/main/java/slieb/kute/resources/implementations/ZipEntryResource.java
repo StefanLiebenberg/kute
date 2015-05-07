@@ -5,12 +5,10 @@ import slieb.kute.api.Resource;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class ZipEntryResource extends AbstractResource implements Resource.Readable, Resource.InputStreaming {
+public class ZipEntryResource extends AbstractResource implements Resource.InputStreaming {
 
     private final ZipFile zipFile;
 
@@ -20,9 +18,6 @@ public class ZipEntryResource extends AbstractResource implements Resource.Reada
         this.zipFile = zipFile;
         this.zipEntry = zipEntry;
     }
-
-
-
 
     @Override
     public InputStream getInputStream() throws IOException {

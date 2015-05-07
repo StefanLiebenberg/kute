@@ -37,9 +37,20 @@ public class Resources {
      */
     public static String readResource(Resource.Readable resource) throws IOException {
         try (Reader reader = resource.getReader()) {
-            StringWriter writer = new StringWriter();
-            IOUtils.copy(reader, writer);
-            return writer.toString();
+            return IOUtils.toString(reader);
+        }
+    }
+
+    public static String readStreamResource(Resource.InputStreaming resource) throws IOException {
+        try (InputStream istream = resource.getInputStream()) {
+            return IOUtils.toString(istream);
+        }
+    }
+
+
+    public static String readStreamResource(Resource.InputStreaming resource, String encoding) throws IOException {
+        try (InputStream istream = resource.getInputStream()) {
+            return IOUtils.toString(istream, encoding);
         }
     }
 
@@ -50,9 +61,21 @@ public class Resources {
      * @param content  The content that will be writen to the resource.
      * @throws IOException a IOException can occur during the write process.
      */
-    public static void writeResource(Resource.Writeable resource, String content) throws IOException {
+    public static void writeResource(Resource.Writeable resource, CharSequence content) throws IOException {
         try (Writer writer = resource.getWriter()) {
-            IOUtils.write(content, writer);
+            IOUtils.write(content.toString(), writer);
+        }
+    }
+
+    public static void writeStreamResource(Resource.OutputStreaming resource, CharSequence content) throws IOException {
+        try (OutputStream stream = resource.getOutputStream()) {
+            IOUtils.write(content.toString(), stream);
+        }
+    }
+
+    public static void writeStreamResource(Resource.OutputStreaming resource, CharSequence content, String encoding) throws IOException {
+        try (OutputStream stream = resource.getOutputStream()) {
+            IOUtils.write(content.toString(), stream, encoding);
         }
     }
 
@@ -66,6 +89,13 @@ public class Resources {
     public static void copyResource(Resource.Readable readable, Resource.Writeable writeable) throws IOException {
         try (Reader reader = readable.getReader(); Writer writer = writeable.getWriter()) {
             IOUtils.copy(reader, writer);
+        }
+    }
+
+    public static void copyResourceAsStreams(Resource.InputStreaming inputStreaming, Resource.OutputStreaming outputStreaming) throws IOException {
+        try (InputStream inputStream = inputStreaming.getInputStream();
+             OutputStream outputStream = outputStreaming.getOutputStream()) {
+            IOUtils.copy(inputStream, outputStream);
         }
     }
 
@@ -123,8 +153,8 @@ public class Resources {
         return new MemoryCacheResource(resource);
     }
 
-    public static StringResource stringResource(String content, String path) {
-        return new StringResource(content, path);
+    public static StringResource stringResource(CharSequence content, String path) {
+        return new StringResource(content.toString(), path);
     }
 
     public static URLResource urlResource(URL url, String path) {

@@ -7,11 +7,10 @@ import java.io.StringReader;
 import java.io.StringWriter;
 
 
-public class MemoryResource
-        extends AbstractResource
-        implements Resource.Readable, Resource.Writeable {
+public class MemoryResource extends AbstractResource implements Resource.Readable, Resource.Writeable {
 
     private final String path;
+
     private StringWriter writer;
 
     public MemoryResource(String path) {

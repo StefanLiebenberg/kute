@@ -22,5 +22,5 @@ public class RenamedPathResource<A extends Resource> implements Resource.Proxy<A
     public String getPath() {
         return path;
     }
-    
+
 }
