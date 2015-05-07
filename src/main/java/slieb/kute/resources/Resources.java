@@ -206,6 +206,7 @@ public class Resources {
     public static <A extends Resource> ResourceProvider<A> group(ResourceProvider<A>... providers) {
         return new GroupResourceProvider<>(ImmutableList.copyOf(providers));
     }
+    
 
     @SuppressWarnings("unchecked")
     public static <A extends Resource, B> B getResourceAs(A resource, Class<B> classObject) {
