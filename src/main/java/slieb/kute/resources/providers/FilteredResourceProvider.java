@@ -27,7 +27,6 @@ public class FilteredResourceProvider<A extends Resource> implements ResourcePro
         }
     }
 
-
     @Override
     public Stream<A> stream() {
         return resourceProvider.stream().filter(resourceFilter::accepts);

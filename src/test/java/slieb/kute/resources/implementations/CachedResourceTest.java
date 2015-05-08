@@ -17,7 +17,7 @@ import static slieb.kute.resources.Resources.readResource;
 /**
  * Created by stefan on 4/22/15.
  */
-public class MemoryCacheResourceTest {
+public class CachedResourceTest {
 
     @Test
     public void testThreadSafe() {
@@ -29,7 +29,7 @@ public class MemoryCacheResourceTest {
         builder.append("done");
 
         Resource.Readable readable = new CounterResource();
-        Resource.Readable cached = new MemoryCacheResource(readable);
+        Resource.Readable cached = new CachedResource(readable);
 
         ThreadFactory factory = Executors.defaultThreadFactory();
         ImmutableList.Builder<Thread> threadsBuilder = new ImmutableList.Builder<>();
@@ -58,7 +58,7 @@ public class MemoryCacheResourceTest {
     public void testCache() throws Throwable {
 
         Resource.Readable readable = new CounterResource();
-        Resource.Readable cached = new MemoryCacheResource(readable);
+        Resource.Readable cached = new CachedResource(readable);
 
         assertEquals("0", Resources.readResource(cached));
         assertEquals("0", Resources.readResource(cached));

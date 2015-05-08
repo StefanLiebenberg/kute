@@ -9,33 +9,34 @@ import java.io.StringReader;
 
 import static slieb.kute.resources.Resources.readResource;
 
-public class MemoryCacheResource
-        extends AbstractResource
-        implements Resource.Readable {
+public class CachedResource extends AbstractResource implements Resource.Proxy<Resource.Readable> {
 
-    private final Readable readable;
+    private final Readable resource;
     private String cachedValue;
     private boolean cached;
 
-    public MemoryCacheResource(Readable readable) {
-        this.readable = readable;
+    public CachedResource(Readable resource) {
+        this.resource = resource;
         this.cached = false;
     }
 
+    @Override
+    public Readable getResource() {
+        return resource;
+    }
 
     @Override
     public synchronized Reader getReader() throws IOException {
         if (!cached) {
             cached = true;
-            cachedValue = readResource(readable);
+            cachedValue = readResource(resource);
         }
         return new StringReader(cachedValue);
     }
 
-
     @Override
     public String getPath() {
-        return readable.getPath();
+        return resource.getPath();
     }
 
     public void clear() {

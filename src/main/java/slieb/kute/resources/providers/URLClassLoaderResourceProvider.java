@@ -3,8 +3,9 @@ package slieb.kute.resources.providers;
 
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
 import java.util.stream.Stream;
+
+import static java.util.Arrays.asList;
 
 public class URLClassLoaderResourceProvider extends AbstractURLResourceProvider {
 
@@ -15,8 +16,8 @@ public class URLClassLoaderResourceProvider extends AbstractURLResourceProvider 
     }
 
     @Override
-    protected Stream<URL> getURLStream() {
-        return Arrays.asList(urlClassLoader.getURLs()).stream();
+    protected Stream<URL> urlStream() {
+        return asList(urlClassLoader.getURLs()).stream();
     }
 }
 

@@ -6,6 +6,7 @@ import slieb.kute.api.ResourceProvider;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
+
 public class StrictCachedProvider<A extends Resource.Writeable> implements ResourceProvider<A> {
 
     private final ConcurrentHashMap<String, A> resourceMap = new ConcurrentHashMap<>();
@@ -18,13 +19,12 @@ public class StrictCachedProvider<A extends Resource.Writeable> implements Resou
         this.resourceProvider = resourceProvider;
     }
 
-
     @Override
     public A getResourceByName(String path) {
         if (!hasBuilt && !resourceMap.containsKey(path)) {
             resourceMap.put(path, resourceProvider.getResourceByName(path));
         }
-        return resourceMap.get(path);
+        return resourceMap.getOrDefault(path, null);
     }
 
     @Override

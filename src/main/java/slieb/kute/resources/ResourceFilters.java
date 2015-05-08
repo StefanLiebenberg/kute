@@ -2,66 +2,101 @@ package slieb.kute.resources;
 
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceFilter;
-import slieb.kute.resources.filters.ExtensionFilter;
-import slieb.kute.resources.filters.PatternFilter;
-import slieb.kute.resources.filters.PredicateFilter;
 
-import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import static java.util.Arrays.asList;
+
 public class ResourceFilters {
 
+    /**
+     * Returns true for a given resource if either left or right returns true for the same resource.
+     *
+     * @param left  A resource filter
+     * @param right A resource filter
+     * @return A boolean value
+     */
     public static ResourceFilter or(ResourceFilter left, ResourceFilter right) {
-        return resource -> left.accepts(resource) || right.accepts(resource);
+        return r -> left.accepts(r) || right.accepts(r);
     }
 
+    /**
+     * Returns true for a given resource if both left and right filters return true for the resource.
+     *
+     * @param left  A resource filter.
+     * @param right A resource filter.
+     * @return A boolean value.
+     */
     public static ResourceFilter and(ResourceFilter left, ResourceFilter right) {
-        return resource -> left.accepts(resource) && right.accepts(resource);
+        return r -> left.accepts(r) && right.accepts(r);
     }
 
+    /**
+     * @param first   A resource filter.
+     * @param filters A variable amount of resource filters.
+     * @return A resource filter that returns true of all of filters return true.
+     */
     public static ResourceFilter all(ResourceFilter first, ResourceFilter... filters) {
-        ResourceFilter returnFilter = first;
-        for (ResourceFilter f : filters) {
-            returnFilter = and(returnFilter, f);
-        }
-        return returnFilter;
+        return asList(filters).stream().reduce(first, ResourceFilters::and);
     }
 
-    public static ResourceFilter all(Collection<ResourceFilter> filters) {
-        return filter(r -> filters.stream().allMatch(f -> f.accepts(r)));
+    /**
+     * @param first   A resource filter.
+     * @param filters A variable amount of resource filters.
+     * @return A resource filter that returns true of none of filters return true.
+     */
+    public static ResourceFilter none(ResourceFilter first, ResourceFilter... filters) {
+        return not(any(first, filters));
     }
 
-    public static ResourceFilter any(Collection<ResourceFilter> filters) {
-        return filter(r -> filters.stream().anyMatch(f -> f.accepts(r)));
-    }
-
+    /**
+     * @param first   A resource filter.
+     * @param filters A variable amount of resource filters.
+     * @return A resource filter that returns true if any of filters return true.
+     */
     public static ResourceFilter any(ResourceFilter first, ResourceFilter... filters) {
-        ResourceFilter returnFilter = first;
-        for (ResourceFilter f : filters) {
-            returnFilter = or(returnFilter, f);
-        }
-        return returnFilter;
+        return asList(filters).stream().reduce(first, ResourceFilters::or);
     }
 
+    /**
+     * @param filter A resource filter
+     * @return A resource filter that is the negation of filter.
+     */
     public static ResourceFilter not(ResourceFilter filter) {
         return resource -> !filter.accepts(resource);
     }
 
-    public static ExtensionFilter extensionFilter(String... extensions) {
-        return new ExtensionFilter(extensions);
+    /**
+     * @param extensions A variable list of extension strings.
+     * @return True resource path ends with any of the extension strings.
+     */
+    public static ResourceFilter extensionFilter(String... extensions) {
+        return (r) -> asList(extensions).stream().anyMatch(r.getPath()::endsWith);
     }
 
-    public static PatternFilter patternFilter(Pattern pattern) {
-        return new PatternFilter(pattern);
+    /**
+     * @param pattern A Pattern to match against the resource path
+     * @return true if the resource path matches the specified pattern.
+     */
+    public static ResourceFilter patternFilter(Pattern pattern) {
+        return (r) -> pattern.matcher(r.getPath()).matches();
     }
 
-    public static PatternFilter patternFilter(String pattern) {
+    /**
+     * @param pattern A string Pattern to match against the resource path
+     * @return true if the pattern matches the resource path.
+     */
+    public static ResourceFilter patternFilter(String pattern) {
         return patternFilter(Pattern.compile(pattern));
     }
 
-    public static PredicateFilter filter(Predicate<Resource> predicate) {
-        return new PredicateFilter(predicate);
+    /**
+     * @param predicate A predicate to turn into a filter.
+     * @return A Resource filter.
+     */
+    public static ResourceFilter filter(Predicate<Resource> predicate) {
+        return (ResourceFilter) predicate;
     }
 
 }

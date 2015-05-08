@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 import slieb.kute.api.Resource;
-import slieb.kute.resources.implementations.MemoryCacheResource;
+import slieb.kute.resources.implementations.CachedResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,7 +76,7 @@ public class ResourcesTest {
     @Test
     public void testCacheResource() throws Exception {
         Resource.Readable readable = Mockito.mock(Resource.Readable.class);
-        MemoryCacheResource cached = Resources.cacheResource(readable);
+        CachedResource cached = Resources.cacheResource(readable);
 
         Mockito.when(readable.getReader()).thenAnswer(invocationOnMock -> new StringReader("cache"));
         Assert.assertEquals("cache", Resources.readResource(cached));

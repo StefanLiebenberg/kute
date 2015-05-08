@@ -149,8 +149,8 @@ public class Resources {
      * @param resource A readable resource instance.
      * @return A readable resource that will cache the contents of another readable resource, to speed things up. Use with caution.
      */
-    public static MemoryCacheResource cacheResource(Resource.Readable resource) {
-        return new MemoryCacheResource(resource);
+    public static CachedResource cacheResource(Resource.Readable resource) {
+        return new CachedResource(resource);
     }
 
     public static StringResource stringResource(CharSequence content, String path) {
@@ -206,7 +206,7 @@ public class Resources {
     public static <A extends Resource> ResourceProvider<A> group(ResourceProvider<A>... providers) {
         return new GroupResourceProvider<>(ImmutableList.copyOf(providers));
     }
-    
+
 
     @SuppressWarnings("unchecked")
     public static <A extends Resource, B> B getResourceAs(A resource, Class<B> classObject) {

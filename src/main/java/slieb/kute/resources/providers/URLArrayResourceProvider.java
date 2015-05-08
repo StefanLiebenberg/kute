@@ -14,7 +14,7 @@ public class URLArrayResourceProvider extends AbstractURLResourceProvider {
     }
 
     @Override
-    protected Stream<URL> getURLStream() {
+    protected Stream<URL> urlStream() {
         return urls.stream();
     }
 }

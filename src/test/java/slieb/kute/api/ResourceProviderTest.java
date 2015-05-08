@@ -57,4 +57,10 @@ public class ResourceProviderTest {
     public void testCollectionResources() throws Exception {
         testProvider(Resources.providerOf(resourceA, resourceB, resourceC));
     }
+
+    @Test
+    public void testFilteredResourceProvider() throws Exception {
+        Resources.filterResources(Resources.providerOf(resourceA, resourceB, resourceC), (ResourceFilter) resource -> true);
+    }
 }
+

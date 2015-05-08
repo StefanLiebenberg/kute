@@ -4,34 +4,29 @@ import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.ResourceProviderFactory;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.stream.Stream;
 
 
 public abstract class AbstractURLResourceProvider implements ResourceProvider<Resource.Readable> {
 
+    @Override
     public Resource.Readable getResourceByName(String path) {
-        return ProviderUtils.find(stream(), path);
+        return providerStream()
+                .map(s -> s.getResourceByName(path))
+                .filter(r -> r != null)
+                .findFirst().orElseGet(null);
     }
 
     @Override
     public Stream<Resource.Readable> stream() {
-        return getURLStream()
-                .map(this::safeCreate)
-                .filter(p -> p != null)
-                .flatMap(ResourceProvider::stream);
+        return providerStream().flatMap(ResourceProvider::stream);
     }
 
-    private ResourceProvider<? extends Resource.Readable> safeCreate(URL url) {
-        try {
-            return ResourceProviderFactory.create(url);
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
-            return null;
-        }
+    public Stream<ResourceProvider<? extends Resource.Readable>> providerStream() {
+        return urlStream().map(ResourceProviderFactory::safeCreate).filter(p -> p != null);
     }
 
-    protected abstract Stream<URL> getURLStream();
+    protected abstract Stream<URL> urlStream();
 }
 

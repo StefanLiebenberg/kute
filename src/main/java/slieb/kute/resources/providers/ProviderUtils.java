@@ -17,14 +17,11 @@ public class ProviderUtils {
 
     public static <R extends Resource> Stream<R> distinct(Stream<R> stream) {
         return stream.map((Function<R, Wrapper<R>>) Wrapper::new).distinct().map(Wrapper::getResource);
-//        return stream.distinct();
     }
-
 
     public static <R extends Resource> Iterable<R> distinct(Iterable<R> iterable) {
         return filter(iterable, ResourceFilters.filter(new DistinctPredicate<>()));
     }
-
 
     public static <R extends Resource> Iterable<R> filter(Iterable<R> iterable, ResourceFilter filter) {
         return () -> new FilteredIterator<>(iterable.iterator(), filter);
@@ -133,4 +130,3 @@ class DistinctPredicate<R extends Resource> implements Predicate<R> {
         }
     }
 }
-

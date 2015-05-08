@@ -18,7 +18,12 @@ public class MappedResourceProvider<A extends Resource, B extends Resource> impl
 
     @Override
     public B getResourceByName(String path) {
-        return function.apply(provider.getResourceByName(path));
+        A resource = provider.getResourceByName(path);
+        if (resource != null) {
+            return function.apply(resource);
+        } else {
+            return null;
+        }
     }
 
     @Override
