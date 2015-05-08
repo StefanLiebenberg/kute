@@ -8,6 +8,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceFilter;
+import slieb.kute.resources.ResourceFilters;
 
 import java.util.regex.Pattern;
 
@@ -23,11 +25,11 @@ public class PatternFilterTest {
     private Resource mockResource;
 
 
-    private PatternFilter patternFilter;
+    private ResourceFilter patternFilter;
 
     @Before
     public void setUp() throws Exception {
-        patternFilter = new PatternFilter(Pattern.compile(".*\\.java"));
+        patternFilter = ResourceFilters.patternFilter(Pattern.compile(".*\\.java"));
     }
 
     @Test
