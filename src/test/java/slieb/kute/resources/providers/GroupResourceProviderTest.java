@@ -60,6 +60,7 @@ public class GroupResourceProviderTest {
         assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC, resourceD), resourceProviderToSet(all));
 
     }
+
     @Test
     public void testGetDistinctByPathResources() throws Exception {
 

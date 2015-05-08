@@ -1,15 +1,11 @@
-package slieb.kute.resources.providers;
+package slieb.kute.resources;
 
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceFilter;
-import slieb.kute.resources.ResourceFilters;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 
@@ -17,10 +13,6 @@ public class ProviderUtils {
 
     public static <R extends Resource> Stream<R> distinct(Stream<R> stream) {
         return stream.map((Function<R, Wrapper<R>>) Wrapper::new).distinct().map(Wrapper::getResource);
-    }
-
-    public static <R extends Resource> Iterable<R> distinct(Iterable<R> iterable) {
-        return filter(iterable, ResourceFilters.filter(new DistinctPredicate<>()));
     }
 
     public static <R extends Resource> Iterable<R> filter(Iterable<R> iterable, ResourceFilter filter) {
@@ -109,24 +101,4 @@ class FilteredIterator<A extends Resource> implements Iterator<A> {
         iterator.remove();
     }
 
-}
-
-class DistinctPredicate<R extends Resource> implements Predicate<R> {
-
-    private final Set<String> visited;
-
-    public DistinctPredicate() {
-        this.visited = new HashSet<>();
-    }
-
-    @Override
-    public synchronized boolean test(R resource) {
-        String path = resource.getPath();
-        if (!visited.contains(path)) {
-            visited.add(path);
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
