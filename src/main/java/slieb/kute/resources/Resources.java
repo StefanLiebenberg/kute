@@ -128,7 +128,7 @@ public class Resources {
      * @param <A>      extends Resource.
      * @return A resource of type A extends Resource that is a copy of the old resource, but with a new name.
      */
-    public static <A extends Resource> RenamedPathResource<A> rename(A resource, String path) {
+    public static <A extends Resource> RenamedPathResource<A> rename(String path, A resource) {
         return new RenamedPathResource<>(path, resource);
     }
 
@@ -139,8 +139,19 @@ public class Resources {
      * @param path     The path name for this resource.
      * @return a readable resource that reads from provided input stream.
      */
-    public static InputStreamResource inputStreamResource(Supplier<InputStream> supplier, String path) {
-        return new InputStreamResource(supplier, path);
+    public static InputStreamResource inputStreamResource(String path, Supplier<InputStream> supplier) {
+        return new InputStreamResource(path, supplier);
+    }
+
+    /**
+     * Create resources from input stream.
+     *
+     * @param supplier The input stream to supply content.
+     * @param path     The path name for this resource.
+     * @return a readable resource that reads from provided input stream.
+     */
+    public static InputStreamResource inputStreamResourceWithIO(String path, InputStreamResource.SupplierWithIO<InputStream> supplier) {
+        return new InputStreamResource(path, supplier);
     }
 
     /**
@@ -162,12 +173,9 @@ public class Resources {
         return new URLResource(path, url);
     }
 
-    public static ZipEntryResource zipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
-        return new ZipEntryResource(zipFile, zipEntry);
-    }
 
-    public static RenamedPathResource<ZipEntryResource> zipEntryResource(ZipFile zipFile, ZipEntry zipEntry, String path) {
-        return rename(zipEntryResource(zipFile, zipEntry), path);
+    public static RenamedPathResource<Resource.InputStreaming> zipEntryResource(String path, ZipFile zipFile, ZipEntry zipEntry) {
+        return rename(path, zipEntryResource(zipFile, zipEntry));
     }
 
 
@@ -214,4 +222,10 @@ public class Resources {
         Preconditions.checkState(resource.getClass().isAssignableFrom(classObject));
         return (B) resource;
     }
+
+
+    public static Resource.InputStreaming zipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
+        return inputStreamResourceWithIO(zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
+    }
+
 }

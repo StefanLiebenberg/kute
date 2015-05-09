@@ -28,7 +28,7 @@ public class RenamedNamespaceProvider<A extends Resource> implements ResourcePro
     public RenamedPathResource<A> getResourceByName(String path) {
         String origPath = getRenamedPath(path, renamedRoot, originalRoot);
         A origResource = resourceProvider.getResourceByName(origPath);
-        return Resources.rename(origResource, path);
+        return Resources.rename(path, origResource);
     }
 
 
@@ -64,7 +64,7 @@ public class RenamedNamespaceProvider<A extends Resource> implements ResourcePro
         @Override
         public RenamedPathResource<A> next() {
             A resource = iterator.next();
-            return Resources.rename(resource, getRenamedPath(resource.getPath(), originalRoot, renamedRoot));
+            return Resources.rename(getRenamedPath(resource.getPath(), originalRoot, renamedRoot), resource);
         }
 
         @Override

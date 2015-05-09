@@ -60,14 +60,14 @@ public class ResourcesTest {
     public void testRename() throws Exception {
         Resource resource = Mockito.mock(Resource.class);
         Mockito.when(resource.getPath()).thenReturn("/path");
-        Resource renamed = Resources.rename(resource, "/renamedPath");
+        Resource renamed = Resources.rename("/renamedPath", resource);
         Assert.assertEquals("/renamedPath", renamed.getPath());
     }
 
     @Test
     public void testInputStreamResource() throws Exception {
         try (InputStream inputStream = IOUtils.toInputStream("content")) {
-            Resource.Readable readable = Resources.inputStreamResource(() -> inputStream, "/path");
+            Resource.Readable readable = Resources.inputStreamResource("/path", () -> inputStream);
             Assert.assertEquals("content", Resources.readResource(readable));
             Assert.assertEquals("/path", readable.getPath());
         }

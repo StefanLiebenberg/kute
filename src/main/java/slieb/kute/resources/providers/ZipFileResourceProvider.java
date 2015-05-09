@@ -1,14 +1,15 @@
 package slieb.kute.resources.providers;
 
+import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
-import slieb.kute.resources.implementations.ZipEntryResource;
+import slieb.kute.resources.Resources;
 
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 
-public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResource> {
+public class ZipFileResourceProvider implements ResourceProvider<Resource.InputStreaming> {
 
     private final ZipFile zipFile;
 
@@ -17,7 +18,7 @@ public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResourc
     }
 
     @Override
-    public ZipEntryResource getResourceByName(String path) {
+    public Resource.InputStreaming getResourceByName(String path) {
         ZipEntry entry = zipFile.getEntry(path);
         if (entry != null) {
             return getZipResource(entry);
@@ -27,12 +28,12 @@ public class ZipFileResourceProvider implements ResourceProvider<ZipEntryResourc
     }
 
     @Override
-    public Stream<ZipEntryResource> stream() {
+    public Stream<Resource.InputStreaming> stream() {
         return zipFile.stream().map(this::getZipResource);
     }
 
-    private ZipEntryResource getZipResource(ZipEntry zipEntry) {
-        return new ZipEntryResource(zipFile, zipEntry);
+    private Resource.InputStreaming getZipResource(ZipEntry zipEntry) {
+        return Resources.zipEntryResource(zipFile, zipEntry);
     }
 
 }
