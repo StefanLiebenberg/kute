@@ -205,7 +205,7 @@ public class Resources {
         return new MappedResourceProvider<>(provider, function);
     }
 
-    public static <A extends Resource> ResourceProvider<A> filterResources(ResourceProvider<A> provider, Predicate<Resource> predicate) {
+    public static <A extends Resource> ResourceProvider<A> filterResources(ResourceProvider<A> provider, Predicate<? super Resource> predicate) {
         return new FilteredResourceProvider<>(provider, predicate);
     }
 

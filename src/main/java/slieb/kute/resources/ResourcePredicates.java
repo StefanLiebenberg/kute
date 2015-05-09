@@ -10,13 +10,13 @@ import static java.util.Arrays.asList;
 
 public class ResourcePredicates {
 
-    public static final Predicate<Resource> NON_NULL = p -> p != null;
+    public static final Predicate<? super Resource> NON_NULL = p -> p != null;
 
     /**
      * @return A nonNull predicate.
      */
-    public static Predicate<Resource> nonNull() {
-        return NON_NULL;
+    public static <A extends Resource> Predicate<A> nonNull() {
+        return p -> p != null;
     }
 
     /**
@@ -24,7 +24,7 @@ public class ResourcePredicates {
      * @return a single predicate.
      */
     @SafeVarargs
-    public static Predicate<Resource> all(Predicate<Resource>... predicates) {
+    public static <A extends Resource> Predicate<A> all(Predicate<A>... predicates) {
         return asList(predicates).stream().reduce(Predicate::and).get();
     }
 
@@ -33,7 +33,7 @@ public class ResourcePredicates {
      * @return a single predicate.
      */
     @SafeVarargs
-    public static Predicate<Resource> any(Predicate<Resource>... predicates) {
+    public static <A extends Resource> Predicate<A> any(Predicate<A>... predicates) {
         return asList(predicates).stream().reduce(Predicate::or).get();
     }
 
@@ -42,7 +42,7 @@ public class ResourcePredicates {
      * @return a single predicate.
      */
     @SafeVarargs
-    public static Predicate<Resource> none(Predicate<Resource>... predicates) {
+    public static <A extends Resource> Predicate<A> none(Predicate<A>... predicates) {
         return all(predicates).negate();
     }
 
@@ -50,7 +50,7 @@ public class ResourcePredicates {
      * @param extensions A variable list of extension strings.
      * @return True resource path ends with any of the extension strings.
      */
-    public static Predicate<Resource> extensionFilter(String... extensions) {
+    public static <A extends Resource> Predicate<A> extensionFilter(String... extensions) {
         return (r) -> asList(extensions).stream().anyMatch(r.getPath()::endsWith);
     }
 
@@ -58,7 +58,7 @@ public class ResourcePredicates {
      * @param pattern A Pattern to match against the resource path
      * @return true if the resource path matches the specified pattern.
      */
-    public static Predicate<Resource> patternFilter(Pattern pattern) {
+    public static <A extends Resource> Predicate<A> patternFilter(Pattern pattern) {
         return (r) -> pattern.matcher(r.getPath()).matches();
     }
 
@@ -66,7 +66,7 @@ public class ResourcePredicates {
      * @param pattern A string Pattern to match against the resource path
      * @return true if the pattern matches the resource path.
      */
-    public static Predicate<Resource> patternFilter(String pattern) {
+    public static <A extends Resource> Predicate<A> patternFilter(String pattern) {
         return patternFilter(Pattern.compile(pattern));
     }
 

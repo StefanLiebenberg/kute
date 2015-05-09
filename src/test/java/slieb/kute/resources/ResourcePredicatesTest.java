@@ -19,7 +19,7 @@ public class ResourcePredicatesTest {
     Predicate<Resource> filterT, filterF, filterM;
 
     @Mock
-    Resource resourceA, resourceB;
+    Resource.Readable resourceA, resourceB;
 
     @Before
     public void setup() {
@@ -31,6 +31,7 @@ public class ResourcePredicatesTest {
 
         Mockito.when(filterM.test(resourceA)).thenReturn(true);
         Mockito.when(filterM.test(resourceB)).thenReturn(false);
+
 
     }
 

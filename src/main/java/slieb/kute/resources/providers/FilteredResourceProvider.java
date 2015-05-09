@@ -10,9 +10,9 @@ public class FilteredResourceProvider<A extends Resource> implements ResourcePro
 
     private final ResourceProvider<A> resourceProvider;
 
-    private final Predicate<Resource> resourceFilter;
+    private final Predicate<? super Resource> resourceFilter;
 
-    public FilteredResourceProvider(ResourceProvider<A> resourceProvider, Predicate<Resource> resourceFilter) {
+    public FilteredResourceProvider(ResourceProvider<A> resourceProvider, Predicate<? super Resource> resourceFilter) {
         this.resourceProvider = resourceProvider;
         this.resourceFilter = resourceFilter;
     }
