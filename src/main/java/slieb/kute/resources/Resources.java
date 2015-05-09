@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceFilter;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.implementations.*;
 import slieb.kute.resources.providers.CollectionResourceProvider;
@@ -20,6 +19,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -206,14 +206,8 @@ public class Resources {
         return new MappedResourceProvider<>(provider, function);
     }
 
-
-    public static <A extends Resource> ResourceProvider<A> filterResources(ResourceProvider<A> provider, ResourceFilter filter) {
-        return new FilteredResourceProvider<>(provider, filter);
-    }
-
     public static <A extends Resource> ResourceProvider<A> filterResources(ResourceProvider<A> provider, Predicate<Resource> predicate) {
-        return filterResources(provider, (ResourceFilter) predicate::test);
-
+        return new FilteredResourceProvider<>(provider, predicate);
     }
 
     public static <A extends Resource> ResourceProvider<A> providerOf(Collection<A> resources) {
@@ -242,4 +236,50 @@ public class Resources {
         return inputStreamResourceWithIO(zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
     }
 
+
+    public static <R extends Resource> R findFirst(Stream<R> stream) {
+        return stream.filter(r -> r != null).findFirst().orElse(null);
+    }
+
+
+    public static <R extends Resource> Stream<R> distinct(Stream<R> stream) {
+        return stream.map((Function<R, Wrapper<R>>) Wrapper::new).distinct().map(Wrapper::getResource);
+    }
+
+
+    public static <R extends Resource> R find(Stream<R> stream, String path) {
+        return findFirst(stream.filter(r -> r.getPath().equals(path)));
+    }
+
+}
+
+
+class Wrapper<R extends Resource> implements Serializable {
+
+    final String path;
+    final R resource;
+
+    public Wrapper(R resource) {
+        this.resource = resource;
+        this.path = resource.getPath();
+    }
+
+    @Override
+    public int hashCode() {
+        return path.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Wrapper)) return false;
+
+        Wrapper<?> map = (Wrapper<?>) o;
+
+        return path.equals(map.path);
+    }
+
+    public R getResource() {
+        return resource;
+    }
 }

@@ -8,9 +8,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceFilter;
 import slieb.kute.resources.ResourceFilters;
 
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static java.util.stream.IntStream.range;
@@ -25,7 +25,7 @@ public class PatternFilterTest {
     private Resource mockResource;
 
 
-    private ResourceFilter patternFilter;
+    private Predicate<Resource> patternFilter;
 
     @Before
     public void setUp() throws Exception {
@@ -35,19 +35,19 @@ public class PatternFilterTest {
     @Test
     public void testMatchingPattern() throws Exception {
         Mockito.when(mockResource.getPath()).thenReturn("/file/path/file.java");
-        Assert.assertTrue(patternFilter.accepts(mockResource));
+        Assert.assertTrue(patternFilter.test(mockResource));
     }
 
     @Test
     public void testAlmostMatchingPattern() throws Exception {
         Mockito.when(mockResource.getPath()).thenReturn("/file/path/file_java");
-        Assert.assertFalse(patternFilter.accepts(mockResource));
+        Assert.assertFalse(patternFilter.test(mockResource));
     }
 
     @Test
     public void testNotMatchingPattern() throws Exception {
         Mockito.when(mockResource.getPath()).thenReturn("/file/path/file.class");
-        Assert.assertFalse(patternFilter.accepts(mockResource));
+        Assert.assertFalse(patternFilter.test(mockResource));
     }
 
     @Test
@@ -55,9 +55,9 @@ public class PatternFilterTest {
         range(0, 1000)
                 .parallel()
                 .forEach(i -> {
-                    assertTrue(patternFilter.accepts(stringResource("/my/Car.java", "content")));
-                    assertFalse(patternFilter.accepts(stringResource("/my/passwords.txt", "content")));
-                    assertFalse(patternFilter.accepts(stringResource("/my/pictures/cat.png", "content")));
+                    assertTrue(patternFilter.test(stringResource("/my/Car.java", "content")));
+                    assertFalse(patternFilter.test(stringResource("/my/passwords.txt", "content")));
+                    assertFalse(patternFilter.test(stringResource("/my/pictures/cat.png", "content")));
                 });
     }
 }

@@ -60,7 +60,7 @@ public class ResourceProviderTest {
 
     @Test
     public void testFilteredResourceProvider() throws Exception {
-        Resources.filterResources(Resources.providerOf(resourceA, resourceB, resourceC), (ResourceFilter) resource -> true);
+        Resources.filterResources(Resources.providerOf(resourceA, resourceB, resourceC), resource -> true);
     }
 }
 

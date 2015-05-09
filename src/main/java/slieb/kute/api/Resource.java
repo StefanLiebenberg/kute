@@ -163,5 +163,4 @@ public interface Resource extends Serializable {
             return getResourceAs(getResource(), OutputStreaming.class).getOutputStream();
         }
     }
-
 }

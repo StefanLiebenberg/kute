@@ -3,6 +3,7 @@ package slieb.kute.resources.providers;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.ResourceProviderFactory;
+import slieb.kute.resources.Resources;
 
 import java.net.URL;
 import java.util.stream.Stream;
@@ -12,10 +13,7 @@ public abstract class AbstractURLResourceProvider implements ResourceProvider<Re
 
     @Override
     public Resource.InputStreaming getResourceByName(String path) {
-        return providerStream()
-                .map(s -> s.getResourceByName(path))
-                .filter(r -> r != null)
-                .findFirst().orElseGet(null);
+        return Resources.findFirst(providerStream().map(s -> s.getResourceByName(path)));
     }
 
     @Override

@@ -2,10 +2,12 @@ package slieb.kute.resources.providers;
 
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
-import slieb.kute.resources.ProviderUtils;
 
 import java.util.Collection;
 import java.util.stream.Stream;
+
+import static slieb.kute.resources.Resources.distinct;
+import static slieb.kute.resources.Resources.findFirst;
 
 public class GroupResourceProvider<A extends Resource> implements ResourceProvider<A> {
 
@@ -17,18 +19,12 @@ public class GroupResourceProvider<A extends Resource> implements ResourceProvid
 
     @Override
     public A getResourceByName(String path) {
-        for (ResourceProvider<? extends A> resourceProvider : resourceProviders) {
-            A resource = resourceProvider.getResourceByName(path);
-            if (resource != null) {
-                return resource;
-            }
-        }
-        return null;
+        return findFirst(resourceProviders.stream().map(p -> p.getResourceByName(path)));
     }
 
     @Override
     public Stream<A> stream() {
-        return ProviderUtils.distinct(resourceProviders.stream().flatMap(ResourceProvider::stream));
+        return distinct(resourceProviders.stream().flatMap(ResourceProvider::stream));
     }
 
 }
