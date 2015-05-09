@@ -10,6 +10,15 @@ import static java.util.Arrays.asList;
 
 public class ResourcePredicates {
 
+    public static final Predicate<Resource> NON_NULL = p -> p != null;
+
+    /**
+     * @return A nonNull predicate.
+     */
+    public static Predicate<Resource> nonNull() {
+        return NON_NULL;
+    }
+
     /**
      * @param predicates Predicates to string together.
      * @return a single predicate.

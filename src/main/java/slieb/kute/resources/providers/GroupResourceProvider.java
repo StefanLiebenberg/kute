@@ -6,8 +6,8 @@ import slieb.kute.api.ResourceProvider;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-import static slieb.kute.resources.Resources.distinct;
-import static slieb.kute.resources.Resources.findFirst;
+import static slieb.kute.resources.Resources.distinctPath;
+import static slieb.kute.resources.Resources.findFirstResource;
 
 public class GroupResourceProvider<A extends Resource> implements ResourceProvider<A> {
 
@@ -19,12 +19,12 @@ public class GroupResourceProvider<A extends Resource> implements ResourceProvid
 
     @Override
     public A getResourceByName(String path) {
-        return findFirst(resourceProviders.stream().map(p -> p.getResourceByName(path)));
+        return findFirstResource(resourceProviders.stream().map(p -> p.getResourceByName(path)));
     }
 
     @Override
     public Stream<A> stream() {
-        return distinct(resourceProviders.stream().flatMap(ResourceProvider::stream));
+        return distinctPath(resourceProviders.stream().flatMap(ResourceProvider::stream));
     }
 
 }

@@ -13,7 +13,7 @@ public abstract class AbstractURLResourceProvider implements ResourceProvider<Re
 
     @Override
     public Resource.InputStreaming getResourceByName(String path) {
-        return Resources.findFirst(providerStream().map(s -> s.getResourceByName(path)));
+        return Resources.findFirstResource(providerStream().map(s -> s.getResourceByName(path)));
     }
 
     @Override

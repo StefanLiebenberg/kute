@@ -201,8 +201,7 @@ public class Resources {
         return resourceProvider.stream().collect(toSet());
     }
 
-    public static <A extends Resource, B extends Resource> ResourceProvider<B> mapResources(
-            ResourceProvider<A> provider, Function<A, B> function) {
+    public static <A extends Resource, B extends Resource> ResourceProvider<B> mapResources(ResourceProvider<A> provider, Function<A, B> function) {
         return new MappedResourceProvider<>(provider, function);
     }
 
@@ -237,49 +236,65 @@ public class Resources {
     }
 
 
-    public static <R extends Resource> R findFirst(Stream<R> stream) {
-        return stream.filter(r -> r != null).findFirst().orElse(null);
+    public static <R extends Resource> R findFirstResource(Stream<R> stream) {
+        return stream.filter(ResourcePredicates.NON_NULL).findFirst().orElse(null);
     }
 
 
-    public static <R extends Resource> Stream<R> distinct(Stream<R> stream) {
-        return stream.map((Function<R, Wrapper<R>>) Wrapper::new).distinct().map(Wrapper::getResource);
+    public static <R extends Resource> R findResource(Stream<R> stream, String path) {
+        return findFirstResource(stream.filter(r -> r.getPath().equals(path)));
     }
 
+    private static <R extends Resource, X> Wrapper<R, X> wrap(R resource, Function<R, X> function) {
+        return new Wrapper<>(resource, function.apply(resource));
+    }
 
-    public static <R extends Resource> R find(Stream<R> stream, String path) {
-        return findFirst(stream.filter(r -> r.getPath().equals(path)));
+    private static <R extends Resource, X> Stream<Wrapper<R, X>> wrapStream(Stream<R> stream, Function<R, X> function) {
+        return stream.map(r -> wrap(r, function));
+    }
+
+    private static <R extends Resource> R unwrap(Wrapper<R, ?> wrapper) {
+        return wrapper.resource;
+    }
+
+    private static <R extends Resource, X> Stream<R> unwrapStream(Stream<Wrapper<R, X>> stream) {
+        return stream.map(Resources::unwrap);
+    }
+
+    public static <R extends Resource, X> Stream<R> distinct(Stream<R> stream, Function<R, X> function) {
+        return unwrapStream(wrapStream(stream, function).distinct());
+    }
+
+    public static <R extends Resource> Stream<R> distinctPath(Stream<R> stream) {
+        return distinct(stream, Resource::getPath);
     }
 
 }
 
 
-class Wrapper<R extends Resource> implements Serializable {
+class Wrapper<R extends Resource, X> implements Serializable {
 
-    final String path;
-    final R resource;
+    public final R resource;
+    public final X value;
 
-    public Wrapper(R resource) {
+    public Wrapper(R resource, X value) {
         this.resource = resource;
-        this.path = resource.getPath();
-    }
-
-    @Override
-    public int hashCode() {
-        return path.hashCode();
+        this.value = value;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Wrapper)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        Wrapper<?> map = (Wrapper<?>) o;
+        Wrapper<?, ?> wrapper = (Wrapper<?, ?>) o;
 
-        return path.equals(map.path);
+        return !(value != null ? !value.equals(wrapper.value) : wrapper.value != null);
+
     }
 
-    public R getResource() {
-        return resource;
+    @Override
+    public int hashCode() {
+        return value != null ? value.hashCode() : 0;
     }
 }
