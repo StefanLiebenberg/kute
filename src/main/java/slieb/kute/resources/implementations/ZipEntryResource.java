@@ -15,6 +15,7 @@ public class ZipEntryResource extends AbstractResource implements Resource.Input
     private final ZipEntry zipEntry;
 
     public ZipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
+        super(zipEntry.getName());
         this.zipFile = zipFile;
         this.zipEntry = zipEntry;
     }
@@ -22,10 +23,5 @@ public class ZipEntryResource extends AbstractResource implements Resource.Input
     @Override
     public InputStream getInputStream() throws IOException {
         return zipFile.getInputStream(zipEntry);
-    }
-
-    @Override
-    public String getPath() {
-        return zipEntry.getName();
     }
 }

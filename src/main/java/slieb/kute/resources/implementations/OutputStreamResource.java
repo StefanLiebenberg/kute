@@ -11,22 +11,16 @@ import java.util.function.Supplier;
  */
 public class OutputStreamResource extends AbstractResource implements Resource.OutputStreaming {
 
-    private final Supplier<OutputStream> outputStream;
+    private final Supplier<OutputStream> supplier;
 
-    private final String path;
-
-    public OutputStreamResource(Supplier<OutputStream> outputStream, String path) {
-        this.outputStream = outputStream;
-        this.path = path;
+    public OutputStreamResource(Supplier<OutputStream> supplier, String path) {
+        super(path);
+        this.supplier = supplier;
     }
 
     @Override
     public OutputStream getOutputStream() {
-        return outputStream.get();
+        return supplier.get();
     }
 
-    @Override
-    public String getPath() {
-        return path;
-    }
 }

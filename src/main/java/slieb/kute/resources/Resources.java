@@ -116,8 +116,8 @@ public class Resources {
      * @param path The path this resource should be available at.
      * @return A file resource that will provide the file contents when needed.
      */
-    public static FileResource fileResource(File file, String path) {
-        return new FileResource(file, path);
+    public static FileResource fileResource(String path, File file) {
+        return new FileResource(path, file);
     }
 
     /**
@@ -129,7 +129,7 @@ public class Resources {
      * @return A resource of type A extends Resource that is a copy of the old resource, but with a new name.
      */
     public static <A extends Resource> RenamedPathResource<A> rename(A resource, String path) {
-        return new RenamedPathResource<>(resource, path);
+        return new RenamedPathResource<>(path, resource);
     }
 
     /**
@@ -153,12 +153,13 @@ public class Resources {
         return new CachedResource(resource);
     }
 
-    public static StringResource stringResource(CharSequence content, String path) {
-        return new StringResource(content.toString(), path);
+    public static StringSupplierResource stringResource(String path, CharSequence content) {
+        return new StringSupplierResource(path, content.toString());
     }
 
-    public static URLResource urlResource(URL url, String path) {
-        return new URLResource(url, path);
+
+    public static URLResource urlResource(String path, URL url) {
+        return new URLResource(path, url);
     }
 
     public static ZipEntryResource zipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {

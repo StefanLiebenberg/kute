@@ -12,6 +12,11 @@ public abstract class AbstractProxy<R extends Resource> extends AbstractResource
     private final R resource;
 
     public AbstractProxy(R resource) {
+        this(resource.getPath(), resource);
+    }
+
+    public AbstractProxy(String path, R resource) {
+        super(path);
         this.resource = resource;
     }
 
@@ -19,11 +24,6 @@ public abstract class AbstractProxy<R extends Resource> extends AbstractResource
         return resource;
     }
 
-    @Override
-    public String getPath() {
-        return resource.getPath();
-    }
-    
     @Override
     public Reader getReader() throws IOException {
         return getResourceAs(getResource(), Resource.Readable.class).getReader();

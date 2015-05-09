@@ -10,11 +10,9 @@ public class URLResource extends AbstractResource implements Resource.InputStrea
 
     private final URL url;
 
-    private final String path;
-
-    public URLResource(URL url, String path) {
+    public URLResource(String path, URL url) {
+        super(path);
         this.url = url;
-        this.path = path;
     }
 
     @Override
@@ -22,8 +20,4 @@ public class URLResource extends AbstractResource implements Resource.InputStrea
         return url.openStream();
     }
 
-    @Override
-    public String getPath() {
-        return path;
-    }
 }

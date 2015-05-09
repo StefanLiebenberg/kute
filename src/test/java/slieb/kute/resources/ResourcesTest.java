@@ -99,7 +99,7 @@ public class ResourcesTest {
 
     @Test
     public void testStringResource() throws Exception {
-        final Resource.Readable readable = Resources.stringResource("content", "/path");
+        final Resource.Readable readable = Resources.stringResource("/path", "content");
         IntStream.range(0, 10000)
                 .parallel()
                 .forEach(i -> {

@@ -14,7 +14,7 @@ public class URLResourceTest {
 
     @Before
     public void setUp() throws Exception {
-        urlResource = new URLResource(getClass().getResource(PATH), PATH);
+        urlResource = new URLResource(PATH, getClass().getResource(PATH));
     }
 
     @Test
@@ -29,7 +29,7 @@ public class URLResourceTest {
 
     @Test
     public void testEquals() throws Exception {
-        URLResource sameResource = new URLResource(getClass().getResource(PATH), PATH);
+        URLResource sameResource = new URLResource(PATH, getClass().getResource(PATH));
         Assert.assertEquals(sameResource, urlResource);
     }
 

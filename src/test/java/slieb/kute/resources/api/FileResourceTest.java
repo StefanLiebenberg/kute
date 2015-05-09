@@ -20,7 +20,7 @@ public class FileResourceTest {
     public void setUp() throws Exception {
         temporaryFile = Files.createTempFile("temp", ".txt").toFile();
         temporaryFile.deleteOnExit();
-        fileResource = new FileResource(temporaryFile, "/example.txt");
+        fileResource = new FileResource("/example.txt", temporaryFile);
     }
 
     @Test
@@ -40,8 +40,8 @@ public class FileResourceTest {
 
     @Test
     public void testEquals() throws Exception {
-        Assert.assertEquals(fileResource, new FileResource(temporaryFile, "/example.txt"));
-        Assert.assertNotEquals(fileResource, new FileResource(temporaryFile, "/example.jpg"));
+        Assert.assertEquals(fileResource, new FileResource("/example.txt", temporaryFile));
+        Assert.assertNotEquals(fileResource, new FileResource("/example.jpg", temporaryFile));
     }
 
 }

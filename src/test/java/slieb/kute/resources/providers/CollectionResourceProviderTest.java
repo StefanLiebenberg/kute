@@ -20,9 +20,9 @@ public class CollectionResourceProviderTest {
 
     @Before
     public void setup() {
-        resourceA = Resources.stringResource("contentA", "/path/a");
-        resourceB = Resources.stringResource("contentA", "/path/a");
-        resourceC = Resources.stringResource("contentA", "/path/a");
+        resourceA = Resources.stringResource("/path/a", "contentA");
+        resourceB = Resources.stringResource("/path/b", "contentB");
+        resourceC = Resources.stringResource("/path/c", "contentC");
         collectionResourceProvider =
                 new CollectionResourceProvider<>(ImmutableList.of(resourceA, resourceB, resourceC));
     }
@@ -30,8 +30,8 @@ public class CollectionResourceProviderTest {
     @Test
     public void testGetResourceByName() throws Exception {
         assertEquals(resourceA, collectionResourceProvider.getResourceByName("/path/a"));
-        assertEquals(resourceB, collectionResourceProvider.getResourceByName("/path/a"));
-        assertEquals(resourceC, collectionResourceProvider.getResourceByName("/path/a"));
+        assertEquals(resourceB, collectionResourceProvider.getResourceByName("/path/b"));
+        assertEquals(resourceC, collectionResourceProvider.getResourceByName("/path/c"));
     }
 
     @Test
@@ -48,7 +48,5 @@ public class CollectionResourceProviderTest {
         }
         assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC),
                 builder.build());
-
-
     }
 }

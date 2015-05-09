@@ -55,9 +55,9 @@ public class PatternFilterTest {
         range(0, 1000)
                 .parallel()
                 .forEach(i -> {
-                    assertTrue(patternFilter.accepts(stringResource("content", "/my/Car.java")));
-                    assertFalse(patternFilter.accepts(stringResource("content", "/my/passwords.txt")));
-                    assertFalse(patternFilter.accepts(stringResource("content", "/my/pictures/cat.png")));
+                    assertTrue(patternFilter.accepts(stringResource("/my/Car.java", "content")));
+                    assertFalse(patternFilter.accepts(stringResource("/my/passwords.txt", "content")));
+                    assertFalse(patternFilter.accepts(stringResource("/my/pictures/cat.png", "content")));
                 });
     }
 }

@@ -8,19 +8,19 @@ import java.io.*;
  * <p>
  * A Resource Object to represent file objects. The FileResource is readable and writable and supports getInputStream
  * and getOutputStream. It stores a file object and a path.</p>
- *
+ * <p>
  * <p><b>To read file Contents:</b></p>
  * <pre><code>
  * FileResource resource =  new FileResource(file);
  * String content = Resources.readResource(resource);
  * </code></pre>
- *
+ * <p>
  * <p><b>To write file Contents:</b></p>
  * <pre><code>
  * FileResource resource =  new FileResource(file);
  * Resources.writeResource(resource, "content");
  * </code></pre>
- *
+ * <p>
  * <p><b>To write a binary using outputStream instead.</b></p>
  * <pre><code>
  * FileResource  resource = new FileResource(file);
@@ -40,7 +40,6 @@ public class FileResource extends AbstractResource implements Resource.InputStre
 
     private final File file;
 
-    private final String path;
 
     /**
      * Specify a file and the path it will be available as.
@@ -48,10 +47,11 @@ public class FileResource extends AbstractResource implements Resource.InputStre
      * @param file The resource's file object.
      * @param path The path under which this resource will be available as.
      */
-    public FileResource(File file, String path) {
+    public FileResource(String path, File file) {
+        super(path);
         this.file = file;
-        this.path = path;
     }
+
 
     /**
      * This constructor extracts the resource path from file.getPath().
@@ -59,13 +59,9 @@ public class FileResource extends AbstractResource implements Resource.InputStre
      * @param file The file resource to use.
      */
     public FileResource(File file) {
-        this(file, file.getPath());
+        this(file.getPath(), file);
     }
 
-    @Override
-    public String getPath() {
-        return path;
-    }
 
     /**
      * @return The resource's file object.

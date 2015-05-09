@@ -19,9 +19,9 @@ public class ResourceProviderTest {
 
     @Before
     public void setup() {
-        resourceA = Resources.stringResource("A", "/path/a");
-        resourceB = Resources.stringResource("B", "/path/b");
-        resourceC = Resources.stringResource("C", "/path/c");
+        resourceA = Resources.stringResource("/path/a", "A");
+        resourceB = Resources.stringResource("/path/b", "B");
+        resourceC = Resources.stringResource("/path/c", "C");
     }
 
 

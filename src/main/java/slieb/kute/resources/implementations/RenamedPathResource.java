@@ -3,18 +3,7 @@ package slieb.kute.resources.implementations;
 import slieb.kute.api.Resource;
 
 public class RenamedPathResource<A extends Resource> extends AbstractProxy<A> {
-
-    private final String path;
-
-    public RenamedPathResource(A resource, String path) {
-        super(resource);
-        this.path = path;
+    public RenamedPathResource(String path, A resource) {
+        super(path, resource);
     }
-
-    @Override
-    public String getPath() {
-        return path;
-    }
-
-
 }
