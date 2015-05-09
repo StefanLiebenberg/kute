@@ -5,22 +5,18 @@ import slieb.kute.api.Resource;
 import java.io.*;
 
 /**
- * <p>
- * A Resource Object to represent file objects. The FileResource is readable and writable and supports getInputStream
+ * <p>A Resource Object to represent file objects. The FileResource is readable and writable and supports getInputStream
  * and getOutputStream. It stores a file object and a path.</p>
- * <p>
  * <p><b>To read file Contents:</b></p>
  * <pre><code>
  * FileResource resource =  new FileResource(file);
  * String content = Resources.readResource(resource);
  * </code></pre>
- * <p>
  * <p><b>To write file Contents:</b></p>
  * <pre><code>
  * FileResource resource =  new FileResource(file);
  * Resources.writeResource(resource, "content");
  * </code></pre>
- * <p>
  * <p><b>To write a binary using outputStream instead.</b></p>
  * <pre><code>
  * FileResource  resource = new FileResource(file);
