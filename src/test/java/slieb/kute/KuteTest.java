@@ -12,13 +12,14 @@ import static org.junit.Assert.assertNotNull;
 import static slieb.kute.Kute.getDefaultProvider;
 import static slieb.kute.Kute.getProvider;
 import static slieb.kute.resources.Resources.readResource;
+import static slieb.kute.resources.Resources.readStreamResource;
 
 
 public class KuteTest {
 
     @Test
     public void testGetProvider() throws Exception {
-        ResourceProvider<Resource.Readable> readables = getProvider(getClass().getClassLoader());
+        ResourceProvider<Resource.InputStreaming> readables = getProvider(getClass().getClassLoader());
         assertNotNull(readables);
         Resource.Readable readable = readables.getResourceByName("/slieb/kute/resources/example.txt");
         assertNotNull("readable cannot be null", readable);
@@ -27,11 +28,11 @@ public class KuteTest {
 
     @Test
     public void testGetDefaultProvider() throws Exception {
-        ResourceProvider<Resource.Readable> readables = getDefaultProvider();
+        ResourceProvider<Resource.InputStreaming> readables = getDefaultProvider();
         assertNotNull(readables);
-        Resource.Readable readable = readables.getResourceByName("/slieb/kute/resources/example.txt");
+        Resource.InputStreaming readable = readables.getResourceByName("/slieb/kute/resources/example.txt");
         assertNotNull(readable);
-        assertEquals("just contains example text.", readResource(readable));
+        assertEquals("just contains example text.", readStreamResource(readable));
     }
 
     @Test

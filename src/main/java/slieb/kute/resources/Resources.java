@@ -41,6 +41,20 @@ public class Resources {
         }
     }
 
+    /**
+     * Read the resource without throwing an IOException.
+     *
+     * @param resource a Readable resource.
+     * @return The content of resource.
+     */
+    public static String readResourceUnsafe(Resource.Readable resource) {
+        try {
+            return readResource(resource);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static String readStreamResource(Resource.InputStreaming resource) throws IOException {
         try (InputStream istream = resource.getInputStream()) {
             return IOUtils.toString(istream);

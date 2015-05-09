@@ -14,7 +14,7 @@ import java.util.zip.ZipFile;
 
 public class ResourceProviderFactory {
 
-    public static ResourceProvider<? extends Resource.Readable> create(URL url) throws IOException {
+    public static ResourceProvider<? extends Resource.InputStreaming> create(URL url) throws IOException {
 
         File urlFile = new File(url.getFile());
         if (urlFile.exists()) {
@@ -31,7 +31,7 @@ public class ResourceProviderFactory {
         throw new IllegalStateException("Unknown url type. " + url.toString());
     }
 
-    public static ResourceProvider<? extends Resource.Readable> safeCreate(URL url) {
+    public static ResourceProvider<? extends Resource.InputStreaming> safeCreate(URL url) {
         try {
             return create(url);
         } catch (IOException e) {

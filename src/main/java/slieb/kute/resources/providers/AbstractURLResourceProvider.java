@@ -8,10 +8,10 @@ import java.net.URL;
 import java.util.stream.Stream;
 
 
-public abstract class AbstractURLResourceProvider implements ResourceProvider<Resource.Readable> {
+public abstract class AbstractURLResourceProvider implements ResourceProvider<Resource.InputStreaming> {
 
     @Override
-    public Resource.Readable getResourceByName(String path) {
+    public Resource.InputStreaming getResourceByName(String path) {
         return providerStream()
                 .map(s -> s.getResourceByName(path))
                 .filter(r -> r != null)
@@ -19,11 +19,11 @@ public abstract class AbstractURLResourceProvider implements ResourceProvider<Re
     }
 
     @Override
-    public Stream<Resource.Readable> stream() {
+    public Stream<Resource.InputStreaming> stream() {
         return providerStream().flatMap(ResourceProvider::stream);
     }
 
-    public Stream<ResourceProvider<? extends Resource.Readable>> providerStream() {
+    public Stream<ResourceProvider<? extends Resource.InputStreaming>> providerStream() {
         return urlStream().map(ResourceProviderFactory::safeCreate).filter(p -> p != null);
     }
 
