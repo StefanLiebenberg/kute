@@ -51,7 +51,7 @@ public class Resources {
         try {
             return readResource(resource);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ResourceException(e);
         }
     }
 

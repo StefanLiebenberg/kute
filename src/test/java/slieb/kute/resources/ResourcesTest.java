@@ -8,10 +8,7 @@ import org.mockito.Mockito;
 import slieb.kute.api.Resource;
 import slieb.kute.resources.implementations.CachedResource;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.stream.IntStream;
 
 
@@ -23,6 +20,22 @@ public class ResourcesTest {
         Mockito.when(readable.getReader()).thenAnswer(i -> new StringReader("content"));
         Assert.assertEquals("content", Resources.readResource(readable));
     }
+
+    @Test(expected = RuntimeException.class)
+    public void testReadResourceUnsafe() {
+        Resources.readResourceUnsafe(new Resource.Readable() {
+            @Override
+            public String getPath() {
+                return "/path";
+            }
+
+            @Override
+            public Reader getReader() throws IOException {
+                throw new IOException("expected io.");
+            }
+        });
+    }
+
 
     @Test
     public void testWriteResource() throws Exception {
@@ -112,58 +125,5 @@ public class ResourcesTest {
                 });
     }
 
-    @Test
-    public void testUrlResource() throws Exception {
-
-    }
-
-    @Test
-    public void testZipEntryResource() throws Exception {
-
-    }
-
-    @Test
-    public void testZipEntryResource1() throws Exception {
-
-    }
-
-    @Test
-    public void testResourceProviderToList() throws Exception {
-
-    }
-
-    @Test
-    public void testResourceProviderToSet() throws Exception {
-
-    }
-
-    @Test
-    public void testMapResources() throws Exception {
-
-    }
-
-    @Test
-    public void testFilterResources() throws Exception {
-
-    }
-
-    @Test
-    public void testFilterResources1() throws Exception {
-
-    }
-
-    @Test
-    public void testProviderOf() throws Exception {
-
-    }
-
-    @Test
-    public void testProviderOf1() throws Exception {
-
-    }
-
-    @Test
-    public void testGroup() throws Exception {
-
-    }
+  
 }
