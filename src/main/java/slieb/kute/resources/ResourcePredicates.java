@@ -13,6 +13,7 @@ public class ResourcePredicates {
     public static final Predicate<? super Resource> NON_NULL = p -> p != null;
 
     /**
+     * @param <A> A implementation of resource.
      * @return A nonNull predicate.
      */
     public static <A extends Resource> Predicate<A> nonNull() {
@@ -20,6 +21,7 @@ public class ResourcePredicates {
     }
 
     /**
+     * @param <A> A implementation of resource.
      * @param predicates Predicates to string together.
      * @return a single predicate.
      */
@@ -29,6 +31,7 @@ public class ResourcePredicates {
     }
 
     /**
+     * @param <A> A implementation of resource.
      * @param predicates Predicates to string together.
      * @return a single predicate.
      */
@@ -38,6 +41,7 @@ public class ResourcePredicates {
     }
 
     /**
+     * @param <A> A implementation of resource.
      * @param predicates Predicates to string together.
      * @return a single predicate.
      */
@@ -47,6 +51,7 @@ public class ResourcePredicates {
     }
 
     /**
+     * @param <A> A implementation of resource.
      * @param extensions A variable list of extension strings.
      * @return True resource path ends with any of the extension strings.
      */
@@ -55,6 +60,7 @@ public class ResourcePredicates {
     }
 
     /**
+     * @param <A> A implementation of resource.
      * @param pattern A Pattern to match against the resource path
      * @return true if the resource path matches the specified pattern.
      */
@@ -63,6 +69,7 @@ public class ResourcePredicates {
     }
 
     /**
+     * @param <A> A implementation of resource.
      * @param pattern A string Pattern to match against the resource path
      * @return true if the pattern matches the resource path.
      */
