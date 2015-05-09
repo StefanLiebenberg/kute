@@ -8,8 +8,34 @@ import java.util.regex.Pattern;
 
 import static java.util.Arrays.asList;
 
-public class ResourceFilters {
+public class ResourcePredicates {
 
+    /**
+     * @param predicates Predicates to string together.
+     * @return a single predicate.
+     */
+    @SafeVarargs
+    public static Predicate<Resource> all(Predicate<Resource>... predicates) {
+        return asList(predicates).stream().reduce(Predicate::and).get();
+    }
+
+    /**
+     * @param predicates Predicates to string together.
+     * @return a single predicate.
+     */
+    @SafeVarargs
+    public static Predicate<Resource> any(Predicate<Resource>... predicates) {
+        return asList(predicates).stream().reduce(Predicate::or).get();
+    }
+
+    /**
+     * @param predicates Predicates to string together.
+     * @return a single predicate.
+     */
+    @SafeVarargs
+    public static Predicate<Resource> none(Predicate<Resource>... predicates) {
+        return all(predicates).negate();
+    }
 
     /**
      * @param extensions A variable list of extension strings.

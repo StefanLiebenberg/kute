@@ -13,7 +13,7 @@ import slieb.kute.api.Resource;
 import java.util.function.Predicate;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ResourceFiltersTest {
+public class ResourcePredicatesTest {
 
     @Mock
     Predicate<Resource> filterT, filterF, filterM;
@@ -40,8 +40,8 @@ public class ResourceFiltersTest {
         Mockito.when(resourceA.getPath()).thenReturn("/resourceA.txt");
         Mockito.when(resourceB.getPath()).thenReturn("/resourceB.log");
 
-        Assert.assertTrue(ResourceFilters.extensionFilter(".txt").test(resourceA));
-        Assert.assertFalse(ResourceFilters.extensionFilter(".txt").test(resourceB));
+        Assert.assertTrue(ResourcePredicates.extensionFilter(".txt").test(resourceA));
+        Assert.assertFalse(ResourcePredicates.extensionFilter(".txt").test(resourceB));
     }
 
     @Test
@@ -49,8 +49,8 @@ public class ResourceFiltersTest {
         Mockito.when(resourceA.getPath()).thenReturn("/aaaab");
         Mockito.when(resourceB.getPath()).thenReturn("/aaababc");
 
-        Assert.assertTrue(ResourceFilters.patternFilter("/(a|b)*").test(resourceA));
-        Assert.assertFalse(ResourceFilters.patternFilter("(a|b)*").test(resourceB));
+        Assert.assertTrue(ResourcePredicates.patternFilter("/(a|b)*").test(resourceA));
+        Assert.assertFalse(ResourcePredicates.patternFilter("(a|b)*").test(resourceB));
     }
 
 
