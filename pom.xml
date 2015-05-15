@@ -10,6 +10,7 @@
     <version>0.7-SNAPSHOT</version>
     <packaging>jar</packaging>
     <url>https://stefanliebenberg.github.io/kute</url>
+    
     <licenses>
         <license>
             <name>MIT License</name>
@@ -40,6 +41,9 @@
         <plugin.maven-resources-plugin>2.7</plugin.maven-resources-plugin>
 
 
+        <plugin.maven-project-info-reports-plugin>2.8</plugin.maven-project-info-reports-plugin>
+        <plugin.maven-shared-jar>1.1</plugin.maven-shared-jar>
+        <plugin.bcel-findbugs>6.0</plugin.bcel-findbugs>
         <dep.maven>3.3.1</dep.maven>
         <dep.commons-io>2.4</dep.commons-io>
         <dep.guava>18.0</dep.guava>
@@ -226,6 +230,29 @@
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <useManifestOnlyJar>true</useManifestOnlyJar>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${plugin.maven-project-info-reports-plugin}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.shared</groupId>
+                        <artifactId>maven-shared-jar</artifactId>
+                        <version>${plugin.maven-shared-jar}</version>
+                        <exclusions>
+                            <exclusion>
+                                <groupId>org.apache.bcel</groupId>
+                                <artifactId>bcel</artifactId>
+                            </exclusion>
+                        </exclusions>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.google.code.findbugs</groupId>
+                        <artifactId>bcel-findbugs</artifactId>
+                        <version>${plugin.bcel-findbugs}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
