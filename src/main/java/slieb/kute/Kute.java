@@ -13,6 +13,10 @@ import java.util.List;
 
 public class Kute {
 
+    public static ResourceProvider<Resource.InputStreaming> getProvider(List<URL> urls) {
+        return new URLArrayResourceProvider(urls);
+    }
+
     public static ResourceProvider<Resource.InputStreaming> getProvider(ClassLoader classLoader) {
         List<URL> urls = new ArrayList<>();
         while (classLoader != null) {
@@ -21,7 +25,7 @@ public class Kute {
             }
             classLoader = classLoader.getParent();
         }
-        return new URLArrayResourceProvider(urls);
+        return getProvider(urls);
     }
 
     public static ResourceProvider<Resource.InputStreaming> getDefaultProvider() {
