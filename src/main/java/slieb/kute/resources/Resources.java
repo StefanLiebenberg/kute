@@ -232,7 +232,7 @@ public class Resources {
 
 
     public static Resource.InputStreaming zipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
-        return inputStreamResourceWithIO(zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
+        return inputStreamResourceWithIO("/" + zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
     }
 
 
