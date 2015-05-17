@@ -9,6 +9,8 @@ import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.providers.GroupResourceProvider;
 import spark.Spark;
 
+import java.util.stream.Stream;
+
 public class Service {
 
     private final ResourceProvider<? extends Resource.Readable> provider;
@@ -31,12 +33,5 @@ public class Service {
         Spark.stop();
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        ResourceProvider<? extends Resource.Readable> sources = Kute.getDefaultProvider();
-        ResourceProvider<? extends Resource.Readable> index = new IndexProvider(sources);
-        ResourceProvider<? extends Resource.Readable> provider = new GroupResourceProvider<>(ImmutableList.of(sources, index));
-        Service service = new Service(provider, 5000);
-        service.start();
-    }
 
 }
