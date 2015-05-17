@@ -8,7 +8,7 @@
     <description>A service wrapper around kute's resource provider</description>
     <groupId>org.slieb</groupId>
     <artifactId>kute-service</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <url>https://stefanliebenberg.github.io/kute-service</url>
 
