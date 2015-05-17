@@ -21,17 +21,18 @@ public class ZipFileResourceProvider implements ResourceProvider<Resource.InputS
     public Resource.InputStreaming getResourceByName(String path) {
         if (path.startsWith("/")) {
             ZipEntry entry = zipFile.getEntry(path.substring(1));
-            if (entry != null) {
+            if (entry != null && !entry.isDirectory()) {
                 return getZipResource(entry);
             }
         }
         return null;
-
     }
 
     @Override
     public Stream<Resource.InputStreaming> stream() {
-        return zipFile.stream().map(this::getZipResource);
+        return zipFile.stream()
+                .filter(e -> !e.isDirectory())
+                .map(this::getZipResource);
     }
 
     private Resource.InputStreaming getZipResource(ZipEntry zipEntry) {
