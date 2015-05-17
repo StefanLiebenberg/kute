@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
+import slieb.kute.api.Resource.InputStreaming;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.implementations.*;
 import slieb.kute.resources.providers.FilteredResourceProvider;
@@ -55,14 +56,31 @@ public class Resources {
         }
     }
 
-    public static String readStreamResource(Resource.InputStreaming resource) throws IOException {
+    /**
+     * Read a {@link InputStreaming} resource. This is almost like {@link Resources#readResource(Resource.Readable)},
+     * except that it uses the {@link InputStreaming#getInputStream()} method instead.
+     *
+     * @param resource An {@link InputStreaming} resource.
+     * @return The string result of reading {@link InputStreaming#getInputStream()}
+     * @throws IOException If there is an exception getting the inputStream or reading from it.
+     */
+    public static String readStreamResource(InputStreaming resource) throws IOException {
         try (InputStream istream = resource.getInputStream()) {
             return IOUtils.toString(istream);
         }
     }
 
 
-    public static String readStreamResource(Resource.InputStreaming resource, String encoding) throws IOException {
+    /**
+     * Read a {@link InputStreaming} resource with encoding. This is almost like {@link Resources#readResource(Resource.Readable)},
+     * except that it uses the {@link InputStreaming#getInputStream()} method instead.
+     *
+     * @param resource An {@link InputStreaming} resource.
+     * @param encoding The encoding with which to read the resource.
+     * @return The string result of reading {@link InputStreaming#getInputStream()}
+     * @throws IOException If there is an exception getting the inputStream or reading from it.
+     */
+    public static String readStreamResource(InputStreaming resource, String encoding) throws IOException {
         try (InputStream istream = resource.getInputStream()) {
             return IOUtils.toString(istream, encoding);
         }
@@ -106,7 +124,7 @@ public class Resources {
         }
     }
 
-    public static void copyResourceAsStreams(Resource.InputStreaming inputStreaming, Resource.OutputStreaming outputStreaming) throws IOException {
+    public static void copyResourceAsStreams(InputStreaming inputStreaming, Resource.OutputStreaming outputStreaming) throws IOException {
         try (InputStream inputStream = inputStreaming.getInputStream();
              OutputStream outputStream = outputStreaming.getOutputStream()) {
             IOUtils.copy(inputStream, outputStream);
@@ -188,7 +206,7 @@ public class Resources {
     }
 
 
-    public static RenamedPathResource<Resource.InputStreaming> zipEntryResource(String path, ZipFile zipFile, ZipEntry zipEntry) {
+    public static RenamedPathResource<InputStreaming> zipEntryResource(String path, ZipFile zipFile, ZipEntry zipEntry) {
         return rename(path, zipEntryResource(zipFile, zipEntry));
     }
 
@@ -234,7 +252,7 @@ public class Resources {
     }
 
 
-    public static Resource.InputStreaming zipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
+    public static InputStreaming zipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
         return inputStreamResourceWithIO(zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
     }
 
