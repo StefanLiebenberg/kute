@@ -3,10 +3,10 @@ package slieb.kute.resources;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.io.IOUtils;
+import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.implementations.*;
-import slieb.kute.resources.providers.CollectionResourceProvider;
 import slieb.kute.resources.providers.FilteredResourceProvider;
 import slieb.kute.resources.providers.GroupResourceProvider;
 import slieb.kute.resources.providers.MappedResourceProvider;
@@ -201,6 +201,7 @@ public class Resources {
         return resourceProvider.stream().collect(toSet());
     }
 
+
     public static <A extends Resource, B extends Resource> ResourceProvider<B> mapResources(ResourceProvider<A> provider, Function<A, B> function) {
         return new MappedResourceProvider<>(provider, function);
     }
@@ -209,13 +210,15 @@ public class Resources {
         return new FilteredResourceProvider<>(provider, predicate);
     }
 
+    @Deprecated
     public static <A extends Resource> ResourceProvider<A> providerOf(Collection<A> resources) {
-        return new CollectionResourceProvider<>(resources);
+        return Kute.providerOf(resources);
     }
 
     @SafeVarargs
+    @Deprecated
     public static <A extends Resource> ResourceProvider<A> providerOf(A... resources) {
-        return providerOf(ImmutableList.copyOf(resources));
+        return Kute.providerOf(resources);
     }
 
     @SafeVarargs
@@ -226,13 +229,13 @@ public class Resources {
 
     @SuppressWarnings("unchecked")
     public static <A extends Resource, B> B getResourceAs(A resource, Class<B> classObject) {
-        Preconditions.checkState(resource.getClass().isAssignableFrom(classObject));
+        Preconditions.checkState(classObject.isAssignableFrom(resource.getClass()), "Resource is not a " + classObject);
         return (B) resource;
     }
 
 
     public static Resource.InputStreaming zipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
-        return inputStreamResourceWithIO("/" + zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
+        return inputStreamResourceWithIO(zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
     }
 
 

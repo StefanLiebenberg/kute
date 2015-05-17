@@ -19,12 +19,14 @@ public class ZipFileResourceProvider implements ResourceProvider<Resource.InputS
 
     @Override
     public Resource.InputStreaming getResourceByName(String path) {
-        ZipEntry entry = zipFile.getEntry(path);
-        if (entry != null) {
-            return getZipResource(entry);
-        } else {
-            return null;
+        if (path.startsWith("/")) {
+            ZipEntry entry = zipFile.getEntry(path.substring(1));
+            if (entry != null) {
+                return getZipResource(entry);
+            }
         }
+        return null;
+
     }
 
     @Override
@@ -33,7 +35,7 @@ public class ZipFileResourceProvider implements ResourceProvider<Resource.InputS
     }
 
     private Resource.InputStreaming getZipResource(ZipEntry zipEntry) {
-        return Resources.zipEntryResource(zipFile, zipEntry);
+        return Resources.zipEntryResource("/" + zipEntry.getName(), zipFile, zipEntry);
     }
 
 }
