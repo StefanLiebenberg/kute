@@ -1,8 +1,11 @@
 package slieb.kute.resources;
 
 
+import com.google.common.collect.Maps;
 import slieb.kute.api.Resource;
 
+import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
@@ -21,7 +24,7 @@ public class ResourcePredicates {
     }
 
     /**
-     * @param <A> A implementation of resource.
+     * @param <A>        A implementation of resource.
      * @param predicates Predicates to string together.
      * @return a single predicate.
      */
@@ -31,7 +34,7 @@ public class ResourcePredicates {
     }
 
     /**
-     * @param <A> A implementation of resource.
+     * @param <A>        A implementation of resource.
      * @param predicates Predicates to string together.
      * @return a single predicate.
      */
@@ -41,7 +44,7 @@ public class ResourcePredicates {
     }
 
     /**
-     * @param <A> A implementation of resource.
+     * @param <A>        A implementation of resource.
      * @param predicates Predicates to string together.
      * @return a single predicate.
      */
@@ -51,7 +54,7 @@ public class ResourcePredicates {
     }
 
     /**
-     * @param <A> A implementation of resource.
+     * @param <A>        A implementation of resource.
      * @param extensions A variable list of extension strings.
      * @return True resource path ends with any of the extension strings.
      */
@@ -60,7 +63,7 @@ public class ResourcePredicates {
     }
 
     /**
-     * @param <A> A implementation of resource.
+     * @param <A>     A implementation of resource.
      * @param pattern A Pattern to match against the resource path
      * @return true if the resource path matches the specified pattern.
      */
@@ -69,7 +72,7 @@ public class ResourcePredicates {
     }
 
     /**
-     * @param <A> A implementation of resource.
+     * @param <A>     A implementation of resource.
      * @param pattern A string Pattern to match against the resource path
      * @return true if the pattern matches the resource path.
      */
@@ -77,5 +80,17 @@ public class ResourcePredicates {
         return patternFilter(Pattern.compile(pattern));
     }
 
+    /**
+     * A predicate to filter out already seen resources by function.
+     *
+     * @param function The function to determine the resource value.
+     * @param <R>      The Resource implementation.
+     * @param <X>      The Value type.
+     * @return A statefull predicate.
+     */
+    public static <R extends Resource, X> Predicate<R> distinctFilter(Function<R, X> function) {
+        final Map<X, Boolean> seen = Maps.newConcurrentMap();
+        return resource -> seen.putIfAbsent(function.apply(resource), Boolean.TRUE) == null;
+    }
 
 }

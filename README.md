@@ -36,7 +36,7 @@ Getting a provider for specific class loader:
 ### Create a ResourceProvider that acts as a filter on top of another provider.
 
     ResourceProvider<Resource.InputStreaming> provider = Kute.getDefaultProvider();
-    ResourceProvider<Resource.InputStreaming> filtered = Resources.filter(provider, ResourceFilters.extensionFilters(".txt", ".class"))
+    ResourceProvider<Resource.InputStreaming> filtered = Kute.filter(provider, ResourceFilters.extensionFilters(".txt", ".class"))
     for(R resource : provider) {
         ... // only .txt or .class resources 
     }
@@ -68,7 +68,7 @@ Each of these have a relevant getReader, getWriter, etc method, which you can us
  
 ### Reading a Resource.Readable with Resources
 
-    String content = Resources.readResource(resource);
+    String content = Kute.readResource(resource);
     
 ### Writing to Resource.Writable
 
@@ -79,6 +79,6 @@ Each of these have a relevant getReader, getWriter, etc method, which you can us
     
 ### Writing to Resource.Writeable with Resources
 
-    Resources.writeResource(readable, "content");
+    Kute.writeResource(readable, "content");
 
 

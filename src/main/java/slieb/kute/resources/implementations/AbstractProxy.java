@@ -4,7 +4,7 @@ import slieb.kute.api.Resource;
 
 import java.io.*;
 
-import static slieb.kute.resources.Resources.getResourceAs;
+import static slieb.kute.Kute.getResourceAs;
 
 
 public abstract class AbstractProxy<R extends Resource> extends AbstractResource implements Resource.Proxy<R> {

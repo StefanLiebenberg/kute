@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.api.Resource;
 import slieb.kute.api.Resource.InputStreaming;
-import slieb.kute.resources.Resources;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +13,7 @@ import java.util.zip.ZipFile;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
+import static slieb.kute.Kute.*;
 
 /**
  * Created by stefan on 5/17/15.
@@ -43,10 +43,10 @@ public class ZipFileResourceProviderTest {
         InputStreaming inputStreaming = provider.getResourceByName("/resource.txt");
         assertNotNull(inputStreaming);
         String expectedContent = "resource content for /resource.txt\n";
-        assertEquals(expectedContent, Resources.readResource(inputStreaming));
-        assertEquals(expectedContent, Resources.readResourceUnsafe(inputStreaming));
-        assertEquals(expectedContent, Resources.readStreamResource(inputStreaming));
-        assertEquals(expectedContent, Resources.readStreamResource(inputStreaming, "UTF-8"));
+        assertEquals(expectedContent, readResource(inputStreaming));
+        assertEquals(expectedContent, readResourceUnsafe(inputStreaming));
+        assertEquals(expectedContent, readStreamResource(inputStreaming));
+        assertEquals(expectedContent, readStreamResource(inputStreaming, "UTF-8"));
     }
 
     @Test

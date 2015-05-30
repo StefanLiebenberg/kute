@@ -1,14 +1,16 @@
 package slieb.kute.resources.providers;
 
+import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
-import slieb.kute.resources.Resources;
 import slieb.kute.resources.implementations.RenamedPathResource;
 
 import java.util.Iterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static slieb.kute.Kute.renameResource;
 
 public class RenamedNamespaceProvider<A extends Resource> implements ResourceProvider<RenamedPathResource<A>>, Iterable<RenamedPathResource<A>> {
 
@@ -28,7 +30,7 @@ public class RenamedNamespaceProvider<A extends Resource> implements ResourcePro
     public RenamedPathResource<A> getResourceByName(String path) {
         String origPath = getRenamedPath(path, renamedRoot, originalRoot);
         A origResource = resourceProvider.getResourceByName(origPath);
-        return Resources.rename(path, origResource);
+        return renameResource(path, origResource);
     }
 
 
@@ -64,7 +66,7 @@ public class RenamedNamespaceProvider<A extends Resource> implements ResourcePro
         @Override
         public RenamedPathResource<A> next() {
             A resource = iterator.next();
-            return Resources.rename(getRenamedPath(resource.getPath(), originalRoot, renamedRoot), resource);
+            return Kute.renameResource(getRenamedPath(resource.getPath(), originalRoot, renamedRoot), resource);
         }
 
         @Override

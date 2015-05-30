@@ -2,7 +2,8 @@ package slieb.kute.api;
 
 import java.io.*;
 
-import static slieb.kute.resources.Resources.getResourceAs;
+import static slieb.kute.Kute.getResourceAs;
+
 
 /**
  * The Resource class represents a entry on the class path.
@@ -13,7 +14,7 @@ import static slieb.kute.resources.Resources.getResourceAs;
  * </p>
  * <p>Calling {@code resource.getPath()} will work on all resources.</p>
  *
- * @see slieb.kute.resources.Resources
+ * @see slieb.kute.Kute
  */
 public interface Resource extends Serializable {
 
@@ -54,7 +55,7 @@ public interface Resource extends Serializable {
          *
          * @return A writer that will write to resource.
          * @throws IOException when the writer is created.
-         * @see slieb.kute.resources.Resources#writeResource
+         * @see slieb.kute.Kute#writeResource
          */
         Writer getWriter() throws IOException;
 
@@ -81,7 +82,7 @@ public interface Resource extends Serializable {
          *
          * @return A inputStream that will read from resource.
          * @throws IOException when there is an exception creating the InputStream.
-         * @see slieb.kute.resources.Resources#readStreamResource
+         * @see slieb.kute.Kute#readStreamResource
          */
         InputStream getInputStream() throws IOException;
     }

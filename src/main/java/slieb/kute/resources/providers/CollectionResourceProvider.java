@@ -6,8 +6,8 @@ import slieb.kute.api.ResourceProvider;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-import static slieb.kute.resources.Resources.distinctPath;
-import static slieb.kute.resources.Resources.findResource;
+import static slieb.kute.Kute.distinctPath;
+import static slieb.kute.Kute.findResource;
 
 
 public class CollectionResourceProvider<R extends Resource> implements ResourceProvider<R> {

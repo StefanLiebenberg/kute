@@ -9,10 +9,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static slieb.kute.Kute.getDefaultProvider;
-import static slieb.kute.Kute.getProvider;
-import static slieb.kute.resources.Resources.readResource;
-import static slieb.kute.resources.Resources.readStreamResource;
+import static slieb.kute.Kute.*;
 
 
 public class KuteTest {
@@ -46,5 +43,12 @@ public class KuteTest {
                         throw new RuntimeException(e);
                     }
                 });
+    }
+
+    public void testGroup() throws Exception {
+        ResourceProvider<? extends Resource.Readable> providerA, providerB, providerC;
+        providerA = Kute.providerOf();
+        providerB = Kute.providerOf();
+        providerC = Kute.<Resource.Readable, ResourceProvider>group(providerA, providerA);
     }
 }

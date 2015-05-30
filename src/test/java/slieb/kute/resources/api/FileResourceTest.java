@@ -3,11 +3,13 @@ package slieb.kute.resources.api;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import slieb.kute.resources.Resources;
 import slieb.kute.resources.implementations.FileResource;
 
 import java.io.File;
 import java.nio.file.Files;
+
+import static slieb.kute.Kute.readResource;
+import static slieb.kute.Kute.writeResource;
 
 
 public class FileResourceTest {
@@ -31,11 +33,11 @@ public class FileResourceTest {
     @Test
     public void testReaderAndWriter() throws Exception {
         String randomText = "Some random text";
-        Resources.writeResource(fileResource, randomText);
-        Assert.assertEquals(randomText, Resources.readResource(fileResource));
+        writeResource(fileResource, randomText);
+        Assert.assertEquals(randomText, readResource(fileResource));
 
-        Resources.writeResource(fileResource, randomText);
-        Assert.assertEquals(randomText, Resources.readResource(fileResource));
+        writeResource(fileResource, randomText);
+        Assert.assertEquals(randomText, readResource(fileResource));
     }
 
     @Test

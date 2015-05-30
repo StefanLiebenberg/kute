@@ -11,7 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-import static slieb.kute.resources.Resources.fileResource;
+import static slieb.kute.Kute.fileResource;
 
 public class FileResourceProvider implements ResourceProvider<FileResource> {
 

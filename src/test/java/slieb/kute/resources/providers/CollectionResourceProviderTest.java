@@ -5,11 +5,11 @@ import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.api.Resource;
-import slieb.kute.resources.Resources;
 
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static slieb.kute.Kute.stringResource;
 
 
 public class CollectionResourceProviderTest {
@@ -20,9 +20,9 @@ public class CollectionResourceProviderTest {
 
     @Before
     public void setup() {
-        resourceA = Resources.stringResource("/path/a", "contentA");
-        resourceB = Resources.stringResource("/path/b", "contentB");
-        resourceC = Resources.stringResource("/path/c", "contentC");
+        resourceA = stringResource("/path/a", "contentA");
+        resourceB = stringResource("/path/b", "contentB");
+        resourceC = stringResource("/path/c", "contentC");
         collectionResourceProvider =
                 new CollectionResourceProvider<>(ImmutableList.of(resourceA, resourceB, resourceC));
     }
