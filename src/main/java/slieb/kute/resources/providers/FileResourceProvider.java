@@ -1,6 +1,8 @@
 package slieb.kute.resources.providers;
 
 import com.google.common.base.Preconditions;
+import slieb.kute.Kute;
+import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 import slieb.kute.resources.ResourceException;
 import slieb.kute.resources.implementations.FileResource;
@@ -11,9 +13,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import static slieb.kute.Kute.copyResourceUnsafe;
 import static slieb.kute.Kute.fileResource;
 
-public class FileResourceProvider implements ResourceProvider<FileResource> {
+public class FileResourceProvider implements ResourceProvider<FileResource>, ResourceProvider.ResourceCreator<FileResource> {
 
     public final File directory;
 
@@ -53,5 +56,11 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
         Preconditions.checkState(path.startsWith(rootPath));
         return new FileResource(path.substring(rootPath.length()), file);
     }
+
+    public FileResource create(String path) {
+        return new FileResource(path, new File(directory, path));
+    }
+
+
 
 }

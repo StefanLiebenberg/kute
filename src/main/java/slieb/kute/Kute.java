@@ -29,12 +29,37 @@ import static slieb.kute.resources.ResourcePredicates.distinctFilter;
 public class Kute {
 
     /**
+     * Provides the {@link ClassLoader} instance. Found from {@code Thread.currentThread().getContextClassLoader()} or {@code Kute.class.getClassLoader()}
+     *
+     * @return The default classloader.
+     */
+    public static ClassLoader getDefaultClassLoader() {
+        try {
+            return Thread.currentThread().getContextClassLoader();
+        } catch (Exception ignored) {
+            return Kute.class.getClassLoader();
+        }
+    }
+
+    /**
+     * Provides a {@link ResourceProvider} that wraps around the default classLoader.
+     *
+     * @return A default provider that wraps a resource provider around a classLoader.
+     * @see Kute#getDefaultClassLoader()
+     * @see Kute#getProvider(ClassLoader)
+     */
+    public static ResourceProvider<Resource.InputStreaming> getDefaultProvider() {
+        return getProvider(getDefaultClassLoader());
+    }
+
+    /**
      * @param urls An array of urls where the provider can search for resources. Only jar and directory urls are supported.
      * @return An {@link URLArrayResourceProvider} class that will provide all the resources in the array of urls.
      */
     public static URLArrayResourceProvider getProvider(List<URL> urls) {
         return new URLArrayResourceProvider(urls);
     }
+
 
     /**
      * @param classLoader The classloader from which to search for resources. Currently only implementations of {@link URLClassLoader} are scanned.
@@ -51,16 +76,6 @@ public class Kute {
         return getProvider(urls);
     }
 
-    /**
-     * @return A default provider that wraps a resource provider around a classLoader.
-     */
-    public static ResourceProvider<Resource.InputStreaming> getDefaultProvider() {
-        try {
-            return getProvider(Thread.currentThread().getContextClassLoader());
-        } catch (Exception ignored) {
-        }
-        return getProvider(Kute.class.getClassLoader());
-    }
 
     /**
      * @param resources A var_arg array of resources that the provider will contain.
@@ -70,6 +85,16 @@ public class Kute {
     @SafeVarargs
     public static <T extends Resource> CollectionResourceProvider<T> providerOf(T... resources) {
         return providerOf(Arrays.asList(resources));
+    }
+
+    /**
+     * Returns a empty resource provider.
+     *
+     * @param <A> Types that the provider supplies.
+     * @return a resource provider that returns nothing.
+     */
+    public <A extends Resource> ResourceProvider<A> emptyProvider() {
+        return new EmptyProvider<>();
     }
 
     /**
@@ -115,7 +140,7 @@ public class Kute {
     }
 
     /**
-     * Read the resource without throwing an IOException.
+     * Read the resource, but throws a RuntimeException instead of a IOException.
      *
      * @param resource a Readable resource.
      * @return The content of resource.
@@ -129,7 +154,7 @@ public class Kute {
     }
 
     /**
-     * Read a {@link Resource.InputStreaming} resource. This is almost like {@link Resources#readResource(Resource.Readable)},
+     * Read a {@link Resource.InputStreaming} resource. This is almost like {@link Kute#readResource(Resource.Readable)},
      * except that it uses the {@link Resource.InputStreaming#getInputStream()} method instead.
      *
      * @param resource An {@link Resource.InputStreaming} resource.
@@ -144,7 +169,7 @@ public class Kute {
 
 
     /**
-     * Read a {@link Resource.InputStreaming} resource with encoding. This is almost like {@link Resources#readResource(Resource.Readable)},
+     * Read a {@link Resource.InputStreaming} resource with encoding. This is almost like {@link Kute#readResource(Resource.Readable)},
      * except that it uses the {@link Resource.InputStreaming#getInputStream()} method instead.
      *
      * @param resource An {@link Resource.InputStreaming} resource.
@@ -190,17 +215,34 @@ public class Kute {
      * @param writeable A writeable resource instance.
      * @throws IOException A io exception can occur during the copy process.
      */
-    public static void copyResource(Resource.Readable readable, Resource.Writeable writeable) throws IOException {
+    public static void copyReadableResource(Resource.Readable readable, Resource.Writeable writeable) throws IOException {
         try (Reader reader = readable.getReader(); Writer writer = writeable.getWriter()) {
             IOUtils.copy(reader, writer);
         }
     }
 
-    public static void copyResourceAsStreams(Resource.InputStreaming inputStreaming, Resource.OutputStreaming outputStreaming) throws IOException {
+    public static void copyStreamingResource(Resource.InputStreaming inputStreaming, Resource.OutputStreaming outputStreaming) throws IOException {
         try (InputStream inputStream = inputStreaming.getInputStream();
              OutputStream outputStream = outputStreaming.getOutputStream()) {
             IOUtils.copy(inputStream, outputStream);
         }
+    }
+
+    public static void copyResource(Resource.Readable input, Resource.Writeable output) throws IOException {
+        if (input instanceof Resource.InputStreaming && output instanceof Resource.OutputStreaming) {
+            copyStreamingResource((Resource.InputStreaming) input, (Resource.OutputStreaming) output);
+        } else {
+            copyReadableResource(input, output);
+        }
+    }
+
+    public static void copyResourceUnsafe(Resource.Readable input, Resource.Writeable output) {
+        try {
+            copyResource(input, output);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -349,4 +391,12 @@ public class Kute {
     public static <R extends Resource> Stream<R> distinctPath(Stream<R> stream) {
         return distinct(stream, Resource::getPath);
     }
+
+
+    public void copyProviderToCreator(ResourceProvider<? extends Resource.Readable> provider,
+                                      ResourceProvider.ResourceCreator<?> creator) {
+        provider.stream().forEach(resource -> copyResourceUnsafe(resource, creator.create(resource.getPath())));
+    }
+
+
 }

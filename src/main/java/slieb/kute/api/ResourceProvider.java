@@ -45,4 +45,8 @@ public interface ResourceProvider<A extends Resource> extends Iterable<A> {
     }
 
     Stream<A> stream();
+
+    interface ResourceCreator<A extends Resource.Writeable> extends ResourceProvider<A> {
+        A create(String path);
+    }
 }
