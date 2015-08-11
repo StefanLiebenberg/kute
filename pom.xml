@@ -38,7 +38,7 @@
         <plugin.maven-surefire-plugin>2.18.1</plugin.maven-surefire-plugin>
         <plugin.maven-clean-plugin>2.6.1</plugin.maven-clean-plugin>
         <plugin.maven-source-plugin>2.4</plugin.maven-source-plugin>
-        <plugin.site-maven-plugin>0.11</plugin.site-maven-plugin>
+        <plugin.site-maven-plugin>0.12</plugin.site-maven-plugin>
         <plugin.maven-resources-plugin>2.7</plugin.maven-resources-plugin>
 
 
@@ -52,7 +52,7 @@
         <dep.mockito>2.0.2-beta</dep.mockito>
         <dep.kute>0.8-SNAPSHOT</dep.kute>
         <dep.spark>2.2</dep.spark>
-        <dep.jsoup>1.7.3</dep.jsoup>
+        <dep.jsoup>1.8.3</dep.jsoup>
     </properties>
 
     <prerequisites>
