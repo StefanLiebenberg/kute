@@ -23,7 +23,7 @@ public class Service {
 
     /**
      * @param provider A provider where resources may be found.
-     * @param port
+     * @param port The port number to run service on.
      */
     public Service(ResourceProvider<? extends Resource.Readable> provider, Integer port) {
         this.provider = provider;
