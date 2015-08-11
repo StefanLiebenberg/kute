@@ -8,7 +8,7 @@
     <description>A service wrapper around kute's resource provider</description>
     <groupId>org.slieb</groupId>
     <artifactId>kute-service</artifactId>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <url>https://stefanliebenberg.github.io/kute-service</url>
 
@@ -51,7 +51,7 @@
         <dep.junit>4.12</dep.junit>
         <dep.mockito>2.0.2-beta</dep.mockito>
         <dep.kute>0.8-SNAPSHOT</dep.kute>
-        <dep.spark>2.2</dep.spark>
+        <dep.spark>2.1</dep.spark>
         <dep.jsoup>1.7.3</dep.jsoup>
     </properties>
 

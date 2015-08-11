@@ -1,12 +1,14 @@
 package org.slieb.kute.service;
 
 import org.apache.commons.io.IOUtils;
+import org.slieb.kute.service.resources.ServiceResource;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,47 +28,34 @@ public class ServiceRoute implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        long startTime = System.nanoTime();
-        try {
-            response.type(getContentType(request, response));
-            Resource.Readable resource = getReadable(request);
+        Resource.Readable resource = provider.getResourceByName(request.pathInfo());
+        if (resource != null) {
+            response.type(getContentType(resource));
             if (isInputStreamingResource(resource)) {
-                return handleInputStreaming((Resource.InputStreaming) resource, request, response);
+                try (InputStream inputStream = ((Resource.InputStreaming) resource).getInputStream();
+                     OutputStream outputStream = response.raw().getOutputStream()) {
+                    IOUtils.copy(inputStream, outputStream);
+                }
+                return "";
+            } else {
+                return readResource(resource);
             }
-            return readResource(getReadable(request));
-        } finally {
-            System.out.println(request.pathInfo() + ": " + (System.nanoTime() - startTime) / 1000000);
         }
+        throw new FileNotFoundException(request.pathInfo());
     }
 
     public boolean isInputStreamingResource(Resource resource) {
-        return resource instanceof Resource.Proxy ?
-                isInputStreamingResource(((Resource.Proxy) resource).getResource()) :
-                resource instanceof Resource.InputStreaming;
+        if (resource instanceof Resource.Proxy) {
+            return isInputStreamingResource(((Resource.Proxy) resource).getResource());
+        }
+        return resource instanceof Resource.InputStreaming;
     }
 
-    
-    public Object handleInputStreaming(Resource.InputStreaming inputStreaming, Request request, Response response) throws IOException {
-        try (InputStream inputStream = inputStreaming.getInputStream();
-             OutputStream outputStream = response.raw().getOutputStream()) {
-            IOUtils.copy(inputStream, outputStream);
-        }
-        return "";
-    }
 
-    public Resource.Readable getReadable(Request request) {
-        Resource.Readable readable = provider.getResourceByName(request.pathInfo());
-        if (readable != null) {
-            return readable;
+    public String getContentType(Resource resource) throws IOException {
+        if (resource instanceof ServiceResource) {
+            return ((ServiceResource) resource).getContentType();
         }
-        throw new RuntimeException("Resource not Found");
-    }
-
-    public String getContentType(Request request, Response response) throws IOException {
-        String path = request.pathInfo();
-        if (path.endsWith("/")) {
-            return "text/html";
-        }
-        return Files.probeContentType(Paths.get(path));
+        return Files.probeContentType(Paths.get(resource.getPath()));
     }
 }

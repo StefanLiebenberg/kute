@@ -1,64 +1,75 @@
 package org.slieb.kute.service.resources;
 
-import org.slieb.kute.service.providers.IndexProvider;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
+import slieb.kute.resources.Resources;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 
-public class IndexResource implements Resource.Readable {
-
-    private final String path;
+public class IndexResource extends AbstractResource {
 
     private final ResourceProvider<? extends Resource.Readable> provider;
 
-    public IndexResource(String path, ResourceProvider<? extends Readable> provider) {
-        this.path = path;
+    private final Resource.Readable indexResource;
+
+    public IndexResource(String path, ResourceProvider<? extends Readable> provider, Resource.Readable indexResource) {
+        super(path);
         this.provider = provider;
+        this.indexResource = indexResource;
+    }
+
+    public boolean hasIndexResource() {
+        return indexResource != null;
     }
 
     @Override
-    public String getPath() {
-        return path;
-    }
+    public String getContent() throws IOException {
 
-    @Override
-    public Reader getReader() throws IOException {
+        if (indexResource != null) {
+            return Resources.readResource(indexResource);
+        }
+
+        Path pathObj = Paths.get(getPath());
         StringBuilder result = new StringBuilder();
-        Path pathObj = Paths.get(path);
-
-        result.append("<h1>Index Of ").append(path).append("</h1>");
-
+        result.append("<h1>Index Of ").append(getPath()).append("</h1>");
         result.append("<ul>");
         Path parentPath = pathObj.getParent();
         if (parentPath != null) {
             result.append("<li>");
-            appendAnchor(result, parentPath.toString(), "Up to Parent");
+            result.append(appendAnchor(parentPath.toString(), "Up to Parent"));
             result.append("</li>");
         }
-
-        provider
-                .stream()
-                .map(Resource::getPath)
-                .map(Paths::get)
-                .flatMap(IndexProvider::parentsStream)
-                .distinct()
-                .filter(p -> pathObj.equals(p.getParent()))
-                .forEach(p -> {
-                    result.append("<li>");
-                    appendAnchor(result, p.toString(), p.getFileName().toString());
-                    result.append("</li>");
-                });
+        getChildrenStream(pathObj)
+                .map(p -> "<li>" + appendAnchor(p.toString(), p.getFileName().toString()) + "</li>")
+                .forEachOrdered(result::append);
         result.append("</ul>");
-        return new StringReader(result.toString());
+        return result.toString();
     }
 
-    private void appendAnchor(StringBuilder str, String href, String name) {
-        str.append("<a href='").append(href).append("'>").append(name).append("</a>");
+    private Stream<Path> getNodeTreeStream(Resource resource) {
+        Stream.Builder<Path> pathBuilder = Stream.builder();
+        for (Path current = Paths.get(resource.getPath()); current != null; current = current.getParent()) {
+            pathBuilder.accept(current);
+        }
+        return pathBuilder.build();
+    }
+
+    protected Stream<Path> getChildrenStream(Path path) {
+        return provider.stream()
+                .parallel()
+                .flatMap(this::getNodeTreeStream)
+                .filter(((Function<Path, Boolean>) path::equals).compose(Path::getParent)::apply)
+                .distinct()
+                .sorted();
+    }
+
+    private String appendAnchor(String href, String name) {
+        return "<a href='" + href + "'>" + name + "</a>";
     }
 }
+
