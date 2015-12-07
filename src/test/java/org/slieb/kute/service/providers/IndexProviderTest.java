@@ -12,9 +12,7 @@ import java.io.IOException;
 
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
-import static slieb.kute.Kute.providerOf;
-import static slieb.kute.resources.Resources.readResource;
-import static slieb.kute.resources.Resources.stringResource;
+import static slieb.kute.Kute.*;
 
 
 public class IndexProviderTest {
@@ -25,7 +23,7 @@ public class IndexProviderTest {
         ResourceProvider<Resource.Readable> provider = providerOf(resource);
         IndexProvider index = new IndexProvider(provider);
         assertNotNull(index.getResourceByName("/"));
-        assertEquals(readResource(resource), readResource(index.getResourceByName("/")));
+        assertEquals(readResource(resource), readResource(index.getResourceByName("/").get()));
     }
 
     @Test
@@ -36,7 +34,7 @@ public class IndexProviderTest {
         ResourceProvider<Resource.Readable> provider = providerOf(level1, level2, level3);
         IndexProvider index = new IndexProvider(provider);
         assertEquals(Sets.newHashSet("/", "/css", "/images", "/images/venice"),
-                index.stream().map(Resource::getPath).collect(toSet()));
+                     index.stream().map(Resource::getPath).collect(toSet()));
     }
 
 
@@ -51,10 +49,11 @@ public class IndexProviderTest {
         Resource.Readable level2_ie = stringResource("/css/ie.min.css", ".color { red; }");
         Resource.Readable level2_print = stringResource("/css/print.min.css", ".color { red; }");
         Resource.Readable level3 = stringResource("/images/venice/yacht.jpg", "!!!!");
-        ResourceProvider<Resource.Readable> provider = providerOf(level1, level2_style, level2_ie, level2_print, level3);
+        ResourceProvider<Resource.Readable> provider = providerOf(level1, level2_style, level2_ie, level2_print,
+                                                                  level3);
         IndexProvider index = new IndexProvider(provider);
 
-        Resource.Readable level2Index = index.getResourceByName("/css");
+        Resource.Readable level2Index = index.getResourceByName("/css").get();
         assertNotNull(level2Index);
 
         Document document = Jsoup.parse(readResource(level2Index));

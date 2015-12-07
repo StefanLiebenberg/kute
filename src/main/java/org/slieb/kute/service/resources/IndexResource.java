@@ -1,8 +1,8 @@
 package org.slieb.kute.service.resources;
 
+import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
-import slieb.kute.resources.Resources;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -31,7 +31,7 @@ public class IndexResource extends AbstractResource {
     public String getContent() throws IOException {
 
         if (indexResource != null) {
-            return Resources.readResource(indexResource);
+            return Kute.readResource(indexResource);
         }
 
         Path pathObj = Paths.get(getPath());
@@ -44,9 +44,9 @@ public class IndexResource extends AbstractResource {
             result.append(appendAnchor(parentPath.toString(), "Up to Parent"));
             result.append("</li>");
         }
-        getChildrenStream(pathObj)
-                .map(p -> "<li>" + appendAnchor(p.toString(), p.getFileName().toString()) + "</li>")
-                .forEachOrdered(result::append);
+        getChildrenStream(pathObj).map(
+                p -> "<li>" + appendAnchor(p.toString(), p.getFileName().toString()) + "</li>").forEachOrdered(
+                result::append);
         result.append("</ul>");
         return result.toString();
     }
@@ -60,12 +60,8 @@ public class IndexResource extends AbstractResource {
     }
 
     protected Stream<Path> getChildrenStream(Path path) {
-        return provider.stream()
-                .parallel()
-                .flatMap(this::getNodeTreeStream)
-                .filter(((Function<Path, Boolean>) path::equals).compose(Path::getParent)::apply)
-                .distinct()
-                .sorted();
+        return provider.stream().parallel().flatMap(this::getNodeTreeStream).filter(
+                ((Function<Path, Boolean>) path::equals).compose(Path::getParent)::apply).distinct().sorted();
     }
 
     private String appendAnchor(String href, String name) {

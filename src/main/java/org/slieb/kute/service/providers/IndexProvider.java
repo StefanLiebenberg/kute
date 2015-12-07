@@ -15,10 +15,12 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class IndexProvider implements ResourceProvider<IndexResource> {
+public class IndexProvider implements ResourceProvider<Resource.Readable> {
 
-    protected final Comparator<IndexResource> INDEXED_COMPARATOR = Comparator.comparingInt(node -> node.hasIndexResource() ? -1 : 1);
-    protected final Function<Stream<IndexResource>, Optional<IndexResource>> TO_INDEXED_NODE = stream -> stream.sorted(INDEXED_COMPARATOR).findFirst();
+    protected final Comparator<IndexResource> INDEXED_COMPARATOR = Comparator.comparingInt(
+            node -> node.hasIndexResource() ? -1 : 1);
+    protected final Function<Stream<IndexResource>, Optional<IndexResource>> TO_INDEXED_NODE = stream -> stream.sorted(
+            INDEXED_COMPARATOR).findFirst();
     public final ResourceProvider<? extends Resource.Readable> provider;
 
     public IndexProvider(ResourceProvider<? extends Resource.Readable> provider) {
@@ -26,25 +28,19 @@ public class IndexProvider implements ResourceProvider<IndexResource> {
     }
 
     @Override
-    public Stream<IndexResource> stream() {
+    public Stream<Resource.Readable> stream() {
         return getDirectoryNodeStream();
     }
 
     @Override
-    public IndexResource getResourceByName(String path) {
-        return getDirectoryNodeStream()
-                .filter(node -> node.getPath().equals(path))
-                .findFirst().orElse(null);
+    public Optional<Resource.Readable> getResourceByName(String path) {
+        return getDirectoryNodeStream().filter(node -> node.getPath().equals(path)).findFirst();
     }
 
-    protected Stream<IndexResource> getDirectoryNodeStream() {
-        return provider.stream()
-                .flatMap(this::getDirectoryNodeStreamForResource)
-                .collect(groupingBy(Resource::getPath))
-                .values().stream()
-                .map(Collection::stream)
-                .map(TO_INDEXED_NODE)
-                .filter(Optional::isPresent).map(Optional::get);
+    protected Stream<Resource.Readable> getDirectoryNodeStream() {
+        return provider.stream().flatMap(this::getDirectoryNodeStreamForResource).collect(
+                groupingBy(Resource::getPath)).values().stream().map(Collection::stream).map(TO_INDEXED_NODE).filter(
+                Optional::isPresent).map(Optional::get);
     }
 
     protected Stream<IndexResource> getDirectoryNodeStreamForResource(Resource.Readable resource) {
