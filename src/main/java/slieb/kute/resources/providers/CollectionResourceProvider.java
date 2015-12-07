@@ -4,6 +4,7 @@ import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static slieb.kute.Kute.distinctPath;
@@ -19,7 +20,7 @@ public class CollectionResourceProvider<R extends Resource> implements ResourceP
     }
 
     @Override
-    public R getResourceByName(String path) {
+    public Optional<R> getResourceByName(String path) {
         return findResource(stream(), path);
     }
 

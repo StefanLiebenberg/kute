@@ -15,9 +15,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
 import static slieb.kute.Kute.*;
 
-/**
- * Created by stefan on 5/17/15.
- */
+
 public class ZipFileResourceProviderTest {
 
     private ZipFileResourceProvider provider;
@@ -35,12 +33,12 @@ public class ZipFileResourceProviderTest {
         assertNotNull(provider.getResourceByName("/resource.txt"));
         assertNotNull(provider.getResourceByName("/nested/resource.txt"));
         assertNotNull(provider.getResourceByName("/nested/other.txt"));
-        assertNull(provider.getResourceByName("/nested/foo.txt"));
+        assertFalse(provider.getResourceByName("/nested/foo.txt").isPresent());
     }
 
     @Test
     public void testResourceTxt() throws IOException {
-        InputStreaming inputStreaming = provider.getResourceByName("/resource.txt");
+        InputStreaming inputStreaming = provider.getResourceByName("/resource.txt").get();
         assertNotNull(inputStreaming);
         String expectedContent = "resource content for /resource.txt\n";
         assertEquals(expectedContent, readResource(inputStreaming));
@@ -51,7 +49,8 @@ public class ZipFileResourceProviderTest {
 
     @Test
     public void testStream() throws IOException {
-        assertEquals(newHashSet("/resource.txt", "/nested/resource.txt", "/nested/other.txt"), provider.stream().map(Resource::getPath).collect(toSet()));
+        assertEquals(newHashSet("/resource.txt", "/nested/resource.txt", "/nested/other.txt"),
+                     provider.stream().map(Resource::getPath).collect(toSet()));
     }
 
 }

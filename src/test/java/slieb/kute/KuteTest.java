@@ -18,7 +18,7 @@ public class KuteTest {
     public void testGetProvider() throws Exception {
         ResourceProvider<Resource.InputStreaming> readables = getProvider(getClass().getClassLoader());
         assertNotNull(readables);
-        Resource.Readable readable = readables.getResourceByName("/slieb/kute/resources/example.txt");
+        Resource.Readable readable = readables.getResourceByName("/slieb/kute/resources/example.txt").get();
         assertNotNull("readable cannot be null", readable);
         assertEquals("just contains example text.", readResource(readable));
     }
@@ -27,28 +27,21 @@ public class KuteTest {
     public void testGetDefaultProvider() throws Exception {
         ResourceProvider<Resource.InputStreaming> readables = getDefaultProvider();
         assertNotNull(readables);
-        Resource.InputStreaming readable = readables.getResourceByName("/slieb/kute/resources/example.txt");
+        Resource.InputStreaming readable = readables.getResourceByName("/slieb/kute/resources/example.txt").get();
         assertNotNull(readable);
         assertEquals("just contains example text.", readStreamResource(readable));
     }
 
     @Test
     public void testGetProviderIsThreadSafe() throws Exception {
-        IntStream.range(0, 100)
-                .parallel()
-                .forEach(i -> {
-                    try {
-                        assertEquals("just contains example text.", readResource(getDefaultProvider().getResourceByName("/slieb/kute/resources/example.txt")));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+        IntStream.range(0, 100).parallel().forEach(i -> {
+            try {
+                assertEquals("just contains example text.", readResource(
+                        getDefaultProvider().getResourceByName("/slieb/kute/resources/example.txt").get()));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
-
-    public void testGroup() throws Exception {
-        ResourceProvider<? extends Resource.Readable> providerA, providerB, providerC;
-        providerA = Kute.providerOf();
-        providerB = Kute.providerOf();
-        providerC = Kute.<Resource.Readable, ResourceProvider>group(providerA, providerA);
-    }
+    
 }

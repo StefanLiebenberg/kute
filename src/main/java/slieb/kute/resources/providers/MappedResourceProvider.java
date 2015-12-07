@@ -3,6 +3,7 @@ package slieb.kute.resources.providers;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -17,13 +18,8 @@ public class MappedResourceProvider<A extends Resource, B extends Resource> impl
     }
 
     @Override
-    public B getResourceByName(String path) {
-        A resource = provider.getResourceByName(path);
-        if (resource != null) {
-            return function.apply(resource);
-        } else {
-            return null;
-        }
+    public Optional<B> getResourceByName(String path) {
+        return provider.getResourceByName(path).map(function);
     }
 
     @Override

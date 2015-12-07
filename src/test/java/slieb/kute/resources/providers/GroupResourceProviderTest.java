@@ -11,6 +11,8 @@ import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
 
+import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
 import static slieb.kute.Kute.group;
 import static slieb.kute.Kute.resourceProviderToSet;
@@ -50,10 +52,10 @@ public class GroupResourceProviderTest {
         ResourceProvider<Resource> group3 = Kute.providerOf(resourceC, resourceD);
         ResourceProvider<Resource> all = group(group1, group2, group3);
 
-        assertEquals(resourceA, all.getResourceByName("/resourceA"));
-        assertEquals(resourceB, all.getResourceByName("/resourceB"));
-        assertEquals(resourceC, all.getResourceByName("/resourceC"));
-        assertEquals(resourceD, all.getResourceByName("/resourceD"));
+        assertEquals(Optional.of(resourceA), all.getResourceByName("/resourceA"));
+        assertEquals(Optional.of(resourceB), all.getResourceByName("/resourceB"));
+        assertEquals(Optional.of(resourceC), all.getResourceByName("/resourceC"));
+        assertEquals(Optional.of(resourceD), all.getResourceByName("/resourceD"));
 
         assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC, resourceD), resourceProviderToSet(all));
 
@@ -65,10 +67,10 @@ public class GroupResourceProviderTest {
         ResourceProvider<Resource> group1 = Kute.providerOf(resourceA, resourceB);
         ResourceProvider<Resource> group2 = Kute.providerOf(resourceC, resourceD);
         ResourceProvider<Resource> all = group(group1, group2);
-        assertEquals(resourceA, all.getResourceByName("/resourceA"));
-        assertEquals(resourceB, all.getResourceByName("/resourceB"));
-        assertEquals(null, all.getResourceByName("/resourceC"));
-        assertEquals(resourceD, all.getResourceByName("/resourceD"));
+        assertEquals(Optional.of(resourceA), all.getResourceByName("/resourceA"));
+        assertEquals(Optional.of(resourceB), all.getResourceByName("/resourceB"));
+        assertEquals(Optional.empty(), all.getResourceByName("/resourceC"));
+        assertEquals(Optional.of(resourceD), all.getResourceByName("/resourceD"));
         assertEquals(ImmutableSet.of(resourceA, resourceB, resourceD), resourceProviderToSet(all));
     }
 

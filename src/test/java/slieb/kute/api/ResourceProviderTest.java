@@ -7,6 +7,7 @@ import slieb.kute.Kute;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
@@ -28,10 +29,10 @@ public class ResourceProviderTest {
 
 
     public void testGetResourceByName(ResourceProvider resourceProvider) throws Exception {
-        assertEquals(resourceA, resourceProvider.getResourceByName("/path/a"));
-        assertEquals(resourceB, resourceProvider.getResourceByName("/path/b"));
-        assertEquals(resourceC, resourceProvider.getResourceByName("/path/c"));
-        assertNull(resourceProvider.getResourceByName("/path/d"));
+        assertEquals(Optional.of(resourceA), resourceProvider.getResourceByName("/path/a"));
+        assertEquals(Optional.of(resourceB), resourceProvider.getResourceByName("/path/b"));
+        assertEquals(Optional.of(resourceC), resourceProvider.getResourceByName("/path/c"));
+        assertFalse(resourceProvider.getResourceByName("/path/d").isPresent());
     }
 
     public void testIterator(ResourceProvider<Resource> provider) throws Exception {

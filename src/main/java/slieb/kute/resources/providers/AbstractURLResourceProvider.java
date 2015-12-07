@@ -2,23 +2,24 @@ package slieb.kute.resources.providers;
 
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
-import slieb.kute.Kute;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.zip.ZipFile;
 
 
 public abstract class AbstractURLResourceProvider implements ResourceProvider<Resource.InputStreaming> {
 
-    private static final String PROTOCOL_ERROR = "Cannot produce ResourceProvider from protocol %s",
-            FILE_ERROR = "Cannot produce ResourceProvider from protocol %s";
+    private static final String PROTOCOL_ERROR = "Cannot produce ResourceProvider from protocol %s", FILE_ERROR =
+            "Cannot produce ResourceProvider from protocol %s";
 
     @Override
-    public Resource.InputStreaming getResourceByName(String path) {
-        return Kute.findFirstResource(providerStream().map(s -> s.getResourceByName(path)));
+    public Optional<Resource.InputStreaming> getResourceByName(String path) {
+        return providerStream().map(s -> s.getResourceByName(path)).filter(Optional::isPresent).map(
+                Optional::get).findFirst();
     }
 
     @Override
@@ -26,13 +27,13 @@ public abstract class AbstractURLResourceProvider implements ResourceProvider<Re
         return providerStream().flatMap(ResourceProvider::stream);
     }
 
-    public Stream<ResourceProvider<? extends Resource.InputStreaming>> providerStream() {
-        return urlStream().map(this::createResourceFromUrl).filter(p -> p != null);
+    public Stream<ResourceProvider<Resource.InputStreaming>> providerStream() {
+        return urlStream().map(this::createResourceFromUrl).filter(Optional::isPresent).map(Optional::get);
     }
 
     protected abstract Stream<URL> urlStream();
 
-    protected ResourceProvider<? extends Resource.InputStreaming> createResourceFromUrl(URL url) {
+    protected Optional<ResourceProvider<Resource.InputStreaming>> createResourceFromUrl(URL url) {
         String protocol = url.getProtocol();
         switch (protocol) {
             case "file":
@@ -42,19 +43,19 @@ public abstract class AbstractURLResourceProvider implements ResourceProvider<Re
         }
     }
 
-    protected ResourceProvider<? extends Resource.InputStreaming> createResourceFromFile(File file) {
-        if (!file.exists()) return null; // this could be a empty/non-existent directory
+    protected Optional<ResourceProvider<Resource.InputStreaming>> createResourceFromFile(File file) {
+        if (!file.exists()) return Optional.empty(); // this could be a empty/non-existent directory
 
         if (file.getPath().endsWith(".jar")) {
             try {
-                return new ZipFileResourceProvider(new ZipFile(file));
+                return Optional.of(new ZipFileResourceProvider(new ZipFile(file)));
             } catch (IOException io) {
                 throw new RuntimeException(io);
             }
         }
 
         if (file.isDirectory()) {
-            return new FileResourceProvider(file);
+            return Optional.of(new FileResourceProvider(file));
         }
 
         throw new IllegalStateException(String.format(FILE_ERROR, file.toString()));

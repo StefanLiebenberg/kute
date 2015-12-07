@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.api.Resource;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -23,21 +24,21 @@ public class CollectionResourceProviderTest {
         resourceA = stringResource("/path/a", "contentA");
         resourceB = stringResource("/path/b", "contentB");
         resourceC = stringResource("/path/c", "contentC");
-        collectionResourceProvider =
-                new CollectionResourceProvider<>(ImmutableList.of(resourceA, resourceB, resourceC));
+        collectionResourceProvider = new CollectionResourceProvider<>(
+                ImmutableList.of(resourceA, resourceB, resourceC));
     }
 
     @Test
     public void testGetResourceByName() throws Exception {
-        assertEquals(resourceA, collectionResourceProvider.getResourceByName("/path/a"));
-        assertEquals(resourceB, collectionResourceProvider.getResourceByName("/path/b"));
-        assertEquals(resourceC, collectionResourceProvider.getResourceByName("/path/c"));
+        assertEquals(Optional.of(resourceA), collectionResourceProvider.getResourceByName("/path/a"));
+        assertEquals(Optional.of(resourceB), collectionResourceProvider.getResourceByName("/path/b"));
+        assertEquals(Optional.of(resourceC), collectionResourceProvider.getResourceByName("/path/c"));
     }
 
     @Test
     public void testStream() throws Exception {
         assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC),
-                collectionResourceProvider.stream().collect(Collectors.toSet()));
+                     collectionResourceProvider.stream().collect(Collectors.toSet()));
     }
 
     @Test
@@ -46,7 +47,6 @@ public class CollectionResourceProviderTest {
         for (Resource resource : collectionResourceProvider) {
             builder.add(resource);
         }
-        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC),
-                builder.build());
+        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC), builder.build());
     }
 }

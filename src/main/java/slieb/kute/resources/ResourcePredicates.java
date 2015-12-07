@@ -15,6 +15,8 @@ public class ResourcePredicates {
 
     public static final Predicate<? super Resource> NON_NULL = p -> p != null;
 
+
+
     /**
      * @param <A> A implementation of resource.
      * @return A nonNull predicate.
