@@ -3,12 +3,12 @@ package slieb.kute;
 import org.junit.Test;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
+import slieb.kute.resources.providers.EmptyProvider;
 
 import java.io.IOException;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static slieb.kute.Kute.*;
 
 
@@ -43,5 +43,12 @@ public class KuteTest {
             }
         });
     }
-    
+
+
+    @Test
+    public void testGetEmptyProvider() {
+        assertTrue(Kute.emptyProvider() instanceof EmptyProvider);
+    }
+
+
 }

@@ -10,7 +10,8 @@ public class URLResource extends AbstractResource implements Resource.InputStrea
 
     private final URL url;
 
-    public URLResource(String path, URL url) {
+    public URLResource(final String path,
+                       final URL url) {
         super(path);
         this.url = url;
     }

@@ -24,23 +24,4 @@ public abstract class AbstractProxy<R extends Resource> extends AbstractResource
         return resource;
     }
 
-    @Override
-    public Reader getReader() throws IOException {
-        return getResourceAs(getResource(), Resource.Readable.class).getReader();
-    }
-
-    @Override
-    public Writer getWriter() throws IOException {
-        return getResourceAs(getResource(), Resource.Writeable.class).getWriter();
-    }
-
-    @Override
-    public InputStream getInputStream() throws IOException {
-        return getResourceAs(getResource(), Resource.InputStreaming.class).getInputStream();
-    }
-
-    @Override
-    public OutputStream getOutputStream() throws IOException {
-        return getResourceAs(getResource(), Resource.OutputStreaming.class).getOutputStream();
-    }
 }

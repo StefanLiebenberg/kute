@@ -22,8 +22,6 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import static slieb.kute.resources.ResourcePredicates.NON_NULL;
 import static slieb.kute.resources.ResourcePredicates.distinctFilter;
 
@@ -97,7 +95,7 @@ public class Kute {
      * @param <A> Types that the provider supplies.
      * @return a resource provider that returns nothing.
      */
-    public <A extends Resource> ResourceProvider<A> emptyProvider() {
+    public static <A extends Resource> ResourceProvider<A> emptyProvider() {
         return new EmptyProvider<>();
     }
 
@@ -158,7 +156,8 @@ public class Kute {
     }
 
     /**
-     * Read a {@link Resource.InputStreaming} resource. This is almost like {@link Kute#readResource(Resource.Readable)},
+     * Read a
+     * {@link Resource.InputStreaming} resource. This is almost like {@link Kute#readResource(Resource.Readable)},
      * except that it uses the {@link Resource.InputStreaming#getInputStream()} method instead.
      *
      * @param resource An {@link Resource.InputStreaming} resource.
@@ -182,26 +181,29 @@ public class Kute {
      * @return The string result of reading {@link Resource.InputStreaming#getInputStream()}
      * @throws IOException If there is an exception getting the inputStream or reading from it.
      */
-    public static String readStreamResource(Resource.InputStreaming resource, String encoding) throws IOException {
+    public static String readStreamResource(Resource.InputStreaming resource,
+                                            String encoding) throws IOException {
         try (InputStream istream = resource.getInputStream()) {
             return IOUtils.toString(istream, encoding);
         }
     }
 
     /**
-     * Write content to a Writeable Resource.
+     * Write content to a Writable Resource.
      *
-     * @param resource a writeable resource instance.
+     * @param resource a writable resource instance.
      * @param content  The content that will be writen to the resource.
      * @throws IOException a IOException can occur during the write process.
      */
-    public static void writeResource(Resource.Writeable resource, CharSequence content) throws IOException {
+    public static void writeResource(Resource.Writable resource,
+                                     CharSequence content) throws IOException {
         try (Writer writer = resource.getWriter()) {
             IOUtils.write(content.toString(), writer);
         }
     }
 
-    public static void writeStreamResource(Resource.OutputStreaming resource, CharSequence content) throws IOException {
+    public static void writeStreamResource(Resource.OutputStreaming resource,
+                                           CharSequence content) throws IOException {
         try (OutputStream stream = resource.getOutputStream()) {
             IOUtils.write(content.toString(), stream);
         }
@@ -218,13 +220,13 @@ public class Kute {
     /**
      * Copy the content of one resources to another.
      *
-     * @param readable  A readable resource instance.
-     * @param writeable A writeable resource instance.
+     * @param readable A readable resource instance.
+     * @param writable A writable resource instance.
      * @throws IOException A io exception can occur during the copy process.
      */
     public static void copyReadableResource(Resource.Readable readable,
-                                            Resource.Writeable writeable) throws IOException {
-        try (Reader reader = readable.getReader(); Writer writer = writeable.getWriter()) {
+                                            Resource.Writable writable) throws IOException {
+        try (Reader reader = readable.getReader(); Writer writer = writable.getWriter()) {
             IOUtils.copy(reader, writer);
         }
     }
@@ -237,7 +239,8 @@ public class Kute {
         }
     }
 
-    public static void copyResource(Resource.Readable input, Resource.Writeable output) throws IOException {
+    public static void copyResource(Resource.Readable input,
+                                    Resource.Writable output) throws IOException {
         if (input instanceof Resource.InputStreaming && output instanceof Resource.OutputStreaming) {
             copyStreamingResource((Resource.InputStreaming) input, (Resource.OutputStreaming) output);
         } else {
@@ -245,7 +248,8 @@ public class Kute {
         }
     }
 
-    public static void copyResourceUnsafe(Resource.Readable input, Resource.Writeable output) {
+    public static void copyResourceUnsafe(Resource.Readable input,
+                                          Resource.Writable output) {
         try {
             copyResource(input, output);
         } catch (IOException e) {
@@ -271,7 +275,8 @@ public class Kute {
      * @param path The path this resource should be available at.
      * @return A file resource that will provide the file contents when needed.
      */
-    public static FileResource fileResource(String path, File file) {
+    public static FileResource fileResource(String path,
+                                            File file) {
         return new FileResource(path, file);
     }
 
@@ -283,7 +288,8 @@ public class Kute {
      * @param <A>      extends Resource.
      * @return A resource of type A extends Resource that is a copy of the old resource, but with a new name.
      */
-    public static <A extends Resource> RenamedPathResource<A> renameResource(String path, A resource) {
+    public static <A extends Resource> RenamedPathResource<A> renameResource(String path,
+                                                                             A resource) {
         return new RenamedPathResource<>(path, resource);
     }
 
@@ -294,7 +300,8 @@ public class Kute {
      * @param path     The path name for this resource.
      * @return a readable resource that reads from provided input stream.
      */
-    public static InputStreamResource inputStreamResource(String path, Supplier<InputStream> supplier) {
+    public static InputStreamResource inputStreamResource(String path,
+                                                          Supplier<InputStream> supplier) {
         return new InputStreamResource(path, supplier);
     }
 
@@ -322,12 +329,14 @@ public class Kute {
         return new CachedResource(resource);
     }
 
-    public static StringSupplierResource stringResource(String path, CharSequence content) {
+    public static StringSupplierResource stringResource(String path,
+                                                        CharSequence content) {
         return new StringSupplierResource(path, content.toString());
     }
 
 
-    public static URLResource urlResource(String path, URL url) {
+    public static URLResource urlResource(final String path,
+                                          final URL url) {
         return new URLResource(path, url);
     }
 
@@ -339,18 +348,9 @@ public class Kute {
     }
 
 
-    public static <R extends Resource> List<R> resourceProviderToList(ResourceProvider<? extends R> resourceProvider) {
-        return resourceProvider.stream().collect(toList());
-    }
-
-    public static <R extends Resource> Set<R> resourceProviderToSet(ResourceProvider<? extends R> resourceProvider) {
-        return resourceProvider.stream().collect(toSet());
-    }
-
-
-    public static <A extends Resource, B extends Resource> ResourceProvider<B> mapResources(ResourceProvider<A>
-                                                                                                    provider,
-                                                                                            Function<A, B> function) {
+    public static <A extends Resource, B extends Resource> ResourceProvider<B> mapResources(
+            final ResourceProvider<A> provider,
+            final Function<A, B> function) {
         return new MappedResourceProvider<>(provider, function);
     }
 
@@ -361,13 +361,15 @@ public class Kute {
 
 
     @SuppressWarnings("unchecked")
-    public static <A extends Resource, B> B getResourceAs(A resource, Class<B> classObject) {
+    public static <A extends Resource, B> B getResourceAs(A resource,
+                                                          Class<B> classObject) {
         Preconditions.checkState(classObject.isAssignableFrom(resource.getClass()), "Resource is not a " + classObject);
         return (B) resource;
     }
 
 
-    public static Resource.InputStreaming zipEntryResource(ZipFile zipFile, ZipEntry zipEntry) {
+    public static Resource.InputStreaming zipEntryResource(ZipFile zipFile,
+                                                           ZipEntry zipEntry) {
         return inputStreamResourceWithIO(zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
     }
 
@@ -389,7 +391,8 @@ public class Kute {
      * @param <R>    The resource implementation.
      * @return A matching resource, if found.
      */
-    public static <R extends Resource> Optional<R> findResource(Stream<R> stream, String path) {
+    public static <R extends Resource> Optional<R> findResource(Stream<R> stream,
+                                                                String path) {
         return findFirstResource(stream.filter(r -> r.getPath().equals(path)));
     }
 
@@ -400,7 +403,8 @@ public class Kute {
      * @param <X>      The generic value type.
      * @return A stream without resource duplicates as determined by the passed function.
      */
-    public static <R extends Resource, X> Stream<R> distinct(Stream<R> stream, Function<R, X> function) {
+    public static <R extends Resource, X> Stream<R> distinct(Stream<R> stream,
+                                                             Function<R, X> function) {
         return stream.filter(distinctFilter(function));
     }
 
@@ -419,5 +423,18 @@ public class Kute {
         provider.stream().forEach(resource -> copyResourceUnsafe(resource, creator.create(resource.getPath())));
     }
 
+
+    public static ResourceProvider<Resource.InputStreaming> asInputStreamingProvider(
+            final ResourceProvider<? extends Resource.InputStreaming> inputStreamings) {
+        //noinspection unchecked
+        return (ResourceProvider<Resource.InputStreaming>) inputStreamings;
+    }
+
+
+    public static ResourceProvider<Resource.Readable> asReadableProvider(
+            final ResourceProvider<? extends Resource.Readable> readableProvider) {
+        //noinspection unchecked
+        return (ResourceProvider<Resource.Readable>) readableProvider;
+    }
 
 }

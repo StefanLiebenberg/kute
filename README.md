@@ -72,12 +72,12 @@ Each of these have a relevant getReader, getWriter, etc method, which you can us
     
 ### Writing to Resource.Writable
 
-    Resource.Writeable writeable = ...;
+    Resource.Writable writable = ...;
     try(Writer writer = resource.getWriter()){ 
        ... // do stuff with writer;
     }
     
-### Writing to Resource.Writeable with Resources
+### Writing to Resource.Writable with Resources
 
     Kute.writeResource(readable, "content");
 

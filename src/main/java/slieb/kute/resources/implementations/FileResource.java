@@ -43,7 +43,8 @@ public class FileResource extends AbstractResource implements Resource.InputStre
      * @param file The resource's file object.
      * @param path The path under which this resource will be available as.
      */
-    public FileResource(String path, File file) {
+    public FileResource(final String path,
+                        final File file) {
         super(path);
         this.file = file;
     }
@@ -81,25 +82,33 @@ public class FileResource extends AbstractResource implements Resource.InputStre
      */
     @Override
     public FileWriter getWriter() throws IOException {
+        this.parentExistsOrMkdirs();
         return new FileWriter(this.file);
     }
 
     /**
      * @return A FileOutputStream that will will write into the resource's file object.
-     * @throws IOException when there is an erro creating the output stream.
+     * @throws IOException when there is an error creating the output stream.
      */
     @Override
     public FileOutputStream getOutputStream() throws IOException {
+        this.parentExistsOrMkdirs();
         return new FileOutputStream(this.file);
     }
 
     /**
-     * @return A FileInputStream that will read fomr the resource's file object.
-     * @throws IOException whne there is an error creating the inputStream.
+     * @return A FileInputStream that will read from the resource's file object.
+     * @throws IOException when there is an error creating the inputStream.
      */
     @Override
     public InputStream getInputStream() throws IOException {
         return new FileInputStream(this.file);
     }
+
+    public boolean parentExistsOrMkdirs() {
+        File parentFile = this.file.getParentFile();
+        return parentFile != null && (parentFile.exists() || parentFile.mkdirs());
+    }
+
 
 }

@@ -13,9 +13,9 @@ import slieb.kute.api.ResourceProvider;
 
 import java.util.Optional;
 
+import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.assertEquals;
 import static slieb.kute.Kute.group;
-import static slieb.kute.Kute.resourceProviderToSet;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GroupResourceProviderTest {
@@ -57,7 +57,7 @@ public class GroupResourceProviderTest {
         assertEquals(Optional.of(resourceC), all.getResourceByName("/resourceC"));
         assertEquals(Optional.of(resourceD), all.getResourceByName("/resourceD"));
 
-        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC, resourceD), resourceProviderToSet(all));
+        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC, resourceD), all.collect(toSet()));
 
     }
 
@@ -71,7 +71,7 @@ public class GroupResourceProviderTest {
         assertEquals(Optional.of(resourceB), all.getResourceByName("/resourceB"));
         assertEquals(Optional.empty(), all.getResourceByName("/resourceC"));
         assertEquals(Optional.of(resourceD), all.getResourceByName("/resourceD"));
-        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceD), resourceProviderToSet(all));
+        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceD), all.collect(toSet()));
     }
 
 

@@ -3,16 +3,17 @@ package slieb.kute.resources;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.mockito.Mockito;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 import slieb.kute.resources.implementations.CachedResource;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static slieb.kute.Kute.*;
 
 
@@ -44,9 +45,9 @@ public class ResourcesTest {
     @Test
     public void testWriteResource() throws Exception {
         StringWriter writer = new StringWriter();
-        Resource.Writeable writeable = mock(Resource.Writeable.class);
-        when(writeable.getWriter()).thenReturn(writer);
-        writeResource(writeable, "content");
+        Resource.Writable writable = mock(Resource.Writable.class);
+        when(writable.getWriter()).thenReturn(writer);
+        writeResource(writable, "content");
         assertEquals("content", writer.toString());
     }
 
@@ -56,22 +57,12 @@ public class ResourcesTest {
         when(readable.getReader()).thenAnswer(i -> new StringReader("content"));
 
         StringWriter writer = new StringWriter();
-        Resource.Writeable writeable = mock(Resource.Writeable.class);
-        when(writeable.getWriter()).thenReturn(writer);
-        copyResource(readable, writeable);
+        Resource.Writable writable = mock(Resource.Writable.class);
+        when(writable.getWriter()).thenReturn(writer);
+        copyResource(readable, writable);
         assertEquals("content", writer.toString());
     }
 
-    @Test
-    public void testFileResource() throws Exception {
-
-
-    }
-
-    @Test
-    public void testFileResource1() throws Exception {
-
-    }
 
     @Test
     public void testRename() throws Exception {
@@ -128,6 +119,5 @@ public class ResourcesTest {
                     }
                 });
     }
-
 
 }

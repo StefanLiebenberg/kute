@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 
-public class StrictCachedProvider<A extends Resource.Writeable> implements ResourceProvider<A> {
+public class StrictCachedProvider<A extends Resource.Writable> implements ResourceProvider<A> {
 
     private final ConcurrentHashMap<String, A> resourceMap = new ConcurrentHashMap<>();
 

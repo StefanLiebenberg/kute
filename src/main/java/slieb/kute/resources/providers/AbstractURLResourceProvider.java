@@ -55,7 +55,11 @@ public abstract class AbstractURLResourceProvider implements ResourceProvider<Re
         }
 
         if (file.isDirectory()) {
-            return Optional.of(new FileResourceProvider(file));
+            //noinspection unchecked
+            return Optional.of(
+                    (ResourceProvider<Resource.InputStreaming>)
+                            (ResourceProvider<? extends Resource.InputStreaming>)
+                                    new FileResourceProvider(file));
         }
 
         throw new IllegalStateException(String.format(FILE_ERROR, file.toString()));

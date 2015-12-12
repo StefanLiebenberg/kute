@@ -12,7 +12,8 @@ public class MappedResourceProvider<A extends Resource, B extends Resource> impl
     private final ResourceProvider<A> provider;
     private final Function<A, B> function;
 
-    public MappedResourceProvider(ResourceProvider<A> provider, Function<A, B> function) {
+    public MappedResourceProvider(ResourceProvider<A> provider,
+                                  Function<A, B> function) {
         this.provider = provider;
         this.function = function;
     }
