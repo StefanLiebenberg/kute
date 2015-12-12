@@ -3,6 +3,14 @@ kute
 
 kute provides a way to get resource content from different locations in the java/maven environment.
 
+### Maven Dependency info
+
+        <dependency>
+            <groupId>org.slieb</groupId>
+            <artifactId>kute</artifactId>
+            <version>1.0</version>
+        </dependency>
+
 # Examples
 
 
@@ -84,5 +92,3 @@ Each of these have a relevant getReader, getWriter, etc method, which you can us
 ### Writing to Resource.Writable with Resources
 
     Kute.writeResource(readable, "content");
-
-
