@@ -86,3 +86,10 @@ Each of these have a relevant getReader, getWriter, etc method, which you can us
     Kute.writeResource(readable, "content");
 
 
+### Maven Dependency info
+
+        <dependency>
+            <groupId>org.slieb</groupId>
+            <artifactId>kute</artifactId>
+            <version>1.0</version>
+        </dependency>
