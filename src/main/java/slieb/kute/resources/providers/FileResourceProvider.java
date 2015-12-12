@@ -9,9 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.stream.Stream;
 
-import static slieb.kute.resources.Resources.fileResource;
+import static slieb.kute.Kute.fileResource;
 
 public class FileResourceProvider implements ResourceProvider<FileResource> {
 
@@ -22,25 +23,32 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
     }
 
     @Override
-    public FileResource getResourceByName(String path) {
-        File file = new File(directory, path);
-        if (shouldProvideFile(file)) {
-            return fileResource(path, file);
-        } else {
-            return null;
+    public Optional<FileResource> getResourceByName(String path) {
+        if (canProvideDirectory()) {
+            File file = new File(directory, path);
+            if (shouldProvideFile(file)) {
+                return Optional.of(fileResource(path, file));
+            }
         }
+        return Optional.empty();
     }
 
     @Override
     public Stream<FileResource> stream() {
-        try {
-            return Files.walk(directory.toPath()).map(Path::toString)
-                    .map(File::new)
-                    .filter(this::shouldProvideFile)
-                    .map(this::createFileResource);
-        } catch (IOException e) {
-            throw new ResourceException(e);
+        if (canProvideDirectory()) {
+            try {
+                return Files.walk(directory.toPath()).map(Path::toString).map(File::new).filter(
+                        this::shouldProvideFile).map(this::createFileResource);
+            } catch (IOException e) {
+                throw new ResourceException(e);
+            }
+        } else {
+            return Stream.empty();
         }
+    }
+
+    private boolean canProvideDirectory() {
+        return directory.exists() && directory.canRead();
     }
 
     private boolean shouldProvideFile(File file) {
@@ -53,5 +61,6 @@ public class FileResourceProvider implements ResourceProvider<FileResource> {
         Preconditions.checkState(path.startsWith(rootPath));
         return new FileResource(path.substring(rootPath.length()), file);
     }
+
 
 }

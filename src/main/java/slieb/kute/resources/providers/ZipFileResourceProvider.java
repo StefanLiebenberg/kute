@@ -1,9 +1,10 @@
 package slieb.kute.resources.providers;
 
+import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
-import slieb.kute.resources.Resources;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -18,25 +19,25 @@ public class ZipFileResourceProvider implements ResourceProvider<Resource.InputS
     }
 
     @Override
-    public Resource.InputStreaming getResourceByName(String path) {
+    public Optional<Resource.InputStreaming> getResourceByName(String path) {
         if (path.startsWith("/")) {
-            ZipEntry entry = zipFile.getEntry(path.substring(1));
-            if (entry != null && !entry.isDirectory()) {
-                return getZipResource(entry);
-            }
+            String entryName = path.substring(1);
+            return entryStream().filter(e -> entryName.equals(e.getName())).map(this::getZipResource).findFirst();
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override
     public Stream<Resource.InputStreaming> stream() {
-        return zipFile.stream()
-                .filter(e -> !e.isDirectory())
-                .map(this::getZipResource);
+        return entryStream().map(this::getZipResource);
+    }
+
+    private Stream<? extends ZipEntry> entryStream() {
+        return zipFile.stream().filter(e -> !e.isDirectory());
     }
 
     private Resource.InputStreaming getZipResource(ZipEntry zipEntry) {
-        return Resources.zipEntryResource("/" + zipEntry.getName(), zipFile, zipEntry);
+        return Kute.zipEntryResource("/" + zipEntry.getName(), zipFile, zipEntry);
     }
 
 }

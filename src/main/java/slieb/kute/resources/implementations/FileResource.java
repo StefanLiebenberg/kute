@@ -10,12 +10,12 @@ import java.io.*;
  * <p><b>To read file Contents:</b></p>
  * <pre><code>
  * FileResource resource =  new FileResource(file);
- * String content = Resources.readResource(resource);
+ * String content = Kute.readResource(resource);
  * </code></pre>
  * <p><b>To write file Contents:</b></p>
  * <pre><code>
  * FileResource resource =  new FileResource(file);
- * Resources.writeResource(resource, "content");
+ * Kute.writeResource(resource, "content");
  * </code></pre>
  * <p><b>To write a binary using outputStream instead.</b></p>
  * <pre><code>
@@ -43,7 +43,8 @@ public class FileResource extends AbstractResource implements Resource.InputStre
      * @param file The resource's file object.
      * @param path The path under which this resource will be available as.
      */
-    public FileResource(String path, File file) {
+    public FileResource(final String path,
+                        final File file) {
         super(path);
         this.file = file;
     }
@@ -81,25 +82,33 @@ public class FileResource extends AbstractResource implements Resource.InputStre
      */
     @Override
     public FileWriter getWriter() throws IOException {
+        this.parentExistsOrMkdirs();
         return new FileWriter(this.file);
     }
 
     /**
      * @return A FileOutputStream that will will write into the resource's file object.
-     * @throws IOException when there is an erro creating the output stream.
+     * @throws IOException when there is an error creating the output stream.
      */
     @Override
     public FileOutputStream getOutputStream() throws IOException {
+        this.parentExistsOrMkdirs();
         return new FileOutputStream(this.file);
     }
 
     /**
-     * @return A FileInputStream that will read fomr the resource's file object.
-     * @throws IOException whne there is an error creating the inputStream.
+     * @return A FileInputStream that will read from the resource's file object.
+     * @throws IOException when there is an error creating the inputStream.
      */
     @Override
     public InputStream getInputStream() throws IOException {
         return new FileInputStream(this.file);
     }
+
+    public boolean parentExistsOrMkdirs() {
+        File parentFile = this.file.getParentFile();
+        return parentFile != null && (parentFile.exists() || parentFile.mkdirs());
+    }
+
 
 }

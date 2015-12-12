@@ -3,7 +3,6 @@ package slieb.kute.resources.implementations;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import slieb.kute.api.Resource;
-import slieb.kute.resources.Resources;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -12,7 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
 import static org.junit.Assert.assertEquals;
-import static slieb.kute.resources.Resources.readResource;
+import static slieb.kute.Kute.readResource;
 
 /**
  * Created by stefan on 4/22/15.
@@ -60,12 +59,11 @@ public class CachedResourceTest {
         Resource.Readable readable = new CounterResource();
         Resource.Readable cached = new CachedResource(readable);
 
-        assertEquals("0", Resources.readResource(cached));
-        assertEquals("0", Resources.readResource(cached));
-        assertEquals("1", Resources.readResource(readable));
-        assertEquals("2", Resources.readResource(readable));
-        assertEquals("0", Resources.readResource(cached));
-
+        assertEquals("0", readResource(cached));
+        assertEquals("0", readResource(cached));
+        assertEquals("1", readResource(readable));
+        assertEquals("2", readResource(readable));
+        assertEquals("0", readResource(cached));
 
     }
 

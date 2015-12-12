@@ -1,6 +1,8 @@
 package slieb.kute.api;
 
 import java.util.Iterator;
+import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 /**
@@ -37,7 +39,7 @@ import java.util.stream.Stream;
  */
 public interface ResourceProvider<A extends Resource> extends Iterable<A> {
 
-    A getResourceByName(String path);
+    Optional<A> getResourceByName(String path);
 
     @Override
     default Iterator<A> iterator() {
@@ -45,4 +47,10 @@ public interface ResourceProvider<A extends Resource> extends Iterable<A> {
     }
 
     Stream<A> stream();
+
+    default <B> B collect(Collector<A, ?, B> collector) {
+        return stream().collect(collector);
+    }
+
+
 }

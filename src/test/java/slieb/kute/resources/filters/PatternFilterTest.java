@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 import static java.util.stream.IntStream.range;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static slieb.kute.resources.Resources.stringResource;
+import static slieb.kute.Kute.stringResource;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PatternFilterTest {

@@ -3,8 +3,9 @@ package slieb.kute.resources.api;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import slieb.kute.resources.Resources;
 import slieb.kute.resources.implementations.URLResource;
+
+import static slieb.kute.Kute.readResource;
 
 public class URLResourceTest {
 
@@ -19,7 +20,7 @@ public class URLResourceTest {
 
     @Test
     public void testGetReader() throws Exception {
-        Assert.assertEquals("just contains example text.", Resources.readResource(urlResource));
+        Assert.assertEquals("just contains example text.", readResource(urlResource));
     }
 
     @Test

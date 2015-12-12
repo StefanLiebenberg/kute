@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 
-import static slieb.kute.resources.Resources.readResource;
+import static slieb.kute.Kute.readResource;
 
 public class CachedResource extends AbstractProxy<Resource.Readable> implements Resource.Proxy<Resource.Readable> {
 

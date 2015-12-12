@@ -3,14 +3,17 @@ package slieb.kute.api;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
-import slieb.kute.resources.Resources;
+import slieb.kute.Kute;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
+import static slieb.kute.Kute.filterResources;
+import static slieb.kute.Kute.providerOf;
 
 
 public class ResourceProviderTest {
@@ -19,17 +22,17 @@ public class ResourceProviderTest {
 
     @Before
     public void setup() {
-        resourceA = Resources.stringResource("/path/a", "A");
-        resourceB = Resources.stringResource("/path/b", "B");
-        resourceC = Resources.stringResource("/path/c", "C");
+        resourceA = Kute.stringResource("/path/a", "A");
+        resourceB = Kute.stringResource("/path/b", "B");
+        resourceC = Kute.stringResource("/path/c", "C");
     }
 
 
     public void testGetResourceByName(ResourceProvider resourceProvider) throws Exception {
-        assertEquals(resourceA, resourceProvider.getResourceByName("/path/a"));
-        assertEquals(resourceB, resourceProvider.getResourceByName("/path/b"));
-        assertEquals(resourceC, resourceProvider.getResourceByName("/path/c"));
-        assertNull(resourceProvider.getResourceByName("/path/d"));
+        assertEquals(Optional.of(resourceA), resourceProvider.getResourceByName("/path/a"));
+        assertEquals(Optional.of(resourceB), resourceProvider.getResourceByName("/path/b"));
+        assertEquals(Optional.of(resourceC), resourceProvider.getResourceByName("/path/c"));
+        assertFalse(resourceProvider.getResourceByName("/path/d").isPresent());
     }
 
     public void testIterator(ResourceProvider<Resource> provider) throws Exception {
@@ -55,12 +58,12 @@ public class ResourceProviderTest {
 
     @Test
     public void testCollectionResources() throws Exception {
-        testProvider(Resources.providerOf(resourceA, resourceB, resourceC));
+        testProvider(providerOf(resourceA, resourceB, resourceC));
     }
 
     @Test
     public void testFilteredResourceProvider() throws Exception {
-        Resources.filterResources(Resources.providerOf(resourceA, resourceB, resourceC), resource -> true);
+        filterResources(providerOf(resourceA, resourceB, resourceC), resource -> true);
     }
 }
 

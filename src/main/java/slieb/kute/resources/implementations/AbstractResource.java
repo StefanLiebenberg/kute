@@ -31,8 +31,4 @@ public abstract class AbstractResource implements Resource, Serializable {
         return getPath().hashCode();
     }
 
-    @Override
-    public String toString() {
-        return String.format("[%s:%s]", getClass().getName(), getPath());
-    }
 }
