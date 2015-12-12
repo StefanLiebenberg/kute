@@ -24,24 +24,26 @@ Getting a provider for specific class loader:
 ### Creating a ResourceProvider that provides files in a directory.
 
     File directory = ...;
-    ResourceProvider<? extends Resource.Readable> provider = new FileResourceProvider(directory);
-    for(Resource.Readable resource : provider) {
+    ResourceProvider<FileResource> provider = new FileResourceProvider(directory);
+    for(FileResource resource : provider) {
         ... // get files inside directory as readable resources.
     }
 
-### Create a ResourceProvider that provides elements from a classLoader:
+### Create a ResourceProvider that provides elements from a url classLoader:
 
-    ResourceProvider<Resource.Readable> provider = new URLClassLoaderResourceProvider((URLClassLoader) getClass().getClassLoader());
+    URLClassLoader urlClassloader = (URLClassLoader) getClass().getClassLoader();
+    ResourceProvider<Resource.Readable> provider = new URLClassLoaderResourceProvider(urlClassloader);
     
 ### Create a ResourceProvider that acts as a filter on top of another provider.
 
     ResourceProvider<Resource.InputStreaming> provider = Kute.getDefaultProvider();
-    ResourceProvider<Resource.InputStreaming> filtered = Kute.filter(provider, ResourceFilters.extensionFilters(".txt", ".class"))
+    Predicate<Resource> extFilter = ResourcePredicates.extensionFilters(".txt", ".class");
+    ResourceProvider<Resource.InputStreaming> filtered = Kute.filterResources(provider, extFilter)
     for(R resource : provider) {
         ... // only .txt or .class resources 
     }
     
-### Use Java 8 stream on Resource Providers
+### Use Java 8 lambda's on Resource Provider
 
     ResourceProvider<Resource.InputStreaming> provider = Kute.getDefaultProvider();
     provider.stream().forEach(resource -> {
@@ -61,12 +63,14 @@ Each of these have a relevant getReader, getWriter, etc method, which you can us
 
 ### Reading a Resource.Readable with Reader
 
-    Resource.Readable readable = resourceProvider.getResourceByName("/some/path.txt");
-    try(Reader reader = readable.getReader()) {
-       ... // do reading stuff with reader;
-     }
+    Optional<Resource.Readable> readable = resourceProvider.getResourceByName("/some/path.txt");
+    if(readable.isPresent()) {
+      try(Reader reader = readable.getReader()) {
+         ... // do reading stuff with reader;
+      }
+    }
  
-### Reading a Resource.Readable with Resources
+### Reading a Resource.Readable with Resources utility method.
 
     String content = Kute.readResource(resource);
     

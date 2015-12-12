@@ -9,12 +9,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import static java.util.Arrays.asList;
+import static java.util.Arrays.stream;
 
 public class ResourcePredicates {
 
     public static final Predicate<? super Resource> NON_NULL = p -> p != null;
-
 
 
     /**
@@ -32,7 +31,7 @@ public class ResourcePredicates {
      */
     @SafeVarargs
     public static <A extends Resource> Predicate<A> all(Predicate<A>... predicates) {
-        return asList(predicates).stream().reduce(Predicate::and).get();
+        return stream(predicates).reduce((a, b) -> a.and(b)).orElse((a) -> true);
     }
 
     /**
@@ -41,8 +40,8 @@ public class ResourcePredicates {
      * @return a single predicate.
      */
     @SafeVarargs
-    public static <A extends Resource> Predicate<A> any(Predicate<A>... predicates) {
-        return asList(predicates).stream().reduce(Predicate::or).get();
+    public static <A extends Resource> Predicate<A> any(final Predicate<A>... predicates) {
+        return stream(predicates).reduce((u, a) -> u.or(a)).orElse((a) -> true);
     }
 
     /**
@@ -56,12 +55,11 @@ public class ResourcePredicates {
     }
 
     /**
-     * @param <A>        A implementation of resource.
      * @param extensions A variable list of extension strings.
      * @return True resource path ends with any of the extension strings.
      */
-    public static <A extends Resource> Predicate<A> extensionFilter(String... extensions) {
-        return (r) -> asList(extensions).stream().anyMatch(r.getPath()::endsWith);
+    public static Predicate<Resource> extensionFilter(String... extensions) {
+        return (r) -> stream(extensions).anyMatch(r.getPath()::endsWith);
     }
 
     /**
