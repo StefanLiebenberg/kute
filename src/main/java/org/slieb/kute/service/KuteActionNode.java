@@ -32,6 +32,7 @@ public class KuteActionNode implements Consumer<SparkInstance> {
 
     @Override
     public void accept(SparkInstance sparkInstance) {
+
         KuteAction kuteAction = method.getAnnotation(KuteAction.class);
         for (Method beforeMethod : beforeMethods) {
             sparkInstance.before(kuteAction.value(), getActionFilter(beforeMethod));

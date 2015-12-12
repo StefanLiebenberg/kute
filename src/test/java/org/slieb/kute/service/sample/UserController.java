@@ -11,13 +11,13 @@ import static org.slieb.kute.service.annotations.KuteAction.Method.POST;
 
 
 @KuteController
+@SuppressWarnings("unused")
 public class UserController {
 
     String currentUser;
 
     @KuteBefore(only = {"userStatus"})
-    public void checkUserIsLoggedIn(Request request,
-                                    Response response) {
+    public void checkUserIsLoggedIn(Response response) {
         if (currentUser == null) {
             response.redirect("/login");
         }
@@ -30,24 +30,23 @@ public class UserController {
     }
 
     @KuteBefore(only = {"getLogin", "postLogin"})
-    public void checkUserIsNotAlreadyLoggedIn(Request request, Response response) {
-        if(currentUser != null) {
+    public void checkUserIsNotAlreadyLoggedIn(Response response) {
+        if (currentUser != null) {
             response.body("already logged in!");
             response.status(500);
         }
     }
 
     @KuteAction(methods = {GET}, value = "/login")
-    public String getLogin(Request request,
-                           Response response) {
-        return new StringBuilder().append("<form method=POST action='/login'>").append(
-                "<input type=text name=user />").append("<input type=submit valule=submit />").append(
-                "</form>").toString();
+    public String getLogin() {
+        return "<form method=POST action='/login'>" +
+                "<input type=text name=user />" +
+                "<input type=submit value=submit />" +
+                "</form>";
     }
 
     @KuteAction(methods = {POST}, value = "/login")
-    public String postLogin(Request request,
-                            Response response) {
+    public String postLogin(Request request) {
         String user = request.queryParams("user");
         if (user != null && !user.isEmpty()) {
             currentUser = user;
@@ -58,8 +57,7 @@ public class UserController {
     }
 
     @KuteAction(methods = {GET, POST}, value = "/currentUser")
-    public String userStatus(Request request,
-                             Response response) {
+    public String userStatus() {
         return currentUser;
     }
 

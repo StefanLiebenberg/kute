@@ -1,8 +1,10 @@
 package org.slieb.kute.service.sample;
 
+import org.slieb.kute.service.KuteService;
 import org.slieb.kute.service.annotations.KuteAction;
 import org.slieb.kute.service.annotations.KuteBefore;
 import org.slieb.kute.service.annotations.KuteController;
+import slieb.kute.Kute;
 import spark.Request;
 import spark.Response;
 
@@ -22,6 +24,14 @@ public class HelloWorldController {
                               Response response,
                               Optional previous) {
         return "Hello World";
+    }
+
+    public static void main(String[] arguments) throws InterruptedException {
+        KuteService service = new KuteService();
+        service.addResourceProvider(Kute.getDefaultProvider());
+        service.addController(new UserController());
+        service.addController(new HelloWorldController());
+        service.start();
     }
 
 }

@@ -2,40 +2,46 @@ package org.slieb.kute.service;
 
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableCollection;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourceProvider;
+import spark.Spark;
 import spark.SparkInstance;
 
 import static org.slieb.sparks.Sparks.addServerStopEndpoints;
 
+/**
+ *
+ */
 public class KuteService {
-
-    public final ImmutableCollection<ResourceProvider<? extends Resource.Readable>> resourceProviders;
-
 
     private boolean started = false;
 
-    private SparkInstance sparkInstance;
+    private final KuteFactory factory;
 
-    private KuteFactory factory;
+    private final SparkInstance sparkInstance;
 
 
-    public KuteService(SparkInstance sparkInstance,
-                       ImmutableCollection<ResourceProvider<? extends Resource.Readable>> resourceProviders) {
+    public KuteService(SparkInstance sparkInstance) {
         this.sparkInstance = sparkInstance;
-        this.resourceProviders = resourceProviders;
         this.factory = new KuteFactory();
     }
+
+    public KuteService() {
+        this(Spark.getInstance());
+    }
+
 
     public void addController(Object controller) {
         KuteControllerNode node = factory.getControllerNode(controller);
         node.accept(sparkInstance);
     }
 
+    public void addResourceProvider(ResourceProvider<? extends Resource.Readable> resourceProvider) {
+        sparkInstance.get("/*", new ResourcesRoute(resourceProvider));
+    }
+
     public void start() throws InterruptedException {
         Preconditions.checkState(!started, "Server already started");
-        sparkInstance.get("/*", ((request, response) -> null));
         sparkInstance.exception(Exception.class, new ServiceExceptionHandler());
         addServerStopEndpoints(sparkInstance, "/shutdown", this::stop);
         sparkInstance.awaitInitialization();
