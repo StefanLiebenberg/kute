@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import slieb.kute.resources.OutputStreamResource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
@@ -14,7 +15,7 @@ import java.util.function.Supplier;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static slieb.kute.Kute.writeStreamResource;
+import static slieb.kute.utils.KuteIO.writeResourceWithOutputStream;
 
 
 @RunWith(MockitoJUnitRunner.class)
@@ -28,7 +29,7 @@ public class OutputStreamResourceTest {
 
     @Before
     public void setUp() throws Exception {
-        outputStreamResource = new OutputStreamResource("/output", mockSupplier);
+        outputStreamResource = new OutputStreamResource("/output", mockSupplier::get);
     }
 
 
@@ -47,7 +48,7 @@ public class OutputStreamResourceTest {
     public void testGetOutputStream() throws Exception {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         when(mockSupplier.get()).thenReturn(outputStream);
-        writeStreamResource(outputStreamResource, "write content");
+        writeResourceWithOutputStream(outputStreamResource, "write content");
         assertEquals("write content", outputStream.toString(Charset.defaultCharset().name()));
     }
 
