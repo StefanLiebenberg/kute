@@ -2,34 +2,36 @@ package slieb.kute;
 
 import org.junit.Test;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceProvider;
-import slieb.kute.resources.providers.EmptyProvider;
 
 import java.io.IOException;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
-import static slieb.kute.Kute.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static slieb.kute.Kute.getDefaultProvider;
+import static slieb.kute.Kute.getProvider;
+import static slieb.kute.utils.KuteIO.readResource;
+import static slieb.kute.utils.KuteIO.readResourceWithInputStream;
 
 
 public class KuteTest {
 
     @Test
     public void testGetProvider() throws Exception {
-        ResourceProvider<Resource.InputStreaming> readables = getProvider(getClass().getClassLoader());
-        assertNotNull(readables);
-        Resource.Readable readable = readables.getResourceByName("/slieb/kute/resources/example.txt").get();
+        Resource.Provider provider = getProvider(getClass().getClassLoader());
+        assertNotNull(provider);
+        Resource.Readable readable = provider.getResourceByName("/slieb/kute/resources/example.txt").get();
         assertNotNull("readable cannot be null", readable);
         assertEquals("just contains example text.", readResource(readable));
     }
 
     @Test
     public void testGetDefaultProvider() throws Exception {
-        ResourceProvider<Resource.InputStreaming> readables = getDefaultProvider();
+        Resource.Provider readables = getDefaultProvider();
         assertNotNull(readables);
-        Resource.InputStreaming readable = readables.getResourceByName("/slieb/kute/resources/example.txt").get();
+        Resource.Readable readable = readables.getResourceByName("/slieb/kute/resources/example.txt").get();
         assertNotNull(readable);
-        assertEquals("just contains example text.", readStreamResource(readable));
+        assertEquals("just contains example text.", readResourceWithInputStream(readable));
     }
 
     @Test
@@ -47,7 +49,7 @@ public class KuteTest {
 
     @Test
     public void testGetEmptyProvider() {
-        assertTrue(Kute.emptyProvider() instanceof EmptyProvider);
+        assertEquals(0, Kute.emptyProvider().stream().count());
     }
 
 

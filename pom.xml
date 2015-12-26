@@ -6,7 +6,7 @@
     <description>A library that provides a easy way to get resources from multiple locations</description>
     <groupId>org.slieb</groupId>
     <artifactId>kute</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <url>https://stefanliebenberg.github.io/kute</url>
 
@@ -48,6 +48,7 @@
         <dep.guava>19.0-rc3</dep.guava>
         <dep.junit>4.12</dep.junit>
         <dep.mockito>2.0.2-beta</dep.mockito>
+        <dep.commons-codec>1.10</dep.commons-codec>
     </properties>
 
     <prerequisites>

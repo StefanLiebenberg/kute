@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import slieb.kute.resources.InputStreamResource;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -14,7 +15,7 @@ import java.util.function.Supplier;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static slieb.kute.Kute.readStreamResource;
+import static slieb.kute.utils.KuteIO.readResourceWithInputStream;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InputStreamResourceTest {
@@ -43,9 +44,8 @@ public class InputStreamResourceTest {
 
     @Test
     public void testGetOutputStream() throws Exception {
-        ByteArrayInputStream outputStream = new ByteArrayInputStream("input content".getBytes());
-        when(mockSupplier.get()).thenReturn(outputStream);
-        assertEquals("input content", readStreamResource(outputStreamResource));
+        when(mockSupplier.get()).thenReturn(new ByteArrayInputStream("input content".getBytes()));
+        assertEquals("input content", readResourceWithInputStream(outputStreamResource));
     }
 
 

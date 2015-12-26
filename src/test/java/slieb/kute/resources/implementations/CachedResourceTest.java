@@ -2,32 +2,26 @@ package slieb.kute.resources.implementations;
 
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
+import slieb.kute.Kute;
 import slieb.kute.api.Resource;
+import slieb.kute.resources.CachedResource;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
-import static slieb.kute.Kute.readResource;
+import static slieb.kute.utils.KuteIO.readResource;
 
-/**
- * Created by stefan on 4/22/15.
- */
+
 public class CachedResourceTest {
 
     @Test
     public void testThreadSafe() {
 
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < 1000; i++) {
-            builder.append(i).append(".");
-        }
-        builder.append("done");
 
-        Resource.Readable readable = new CounterResource();
+        Resource.Readable readable = getCounterResource();
         Resource.Readable cached = new CachedResource(readable);
 
         ThreadFactory factory = Executors.defaultThreadFactory();
@@ -53,10 +47,11 @@ public class CachedResourceTest {
 
     }
 
+
     @Test
     public void testCache() throws Throwable {
 
-        Resource.Readable readable = new CounterResource();
+        Resource.Readable readable = getCounterResource();
         Resource.Readable cached = new CachedResource(readable);
 
         assertEquals("0", readResource(cached));
@@ -67,20 +62,9 @@ public class CachedResourceTest {
 
     }
 
-}
-
-
-class CounterResource implements Resource.Readable {
-
-    int i = 0;
-
-    @Override
-    public Reader getReader() {
-        return new StringReader(String.valueOf(i++));
+    private Resource.Readable getCounterResource() {
+        final AtomicInteger atomicInteger = new AtomicInteger(0);
+        return Kute.stringResource("/counter", () -> String.valueOf(atomicInteger.getAndIncrement()));
     }
 
-    @Override
-    public String getPath() {
-        return "/counter_resource";
-    }
 }

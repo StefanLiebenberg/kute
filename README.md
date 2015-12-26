@@ -45,7 +45,7 @@ Getting a provider for specific class loader:
 ### Create a ResourceProvider that acts as a filter on top of another provider.
 
     ResourceProvider<Resource.InputStreaming> provider = Kute.getDefaultProvider();
-    Predicate<Resource> extFilter = ResourcePredicates.extensionFilters(".txt", ".class");
+    Predicate<Resource> extFilter = KuteLambdas.extensionFilters(".txt", ".class");
     ResourceProvider<Resource.InputStreaming> filtered = Kute.filterResources(provider, extFilter)
     for(R resource : provider) {
         ... // only .txt or .class resources 

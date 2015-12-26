@@ -4,14 +4,15 @@ import com.google.common.collect.Lists;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import slieb.kute.resources.FileResource;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static slieb.kute.Kute.readResource;
-import static slieb.kute.Kute.writeResource;
+import static slieb.kute.utils.KuteIO.readResource;
+import static slieb.kute.utils.KuteIO.writeResource;
 
 
 public class FileResourceTest {
