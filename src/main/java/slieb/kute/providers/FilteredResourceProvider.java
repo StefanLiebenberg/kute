@@ -1,5 +1,6 @@
 package slieb.kute.providers;
 
+import com.google.common.base.Preconditions;
 import slieb.kute.api.Resource;
 
 import java.io.Serializable;
@@ -8,14 +9,15 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public final class FilteredResourceProvider implements Resource.Provider, Serializable {
+public final class FilteredResourceProvider implements Resource.Provider {
 
     private final Resource.Provider resourceProvider;
 
     private final Predicate<? super Resource> resourceFilter;
 
-    public FilteredResourceProvider(Resource.Provider resourceProvider,
-                                    Predicate<? super Resource> resourceFilter) {
+    public FilteredResourceProvider(final Resource.Provider resourceProvider,
+                                    final Predicate<? super Resource> resourceFilter) {
+        Preconditions.checkState(resourceFilter instanceof Serializable, "FilteredResourceProvider is serializable, so the given resourceFilter must be serializable too.");
         this.resourceProvider = resourceProvider;
         this.resourceFilter = resourceFilter;
     }
