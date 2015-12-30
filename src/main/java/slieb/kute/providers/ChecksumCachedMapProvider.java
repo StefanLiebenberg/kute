@@ -2,10 +2,9 @@ package slieb.kute.providers;
 
 
 import slieb.kute.Kute;
-import slieb.kute.utils.KuteDigest;
 import slieb.kute.api.Resource;
+import slieb.kute.utils.KuteDigest;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +13,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static slieb.kute.utils.KuteLambdas.safelyMapWithIO;
 
-public final class ChecksumCachedMapProvider implements Resource.Provider, Serializable {
+public final class ChecksumCachedMapProvider implements Resource.Provider {
 
     private final Resource.Provider resourceProvider;
 
