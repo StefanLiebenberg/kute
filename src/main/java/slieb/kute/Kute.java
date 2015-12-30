@@ -2,7 +2,6 @@ package slieb.kute;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.providers.CollectionResourceProvider;
 import slieb.kute.providers.FilteredResourceProvider;
 import slieb.kute.providers.MappedResourceProvider;
 import slieb.kute.providers.URLArrayResourceProvider;
@@ -89,18 +88,18 @@ public class Kute {
 
     /**
      * @param resources A var_arg array of resources that the provider will contain.
-     * @return A {@link CollectionResourceProvider} that contains all of the specified resources.
+     * @return A {@link slieb.kute.api.Resource.Provider} that contains all of the specified resources.
      */
-    public static CollectionResourceProvider providerOf(Resource.Readable... resources) {
+    public static Resource.Provider providerOf(Resource.Readable... resources) {
         return providerOf(Arrays.asList(resources));
     }
 
     /**
      * @param resources A collection of resources that the provider will contain.
-     * @return A {@link CollectionResourceProvider} that contains all of the specified resources.
+     * @return A {@link slieb.kute.api.Resource.Provider} that contains all of the specified resources.
      */
-    public static CollectionResourceProvider providerOf(Collection<Resource.Readable> resources) {
-        return new CollectionResourceProvider(resources);
+    public static Resource.Provider providerOf(Collection<Resource.Readable> resources) {
+        return resources::stream;
     }
 
     /**
@@ -238,7 +237,7 @@ public class Kute {
     public static Resource.Provider filterResources(Resource.Provider provider,
                                                     Predicate<? super Resource>
                                                             predicate) {
-        return new FilteredResourceProvider(provider, predicate);
+        return new FilteredResourceProvider(provider, (Serializable & Predicate<? super Resource>) predicate);
     }
 
     public static Resource.Readable zipEntryResource(final ZipFile zipFile,
