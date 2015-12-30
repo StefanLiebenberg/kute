@@ -1,6 +1,7 @@
 package slieb.kute.utils;
 
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
 
@@ -8,13 +9,39 @@ import java.io.*;
 
 public class KuteIO {
 
+
+    public static void serializeToStream(Serializable serializable, OutputStream outputStream) throws IOException {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
+            objectOutputStream.writeObject(serializable);
+        }
+    }
+
+    public static Serializable deserializeFromStream(InputStream inputStream) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
+            return (Serializable) objectInputStream.readObject();
+        }
+    }
+
+    public static <T> T deserialize(byte[] bytes, Class<T> classT) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        Serializable serializable = deserializeFromStream(bais);
+        Preconditions.checkState(classT.isInstance(serializable));
+        //noinspection unchecked
+        return (T) serializable;
+    }
+
+    public static byte[] serialize(Serializable object) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        serializeToStream(object, baos);
+        return baos.toByteArray();
+    }
+
+
     public void copyProviderToCreator(Resource.Provider provider,
                                       Resource.Creator creator) {
         provider.stream().forEach(KuteLambdas.safelyConsume(
                 resource -> copyResourceWithStreams(resource, creator.create(resource.getPath()))));
     }
-
-
 
 
     /**
