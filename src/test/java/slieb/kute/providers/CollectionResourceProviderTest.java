@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Before;
 import org.junit.Test;
+import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 
 import java.util.Optional;
@@ -13,18 +14,19 @@ import static org.junit.Assert.assertEquals;
 import static slieb.kute.Kute.stringResource;
 
 
+@Deprecated
 public class CollectionResourceProviderTest {
 
     Resource.Readable resourceA, resourceB, resourceC;
 
-    CollectionResourceProvider collectionResourceProvider;
+    Resource.Provider collectionResourceProvider;
 
     @Before
     public void setup() {
         resourceA = stringResource("/path/a", "contentA");
         resourceB = stringResource("/path/b", "contentB");
         resourceC = stringResource("/path/c", "contentC");
-        collectionResourceProvider = new CollectionResourceProvider(ImmutableList.of(resourceA, resourceB, resourceC));
+        collectionResourceProvider = Kute.providerOf(ImmutableList.of(resourceA, resourceB, resourceC));
     }
 
     @Test
@@ -37,7 +39,7 @@ public class CollectionResourceProviderTest {
     @Test
     public void testStream() throws Exception {
         assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC),
-                     collectionResourceProvider.stream().collect(Collectors.toSet()));
+                collectionResourceProvider.stream().collect(Collectors.toSet()));
     }
 
     @Test

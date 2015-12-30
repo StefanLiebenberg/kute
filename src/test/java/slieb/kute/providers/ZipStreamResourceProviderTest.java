@@ -2,8 +2,8 @@ package slieb.kute.providers;
 
 import org.junit.Before;
 import org.junit.Test;
-import slieb.kute.utils.KuteIO;
 import slieb.kute.api.Resource;
+import slieb.kute.utils.KuteIO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
 
 
-public class ZipStreamResourceProviderTest {
+public class ZipStreamResourceProviderTest implements ProviderTestInterface {
     private ZipStreamResourceProvider provider;
 
     @Before
@@ -55,4 +55,54 @@ public class ZipStreamResourceProviderTest {
                 provider.stream().map(Resource::getPath).collect(toSet()));
     }
 
+    @Override
+    @Test
+    public void shouldNotProvideDirectoriesInStream() throws Exception {
+        assertTrue(provider.stream().noneMatch(resources -> resources.getPath().equals("/nested")));
+    }
+
+    @Override
+    @Test
+    public void shouldNotProvideDirectoriesInGetByPath() throws Exception {
+        assertFalse(provider.getResourceByName("/nested").isPresent());
+    }
+
+    @Override
+    @Test
+    public void shouldNeverReturnNullOnGetByPath() throws Exception {
+        assertNotNull(provider.getResourceByName(""));
+        assertNotNull(provider.getResourceByName("/none"));
+    }
+
+    @Override
+    @Test
+    public void shouldReturnElementsInStream() throws Exception {
+        assertTrue(provider.stream().limit(1).count() > 0);
+    }
+
+    @Override
+    @Test
+    public void shouldReturnPresentOptionalInGetByPath() throws Exception {
+        assertTrue(provider.getResourceByName("/nested/other.txt").isPresent());
+    }
+
+    @Override
+    public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
+
+    }
+
+    @Override
+    public void shouldReturnResourceWithCorrectContentInGetByPath() throws Exception {
+
+    }
+
+    @Override
+    public void shouldReturnAllResourcesInStreamInGetByPath() throws Exception {
+
+    }
+
+    @Override
+    public void shouldBeSerializable() throws Exception {
+
+    }
 }
