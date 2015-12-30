@@ -35,7 +35,7 @@ public interface Resource extends Serializable {
     /**
      * Represents a readable resource. Provides getReader() and getInputStream() methods to read the resource with.
      */
-    interface Readable extends Resource, Checksumable {
+    interface Readable extends Resource, Checksumable, Serializable {
 
         /**
          * @return A reader that will give you the contents of resource.
@@ -71,7 +71,7 @@ public interface Resource extends Serializable {
     /**
      *
      */
-    interface Checksumable {
+    interface Checksumable extends Serializable {
 
         void updateDigest(MessageDigest digest) throws IOException;
 
@@ -87,7 +87,7 @@ public interface Resource extends Serializable {
      * This represents a Writable resource. You can call {@link Writable#getWriter} on it to get a writer that will
      * write to the resource.
      */
-    interface Writable extends Resource {
+    interface Writable extends Resource, Serializable {
 
         /**
          * <b>Using the Writer</b>
@@ -141,7 +141,7 @@ public interface Resource extends Serializable {
      *     });
      * </code></pre>
      */
-    interface Provider extends Iterable<Resource.Readable>, Resource.Checksumable {
+    interface Provider extends Iterable<Resource.Readable>, Resource.Checksumable, Serializable {
 
         @Override
         default Iterator<Resource.Readable> iterator() {
@@ -169,7 +169,7 @@ public interface Resource extends Serializable {
     /**
      * The opposite of {@link Provider}
      */
-    interface Creator {
+    interface Creator extends Serializable {
         Resource.Writable create(String path);
     }
 
