@@ -11,28 +11,116 @@ kute provides a way to get resource content from different locations in the java
             <version>1.0</version>
         </dependency>
 
+# Description
+
+Kute is a resource library that provides some basic interfaces and common-usage implementations of them. 
+
+  
+| Interface             | Description                               | Methods                                       |
+|-----------------------|-------------------------------------------|-----------------------------------------------|
+| Resource              | Base resource interface                   | getPath()                                     |
+| Resource.Readable     | Represents readable resources             | getReader(), getInputStream()                 | 
+| Resource.Writable     | Represents writable resources             | getWriter(), getOutputStream()                |
+| Resource.Provider     | A container for readable resources        | stream(), iterator(), getResourceByPath(path) |
+| Resource.Creator      | A factory that creates writable resources | create(path)                                  |
+| Resource.Checksumable | A resource that can be checksumed         | updateDigest()                                |
+
+## Resource
+
+Conceptually, a resource in Kute exists on some path. Therefore, the base resource interface implements 
+only a getPath() method that returns a string.  
+
+## Resource.Readable
+
+The Readable interface extends the base Resource, and provides a getReader() and getInputStream() methods 
+for read access to a given resource.
+
+For example:
+
+    File file = new File("custom.txt");
+    FileResource fileResource = new FileResource(file); // FileResource implements Resource.Writable
+    
+    
+    // query the input stream, and read directly from that.
+    try(InputStream inputStream : fileResource.getInputStream()) {
+      // do inputstream stuff
+    }
+        
+    // or use a lambda let kute deal with ensuring that the stream is closed.
+    fileResource.useInputStream(inputStream -> {
+       // do inputstream stuff
+    });
+    
+    // using a reader instead of the InputStream, the charset used depends on the implementing method.
+    try(Reader reader : fileResource.getReader()) {
+       // do reader stuff.
+    }
+
+    // or use a lambda and let kute deal with closing the stream.
+    reader.useReader(reader -> {
+      // do reader stuff
+    });
+    
+    // or let kute deal with everthing, and just read the resource. See KuteIO for more useful methods.
+    String fileContent = KuteIO.readResource(fileResource);
+   
+
+## Resource.Writable
+
+
+The Readable interface extends the base Resource, and provides a getWriter() and getOutputStream() methods 
+for write access to a given resource.
+ 
+ 
+    File file = new File("custom.txt");
+    FileResource fileResource = new FileResource(file); // FileResource implements Resource.Writable
+    
+    // query the output stream, and write directly into it
+    try(OutputStream outputStream : fileResource.getOutputStream()) {
+      // do outputStream stuff
+    }
+        
+    // or use a lambda let kute deal with ensuring that the stream is closed.
+    fileResource.useOutputStream(outputStream -> {
+      // do outputStream stuff
+    });
+    
+    // using a writer instead of the OutputStream, the charset used depends on the implementing method.
+    try(Writer writer : fileResource.getWriter()) {
+       // do reader stuff.
+    }
+
+    // or use a lambda and let kute deal with closing the stream.
+    reader.useWriter(writer -> {
+      // do reader stuff
+    });
+    
+    // or let kute deal with everything, and just write to the resource. See KuteIO for more useful methods.
+    KuteIO.writeResource(fileResource, "some content....");
+    
+## Resource.Provider
+
+A Resource.Provider provides a stream of Resource.Readable instances via the the `stream()` method.       
+
 # Examples
 
-
-## ResourceProvider
-
-The ResourceProvider class implements Iterable and exposes a stream() method. This allows for easy management of resources.
+The Resource.Provider class implements Iterable and exposes a stream() method. This allows for easy management of resources.
  
 ### Getting default resource providers
 
 Getting the default provider
 
-    ResourceProvider<Resource.InputStreaming> readableProvider = Kute.getDefaultProvider();
+    Resource.Provider provider = Kute.getDefaultProvider();
     
 Getting a provider for specific class loader:
  
-    ResourceProvider<Resource.InputStreaming> readableProvider = Kute.getProvider(getClass().getClassLoader())
+    Resource.Provider provider = Kute.getProvider(getClass().getClassLoader())
         
 
 ### Creating a ResourceProvider that provides files in a directory.
 
     File directory = ...;
-    ResourceProvider<FileResource> provider = new FileResourceProvider(directory);
+    Resource.Provider provider = Kute.provideFrom(directory);
     for(FileResource resource : provider) {
         ... // get files inside directory as readable resources.
     }
@@ -40,33 +128,23 @@ Getting a provider for specific class loader:
 ### Create a ResourceProvider that provides elements from a url classLoader:
 
     URLClassLoader urlClassloader = (URLClassLoader) getClass().getClassLoader();
-    ResourceProvider<Resource.Readable> provider = new URLClassLoaderResourceProvider(urlClassloader);
+    Resource.Provider provider = new URLClassLoaderResourceProvider(urlClassloader);
     
 ### Create a ResourceProvider that acts as a filter on top of another provider.
 
-    ResourceProvider<Resource.InputStreaming> provider = Kute.getDefaultProvider();
-    Predicate<Resource> extFilter = KuteLambdas.extensionFilters(".txt", ".class");
-    ResourceProvider<Resource.InputStreaming> filtered = Kute.filterResources(provider, extFilter)
+    Resource.Provider provider = Kute.getDefaultProvider();
+    ResourcePredicate<Resource> extFilter = KuteLambdas.extensionFilters(".txt", ".class");
+    Resource.Provider filtered = Kute.filterResources(provider, extFilter)
     for(R resource : provider) {
         ... // only .txt or .class resources 
     }
     
 ### Use Java 8 lambda's on Resource Provider
 
-    ResourceProvider<Resource.InputStreaming> provider = Kute.getDefaultProvider();
+    Resource.Provider provider = Kute.getDefaultProvider();
     provider.stream().forEach(resource -> {
        
     });
-    
-
-## Resource
-
-The Resource interface only has one method, getPath(). All implementations of resource will use this to indicate its 
-location on the resource provider.  Furthermore, resource can implement one of four interfaces: 
-Resource.Reader, Resource.Writer, Resource.InputStreaming or Resource.OutputStreaming.
- 
-Each of these have a relevant getReader, getWriter, etc method, which you can use to access or manipulate the git content of said resource.
-
 
 
 ### Reading a Resource.Readable with Reader
@@ -80,7 +158,7 @@ Each of these have a relevant getReader, getWriter, etc method, which you can us
  
 ### Reading a Resource.Readable with Resources utility method.
 
-    String content = Kute.readResource(resource);
+    String content = KuteIO.readResource(resource);
     
 ### Writing to Resource.Writable
 
@@ -91,4 +169,4 @@ Each of these have a relevant getReader, getWriter, etc method, which you can us
     
 ### Writing to Resource.Writable with Resources
 
-    Kute.writeResource(readable, "content");
+    KuteIO.writeResource(readable, "content");

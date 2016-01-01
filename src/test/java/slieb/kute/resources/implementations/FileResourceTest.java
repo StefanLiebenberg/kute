@@ -56,10 +56,10 @@ public class FileResourceTest {
             IOUtils.writeLines(lines, System.lineSeparator(), outputStream);
         }
 
-        try (InputStream inputStream = fileResource.getInputStream()) {
+        fileResource.useInputStream(inputStream -> {
             assertNotNull(inputStream);
             assertEquals(lines, IOUtils.readLines(inputStream));
-        }
+        });
     }
 
     @Test

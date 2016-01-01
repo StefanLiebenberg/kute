@@ -92,25 +92,19 @@ public class KuteIO {
      */
     public static void writeResource(final Resource.Writable resource,
                                      final CharSequence content) throws IOException {
-        try (Writer writer = resource.getWriter()) {
-            IOUtils.write(content.toString(), writer);
-        }
+        resource.useWriter(writer -> IOUtils.write(content.toString(), writer));
     }
 
 
     public static void writeResourceWithOutputStream(final Resource.Writable resource,
                                                      final CharSequence content) throws IOException {
-        try (OutputStream stream = resource.getOutputStream()) {
-            IOUtils.write(content.toString(), stream);
-        }
+        resource.useOutputStream(stream -> IOUtils.write(content.toString(), stream));
     }
 
     public static void writeResourceWithOutputStream(final Resource.Writable resource,
                                                      final CharSequence content,
                                                      final String encoding) throws IOException {
-        try (OutputStream stream = resource.getOutputStream()) {
-            IOUtils.write(content.toString(), stream, encoding);
-        }
+        resource.useOutputStream(stream -> IOUtils.write(content.toString(), stream, encoding));
     }
 
     /**
@@ -122,17 +116,12 @@ public class KuteIO {
      */
     public static void copyResource(Resource.Readable readable,
                                     Resource.Writable writable) throws IOException {
-        try (Reader reader = readable.getReader(); Writer writer = writable.getWriter()) {
-            IOUtils.copy(reader, writer);
-        }
+        readable.useReader(reader -> writable.useWriter(writer -> IOUtils.copy(reader, writer)));
     }
 
-    public static void copyResourceWithStreams(Resource.Readable inputStreaming,
-                                               Resource.Writable outputStreaming) throws IOException {
-        try (InputStream inputStream = inputStreaming.getInputStream();
-             OutputStream outputStream = outputStreaming.getOutputStream()) {
-            IOUtils.copy(inputStream, outputStream);
-        }
+    public static void copyResourceWithStreams(Resource.Readable readable,
+                                               Resource.Writable writable) throws IOException {
+        readable.useInputStream(istream -> writable.useOutputStream(ostream -> IOUtils.copy(istream, ostream)));
     }
 
     public static byte[] readBytes(Resource.Readable resource) throws IOException {

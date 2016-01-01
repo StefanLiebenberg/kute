@@ -2,11 +2,11 @@ package slieb.kute;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.providers.*;
-import slieb.kute.resources.*;
 import slieb.kute.api.ResourceFunction;
 import slieb.kute.api.ResourcePredicate;
 import slieb.kute.api.SupplierWithIO;
+import slieb.kute.providers.*;
+import slieb.kute.resources.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -135,10 +135,10 @@ public class Kute {
     /**
      * Creates a file resource provider.
      *
-     * @param directory
-     * @return
+     * @param directory A directory
+     * @return A Resource Provider that provides files from directory with paths relative to the directory.
      */
-    public static FileResourceProvider fileResourceProvider(File directory) {
+    public static FileResourceProvider provideFrom(File directory) {
         return new FileResourceProvider(directory);
     }
 
@@ -220,7 +220,6 @@ public class Kute {
         return resourceWithBytes(path, content.getBytes());
     }
 
-    @Deprecated
     public static Resource.Readable stringResource(String path, Supplier<String> supplier) {
         return new StringSupplierResource(path, supplier);
     }

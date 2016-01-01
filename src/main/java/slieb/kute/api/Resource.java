@@ -61,6 +61,41 @@ public interface Resource extends Serializable {
         InputStream getInputStream() throws IOException;
 
 
+        /**
+         * <pre>{@code
+         *   Resource.Readable readable =  ...;
+         *   readable.useReader(reader -> {
+         *      // do reader stuff.
+         *   })
+         * }</pre>
+         *
+         * @param consumerWithIO A input stream consumer that can throw IOExceptions.
+         * @throws IOException throws a io exception
+         */
+        default void useReader(final ConsumerWithIO<Reader> consumerWithIO) throws IOException {
+            try (Reader reader = getReader()) {
+                consumerWithIO.acceptWithIO(reader);
+            }
+        }
+
+        /**
+         * <pre>{@code
+         *   Resource.Readable readable =  ...;
+         *   readable.useInputStream(inputStream -> {
+         *      // do inputStream stuff.
+         *   })
+         * }</pre>
+         *
+         * @param consumerWithIO Some consumer for writer
+         * @throws IOException throws a io exception
+         */
+        default void useInputStream(final ConsumerWithIO<InputStream> consumerWithIO) throws IOException {
+            try (InputStream inputStream = getInputStream()) {
+                consumerWithIO.acceptWithIO(inputStream);
+            }
+        }
+
+
         @Override
         default void updateDigest(final MessageDigest digest) throws IOException {
             digest.update(KuteIO.readResource(this).getBytes());
@@ -89,6 +124,8 @@ public interface Resource extends Serializable {
      */
     interface Writable extends Resource, Serializable {
 
+        OutputStream getOutputStream() throws IOException;
+
         /**
          * <b>Using the Writer</b>
          * <pre>{@code
@@ -106,8 +143,39 @@ public interface Resource extends Serializable {
             return new OutputStreamWriter(getOutputStream());
         }
 
+        /**
+         * <pre>{@code
+         *   Resource.Writable writable =  ...;
+         *   writable.useWriter(writer -> {
+         *      // do writer stuff.
+         *   })
+         * }</pre>
+         *
+         * @param consumerWithIO Some consumer for writer
+         * @throws IOException throws a io exception
+         */
+        default void useWriter(ConsumerWithIO<Writer> consumerWithIO) throws IOException {
+            try (Writer writer = getWriter()) {
+                consumerWithIO.acceptWithIO(writer);
+            }
+        }
 
-        OutputStream getOutputStream() throws IOException;
+        /**
+         * <pre>{@code
+         *   Resource.Writable writable =  ...;
+         *   writable.useOutputStream(outputStream -> {
+         *      // do outputStream stuff.
+         *   })
+         * }</pre>
+         *
+         * @param consumerWithIO Some consumer for writer
+         * @throws IOException throws a io exception
+         */
+        default void useOutputStream(ConsumerWithIO<OutputStream> consumerWithIO) throws IOException {
+            try (OutputStream writer = getOutputStream()) {
+                consumerWithIO.acceptWithIO(writer);
+            }
+        }
     }
 
 
