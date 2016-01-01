@@ -1,6 +1,6 @@
 package slieb.kute.providers;
 
-import org.slieb.unnamed.api.FunctionWithException;
+import org.slieb.throwables.FunctionWithException;
 import slieb.kute.api.Resource;
 
 import java.io.IOException;

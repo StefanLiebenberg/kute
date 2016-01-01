@@ -1,8 +1,8 @@
 package slieb.kute;
 
 
-import org.slieb.unnamed.api.FunctionWithException;
-import org.slieb.unnamed.api.SupplierWithException;
+import org.slieb.throwables.FunctionWithException;
+import org.slieb.throwables.SupplierWithException;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourcePredicate;
 import slieb.kute.providers.*;

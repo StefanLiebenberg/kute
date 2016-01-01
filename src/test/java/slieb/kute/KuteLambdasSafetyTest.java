@@ -1,12 +1,12 @@
 package slieb.kute;
 
 import org.junit.Test;
-import org.slieb.unnamed.api.SupplierWithException;
 
 import java.io.IOException;
 
-import static org.slieb.unnamed.api.ConsumerWithException.castConsumerWithException;
-import static org.slieb.unnamed.api.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.ConsumerWithException.castConsumerWithException;
+import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.SupplierWithException.castSupplierWithException;
 
 
 public class KuteLambdasSafetyTest {
@@ -27,7 +27,7 @@ public class KuteLambdasSafetyTest {
 
     @Test(expected = RuntimeException.class)
     public void testSafelySupply() throws Exception {
-        SupplierWithException.castSupplierWithException(() -> {
+        castSupplierWithException(() -> {
             throw new IOException("expected io");
         }).get();
     }

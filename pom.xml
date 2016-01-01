@@ -94,8 +94,8 @@
     <dependencies>
         <dependency>
             <groupId>org.slieb</groupId>
-            <artifactId>unnamed</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>throwable-interfaces</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

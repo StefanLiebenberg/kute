@@ -10,7 +10,7 @@ import slieb.kute.api.Resource;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
-import static org.slieb.unnamed.api.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
 import static slieb.kute.KuteIO.readResource;
 
 

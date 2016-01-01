@@ -4,7 +4,6 @@ import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slieb.unnamed.api.FunctionWithException;
 import slieb.kute.KuteIO;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourcePredicate;
@@ -12,6 +11,8 @@ import slieb.kute.api.ResourcePredicate;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
 
 
 public class FilteredResourceProviderTest implements ProviderTestInterface {
@@ -81,7 +82,7 @@ public class FilteredResourceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content"),
-                provider.stream().map(FunctionWithException.castFunctionWithException(KuteIO::readResource)).collect(Collectors.toSet()));
+                provider.stream().map(castFunctionWithException(KuteIO::readResource)).collect(Collectors.toSet()));
     }
 
     @Override

@@ -2,7 +2,7 @@ package slieb.kute;
 
 
 import com.google.common.collect.Maps;
-import org.slieb.unnamed.api.FunctionWithException;
+import org.slieb.throwables.FunctionWithException;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourcePredicate;
 
@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import static java.util.Arrays.stream;
 
 public class KuteLambdas {
-    
+
     /**
      * @param <A> A implementation of resource.
      * @return A nonNull predicate.

@@ -5,7 +5,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slieb.unnamed.api.FunctionWithException;
+import org.slieb.throwables.FunctionWithException;
 import slieb.kute.Kute;
 import slieb.kute.KuteDigest;
 import slieb.kute.KuteIO;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
-import static org.slieb.unnamed.api.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
 import static slieb.kute.KuteIO.readResource;
 
 

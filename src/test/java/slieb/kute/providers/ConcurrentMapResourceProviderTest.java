@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slieb.unnamed.api.FunctionWithException;
+import org.slieb.throwables.FunctionWithException;
 import slieb.kute.KuteIO;
 import slieb.kute.api.Resource;
 

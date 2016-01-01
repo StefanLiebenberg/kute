@@ -3,7 +3,7 @@ package slieb.kute;
 
 import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
-import org.slieb.unnamed.api.ConsumerWithException;
+import org.slieb.throwables.ConsumerWithException;
 import slieb.kute.api.Resource;
 
 import java.io.*;

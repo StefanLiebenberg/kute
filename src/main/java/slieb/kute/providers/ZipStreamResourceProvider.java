@@ -2,7 +2,7 @@ package slieb.kute.providers;
 
 import com.google.common.io.ByteStreams;
 import org.apache.commons.io.IOUtils;
-import org.slieb.unnamed.api.SupplierWithException;
+import org.slieb.throwables.SupplierWithException;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 

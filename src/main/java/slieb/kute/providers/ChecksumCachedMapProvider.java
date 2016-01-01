@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static org.slieb.unnamed.api.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
 
 public final class ChecksumCachedMapProvider implements Resource.Provider {
 

@@ -1,6 +1,6 @@
 package slieb.kute.api;
 
-import org.slieb.unnamed.api.ConsumerWithException;
+import org.slieb.throwables.ConsumerWithException;
 import slieb.kute.Kute;
 import slieb.kute.KuteIO;
 

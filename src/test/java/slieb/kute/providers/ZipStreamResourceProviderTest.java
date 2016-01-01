@@ -3,7 +3,7 @@ package slieb.kute.providers;
 import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
-import org.slieb.unnamed.api.SupplierWithException;
+import org.slieb.throwables.SupplierWithException;
 import slieb.kute.KuteIO;
 import slieb.kute.api.Resource;
 

@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
-import static org.slieb.unnamed.api.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
 import static slieb.kute.KuteIO.readResource;
 
 public class FileResourceProviderTest implements ProviderTestInterface {
