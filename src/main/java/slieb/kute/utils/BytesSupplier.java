@@ -35,7 +35,7 @@ public class BytesSupplier implements SupplierWithIO<byte[]> {
 
     @Override
     public String toString() {
-        return "InstanceSupplier{" +
+        return "BytesSupplier{" +
                 "bytes=" + Arrays.toString(bytes) +
                 '}';
     }
