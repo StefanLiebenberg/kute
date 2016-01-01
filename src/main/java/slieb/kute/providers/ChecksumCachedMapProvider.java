@@ -2,8 +2,8 @@ package slieb.kute.providers;
 
 
 import slieb.kute.Kute;
-import slieb.kute.api.Resource;
 import slieb.kute.KuteDigest;
+import slieb.kute.api.Resource;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static slieb.kute.KuteLambdas.unsafeMap;
+import static org.slieb.unnamed.api.FunctionWithException.castFunctionWithException;
 
 public final class ChecksumCachedMapProvider implements Resource.Provider {
 
@@ -41,7 +41,7 @@ public final class ChecksumCachedMapProvider implements Resource.Provider {
     }
 
     private Stream<Resource.Readable> streamInternal() {
-        return resourceProvider.stream().map(unsafeMap(Kute::immutableMemoryResource));
+        return resourceProvider.stream().map(castFunctionWithException(Kute::immutableMemoryResource));
     }
 
     @Override

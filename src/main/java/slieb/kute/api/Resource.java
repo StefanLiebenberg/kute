@@ -1,5 +1,6 @@
 package slieb.kute.api;
 
+import org.slieb.unnamed.api.ConsumerWithException;
 import slieb.kute.Kute;
 import slieb.kute.KuteIO;
 
@@ -72,9 +73,9 @@ public interface Resource extends Serializable {
          * @param consumerWithIO A input stream consumer that can throw IOExceptions.
          * @throws IOException throws a io exception
          */
-        default void useReader(final ConsumerWithIO<Reader> consumerWithIO) throws IOException {
+        default void useReader(final ConsumerWithException<Reader, IOException> consumerWithIO) throws IOException {
             try (Reader reader = getReader()) {
-                consumerWithIO.acceptWithIO(reader);
+                consumerWithIO.acceptWithException(reader);
             }
         }
 
@@ -89,9 +90,9 @@ public interface Resource extends Serializable {
          * @param consumerWithIO Some consumer for writer
          * @throws IOException throws a io exception
          */
-        default void useInputStream(final ConsumerWithIO<InputStream> consumerWithIO) throws IOException {
+        default void useInputStream(final ConsumerWithException<InputStream, IOException> consumerWithIO) throws IOException {
             try (InputStream inputStream = getInputStream()) {
-                consumerWithIO.acceptWithIO(inputStream);
+                consumerWithIO.acceptWithException(inputStream);
             }
         }
 
@@ -154,9 +155,9 @@ public interface Resource extends Serializable {
          * @param consumerWithIO Some consumer for writer
          * @throws IOException throws a io exception
          */
-        default void useWriter(ConsumerWithIO<Writer> consumerWithIO) throws IOException {
+        default void useWriter(ConsumerWithException<Writer, IOException> consumerWithIO) throws IOException {
             try (Writer writer = getWriter()) {
-                consumerWithIO.acceptWithIO(writer);
+                consumerWithIO.acceptWithException(writer);
             }
         }
 
@@ -171,9 +172,9 @@ public interface Resource extends Serializable {
          * @param consumerWithIO Some consumer for writer
          * @throws IOException throws a io exception
          */
-        default void useOutputStream(ConsumerWithIO<OutputStream> consumerWithIO) throws IOException {
+        default void useOutputStream(ConsumerWithException<OutputStream, IOException> consumerWithIO) throws IOException {
             try (OutputStream writer = getOutputStream()) {
-                consumerWithIO.acceptWithIO(writer);
+                consumerWithIO.acceptWithException(writer);
             }
         }
     }

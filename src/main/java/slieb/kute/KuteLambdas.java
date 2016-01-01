@@ -2,7 +2,9 @@ package slieb.kute;
 
 
 import com.google.common.collect.Maps;
-import slieb.kute.api.*;
+import org.slieb.unnamed.api.FunctionWithException;
+import slieb.kute.api.Resource;
+import slieb.kute.api.ResourcePredicate;
 
 import java.io.IOException;
 import java.util.Map;
@@ -11,59 +13,7 @@ import java.util.regex.Pattern;
 import static java.util.Arrays.stream;
 
 public class KuteLambdas {
-
-
-    public static <T extends Resource> ResourceConsumer<T> unsafeConsumer(final ResourceConsumerWithIO<T> resourceConsumerWithIO) {
-        return (object) -> {
-            try {
-                resourceConsumerWithIO.acceptWithIO(object);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-    }
-
-    public static <A extends Resource, B> ResourceFunction<A, B> unsafeMap(final ResourceFunctionWithIO<A, B> mapFunction) {
-        return (a) -> {
-            try {
-                return mapFunction.applyWithIO(a);
-            } catch (IOException ioException) {
-                throw new RuntimeException(ioException);
-            }
-        };
-    }
-
-    public static <T extends Resource> ResourceSupplier<T> unsafeSupply(SupplierWithIO<T> resourceSupplier) {
-        return () -> {
-            try {
-                return resourceSupplier.getWithIO();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        };
-    }
-//
-//    public static <T extends Resource> ResourceSupplier<T> unsafeSupplyResource(ResourceSupplierWithIO<T> resourceSupplier) {
-//        return () -> {
-//            try {
-//                return resourceSupplier.getWithIO();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        };
-//    }
-//
-//    public static ResourcePredicate unsafeTest(PredicateWithIO predicateWithIO) {
-//        return (object) -> {
-//            try {
-//                return predicateWithIO.testWithIO(object);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//        };
-//    }
-
-
+    
     /**
      * @param <A> A implementation of resource.
      * @return A nonNull predicate.
@@ -134,7 +84,7 @@ public class KuteLambdas {
      * @param <X>      The Value type.
      * @return A stateful predicate.
      */
-    public static <R extends Resource, X> ResourcePredicate<R> distinctFilter(ResourceFunction<R, X> function) {
+    public static <R extends Resource, X> ResourcePredicate<R> distinctFilter(FunctionWithException<R, X, IOException> function) {
         final Map<X, Boolean> seen = Maps.newConcurrentMap();
         return resource -> seen.putIfAbsent(function.apply(resource), Boolean.TRUE) == null;
     }

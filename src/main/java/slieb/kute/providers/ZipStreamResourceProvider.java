@@ -2,9 +2,9 @@ package slieb.kute.providers;
 
 import com.google.common.io.ByteStreams;
 import org.apache.commons.io.IOUtils;
+import org.slieb.unnamed.api.SupplierWithException;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
-import slieb.kute.api.SupplierWithIO;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -17,16 +17,16 @@ import java.util.zip.ZipInputStream;
 
 public class ZipStreamResourceProvider implements Resource.Provider {
 
-    private final SupplierWithIO<ZipInputStream> zipInputStreamSupplier;
+    private final SupplierWithException<ZipInputStream, IOException> zipInputStreamSupplier;
 
-    public ZipStreamResourceProvider(SupplierWithIO<ZipInputStream> zipInputStreamSupplier) {
+    public ZipStreamResourceProvider(SupplierWithException<ZipInputStream, IOException> zipInputStreamSupplier) {
         this.zipInputStreamSupplier = zipInputStreamSupplier;
     }
 
     @Override
     public Stream<Resource.Readable> stream() {
         try {
-            try (ZipInputStream zipStream = zipInputStreamSupplier.getWithIO()) {
+            try (ZipInputStream zipStream = zipInputStreamSupplier.getWithException()) {
                 Stream.Builder<Resource.Readable> builder = Stream.builder();
                 for (ZipEntry entry = zipStream.getNextEntry(); entry != null; entry = zipStream.getNextEntry()) {
                     if (!entry.isDirectory()) {

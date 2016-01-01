@@ -1,7 +1,7 @@
 package slieb.kute.resources;
 
+import org.slieb.unnamed.api.SupplierWithException;
 import slieb.kute.api.Resource;
-import slieb.kute.api.SupplierWithIO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,10 +12,10 @@ import java.util.Objects;
 public class InputStreamResource implements Resource.Readable, Serializable {
 
     private final String path;
-    private final SupplierWithIO<InputStream> supplier;
+    private final SupplierWithException<InputStream, IOException> supplier;
 
     public InputStreamResource(final String path,
-                               final SupplierWithIO<InputStream> resourceSupplierWithIO) {
+                               final SupplierWithException<InputStream, IOException> resourceSupplierWithIO) {
         this.path = path;
         this.supplier = resourceSupplierWithIO;
     }
@@ -23,7 +23,7 @@ public class InputStreamResource implements Resource.Readable, Serializable {
 
     @Override
     public InputStream getInputStream() throws IOException {
-        return supplier.getWithIO();
+        return supplier.getWithException();
     }
 
     @Override

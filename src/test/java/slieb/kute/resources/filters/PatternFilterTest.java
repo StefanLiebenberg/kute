@@ -7,8 +7,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import slieb.kute.api.Resource;
 import slieb.kute.KuteLambdas;
+import slieb.kute.api.Resource;
 import slieb.kute.api.ResourcePredicate;
 
 import java.util.regex.Pattern;

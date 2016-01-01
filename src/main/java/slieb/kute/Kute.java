@@ -1,10 +1,10 @@
 package slieb.kute;
 
 
+import org.slieb.unnamed.api.FunctionWithException;
+import org.slieb.unnamed.api.SupplierWithException;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceFunction;
 import slieb.kute.api.ResourcePredicate;
-import slieb.kute.api.SupplierWithIO;
 import slieb.kute.providers.*;
 import slieb.kute.resources.*;
 
@@ -179,11 +179,12 @@ public class Kute {
     /**
      * Create resources from input stream.
      *
-     * @param supplier The input stream to supply content.
      * @param path     The path name for this resource.
+     * @param supplier The input stream to supply content.
      * @return a readable resource that reads from provided input stream.
      */
-    public static InputStreamResource inputStreamResource(String path, SupplierWithIO<InputStream> supplier) {
+    public static InputStreamResource inputStreamResource(final String path,
+                                                          final SupplierWithException<InputStream, IOException> supplier) {
         return new InputStreamResource(path, supplier);
     }
 
@@ -195,7 +196,7 @@ public class Kute {
      * @return a readable resource that reads from provided input stream.
      */
     public static OutputStreamResource outputStreamResource(final String path,
-                                                            final SupplierWithIO<OutputStream> supplier) {
+                                                            final SupplierWithException<OutputStream, IOException> supplier) {
         return new OutputStreamResource(path, supplier);
     }
 
@@ -237,11 +238,11 @@ public class Kute {
     }
 
 
-    public static Resource.Provider mapResources(final Resource.Provider provider, final ResourceFunction<Resource.Readable, Resource.Readable> function) {
+    public static Resource.Provider mapResources(final Resource.Provider provider, final FunctionWithException<Resource.Readable, Resource.Readable, IOException> function) {
         return new MappedResourceProvider(provider, function);
     }
 
-    public static Resource.Provider filterResources(Resource.Provider provider, ResourcePredicate predicate) {
+    public static Resource.Provider filterResources(Resource.Provider provider, ResourcePredicate<Resource> predicate) {
         return new FilteredResourceProvider(provider, predicate);
     }
 
@@ -281,7 +282,7 @@ public class Kute {
      * @return A stream without resource duplicates as determined by the passed function.
      */
     public static <R extends Resource, X> Stream<R> distinct(final Stream<R> stream,
-                                                             final ResourceFunction<R, X> function) {
+                                                             final FunctionWithException<R, X, IOException> function) {
         return stream.filter(KuteLambdas.distinctFilter(function));
     }
 

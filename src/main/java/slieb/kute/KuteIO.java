@@ -3,6 +3,7 @@ package slieb.kute;
 
 import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
+import org.slieb.unnamed.api.ConsumerWithException;
 import slieb.kute.api.Resource;
 
 import java.io.*;
@@ -44,8 +45,8 @@ public class KuteIO {
      */
     public void copyProviderToCreator(Resource.Provider provider,
                                       Resource.Creator creator) {
-        provider.stream().forEach(KuteLambdas.unsafeConsumer(resource ->
-                copyResourceWithStreams(resource, creator.create(resource.getPath()))));
+        provider.stream().forEach((ConsumerWithException<Resource.Readable, IOException>) resource ->
+                copyResourceWithStreams(resource, creator.create(resource.getPath())));
     }
 
 
@@ -135,7 +136,12 @@ public class KuteIO {
     }
 
     public static String readResourceUnsafe(Resource.Readable readable) {
-        return KuteLambdas.unsafeMap(KuteIO::readResource).apply(readable);
+        try {
+            return KuteIO.readResource(readable);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

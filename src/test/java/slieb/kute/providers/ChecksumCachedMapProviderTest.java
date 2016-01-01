@@ -5,16 +5,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.Kute;
-import slieb.kute.api.Resource;
-import slieb.kute.resources.MutableBytesArrayResource;
 import slieb.kute.KuteDigest;
 import slieb.kute.KuteIO;
+import slieb.kute.api.Resource;
+import slieb.kute.resources.MutableBytesArrayResource;
 
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
+import static org.slieb.unnamed.api.FunctionWithException.castFunctionWithException;
 import static slieb.kute.KuteIO.readResource;
-import static slieb.kute.KuteLambdas.unsafeMap;
 import static slieb.kute.KutePredicates.resourceEquals;
 
 
@@ -34,10 +34,6 @@ public class ChecksumCachedMapProviderTest implements ProviderTestInterface {
         rawProvider = Kute.providerOf(resourceA, resourceB);
         provider = new ChecksumCachedMapProvider(rawProvider, checksumable);
     }
-
-
-
-
 
 
     @Override
@@ -80,7 +76,7 @@ public class ChecksumCachedMapProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("content A", "content B"),
-                provider.stream().map(unsafeMap(KuteIO::readResource)).collect(toSet()));
+                provider.stream().map(castFunctionWithException(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override

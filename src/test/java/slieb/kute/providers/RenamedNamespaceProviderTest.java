@@ -4,14 +4,14 @@ import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import slieb.kute.api.Resource;
 import slieb.kute.KuteIO;
+import slieb.kute.api.Resource;
 
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
+import static org.slieb.unnamed.api.FunctionWithException.castFunctionWithException;
 import static slieb.kute.KuteIO.readResource;
-import static slieb.kute.KuteLambdas.unsafeMap;
 
 
 public class RenamedNamespaceProviderTest implements ProviderTestInterface {
@@ -74,7 +74,7 @@ public class RenamedNamespaceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content", "other content"),
-                provider.stream().map(unsafeMap(KuteIO::readResource)).collect(toSet()));
+                provider.stream().map(castFunctionWithException(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override
