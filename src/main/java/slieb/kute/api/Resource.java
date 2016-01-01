@@ -1,7 +1,7 @@
 package slieb.kute.api;
 
 import slieb.kute.Kute;
-import slieb.kute.utils.KuteIO;
+import slieb.kute.KuteIO;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -35,7 +35,7 @@ public interface Resource extends Serializable {
     /**
      * Represents a readable resource. Provides getReader() and getInputStream() methods to read the resource with.
      */
-    interface Readable extends Resource, Checksumable {
+    interface Readable extends Resource, Checksumable, Serializable {
 
         /**
          * @return A reader that will give you the contents of resource.
@@ -61,6 +61,41 @@ public interface Resource extends Serializable {
         InputStream getInputStream() throws IOException;
 
 
+        /**
+         * <pre>{@code
+         *   Resource.Readable readable =  ...;
+         *   readable.useReader(reader -> {
+         *      // do reader stuff.
+         *   })
+         * }</pre>
+         *
+         * @param consumerWithIO A input stream consumer that can throw IOExceptions.
+         * @throws IOException throws a io exception
+         */
+        default void useReader(final ConsumerWithIO<Reader> consumerWithIO) throws IOException {
+            try (Reader reader = getReader()) {
+                consumerWithIO.acceptWithIO(reader);
+            }
+        }
+
+        /**
+         * <pre>{@code
+         *   Resource.Readable readable =  ...;
+         *   readable.useInputStream(inputStream -> {
+         *      // do inputStream stuff.
+         *   })
+         * }</pre>
+         *
+         * @param consumerWithIO Some consumer for writer
+         * @throws IOException throws a io exception
+         */
+        default void useInputStream(final ConsumerWithIO<InputStream> consumerWithIO) throws IOException {
+            try (InputStream inputStream = getInputStream()) {
+                consumerWithIO.acceptWithIO(inputStream);
+            }
+        }
+
+
         @Override
         default void updateDigest(final MessageDigest digest) throws IOException {
             digest.update(KuteIO.readResource(this).getBytes());
@@ -71,7 +106,7 @@ public interface Resource extends Serializable {
     /**
      *
      */
-    interface Checksumable {
+    interface Checksumable extends Serializable {
 
         void updateDigest(MessageDigest digest) throws IOException;
 
@@ -87,7 +122,9 @@ public interface Resource extends Serializable {
      * This represents a Writable resource. You can call {@link Writable#getWriter} on it to get a writer that will
      * write to the resource.
      */
-    interface Writable extends Resource {
+    interface Writable extends Resource, Serializable {
+
+        OutputStream getOutputStream() throws IOException;
 
         /**
          * <b>Using the Writer</b>
@@ -106,8 +143,39 @@ public interface Resource extends Serializable {
             return new OutputStreamWriter(getOutputStream());
         }
 
+        /**
+         * <pre>{@code
+         *   Resource.Writable writable =  ...;
+         *   writable.useWriter(writer -> {
+         *      // do writer stuff.
+         *   })
+         * }</pre>
+         *
+         * @param consumerWithIO Some consumer for writer
+         * @throws IOException throws a io exception
+         */
+        default void useWriter(ConsumerWithIO<Writer> consumerWithIO) throws IOException {
+            try (Writer writer = getWriter()) {
+                consumerWithIO.acceptWithIO(writer);
+            }
+        }
 
-        OutputStream getOutputStream() throws IOException;
+        /**
+         * <pre>{@code
+         *   Resource.Writable writable =  ...;
+         *   writable.useOutputStream(outputStream -> {
+         *      // do outputStream stuff.
+         *   })
+         * }</pre>
+         *
+         * @param consumerWithIO Some consumer for writer
+         * @throws IOException throws a io exception
+         */
+        default void useOutputStream(ConsumerWithIO<OutputStream> consumerWithIO) throws IOException {
+            try (OutputStream writer = getOutputStream()) {
+                consumerWithIO.acceptWithIO(writer);
+            }
+        }
     }
 
 
@@ -141,7 +209,7 @@ public interface Resource extends Serializable {
      *     });
      * </code></pre>
      */
-    interface Provider extends Iterable<Resource.Readable>, Resource.Checksumable {
+    interface Provider extends Iterable<Resource.Readable>, Resource.Checksumable, Serializable {
 
         @Override
         default Iterator<Resource.Readable> iterator() {
@@ -169,7 +237,7 @@ public interface Resource extends Serializable {
     /**
      * The opposite of {@link Provider}
      */
-    interface Creator {
+    interface Creator extends Serializable {
         Resource.Writable create(String path);
     }
 

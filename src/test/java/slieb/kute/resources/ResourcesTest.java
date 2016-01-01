@@ -3,19 +3,20 @@ package slieb.kute.resources;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import slieb.kute.Kute;
+import slieb.kute.KuteIO;
 import slieb.kute.api.Resource;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static slieb.kute.Kute.*;
-import static slieb.kute.utils.KuteIO.*;
+import static slieb.kute.KuteIO.*;
 
 
 public class ResourcesTest {
@@ -30,23 +31,17 @@ public class ResourcesTest {
 
     @Test
     public void testWriteResource() throws Exception {
-        StringWriter writer = new StringWriter();
-        Resource.Writable writable = mock(Resource.Writable.class);
-        when(writable.getWriter()).thenReturn(writer);
-        writeResource(writable, "content");
-        assertEquals("content", writer.toString());
+        MutableBytesArrayResource mutableResource = Kute.mutableResource("/path", "");
+        writeResource(mutableResource, "content");
+        assertEquals("content", KuteIO.readResource(mutableResource));
     }
 
     @Test
     public void testCopyResource() throws Exception {
-        Resource.Readable readable = mock(Resource.Readable.class);
-        when(readable.getReader()).thenAnswer(i -> new StringReader("content"));
-
-        StringWriter writer = new StringWriter();
-        Resource.Writable writable = mock(Resource.Writable.class);
-        when(writable.getWriter()).thenReturn(writer);
+        Resource.Readable readable = Kute.stringResource("/path", "content");
+        MutableBytesArrayResource writable = Kute.mutableResource("/otherpath", "");
         copyResource(readable, writable);
-        assertEquals("content", writer.toString());
+        assertEquals("content", KuteIO.readResource(writable));
     }
 
 

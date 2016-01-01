@@ -1,7 +1,6 @@
 package slieb.kute;
 
 import org.junit.Test;
-import slieb.kute.utils.KuteLambdas;
 
 import java.io.IOException;
 
@@ -10,21 +9,21 @@ public class KuteLambdasSafetyTest {
 
     @Test(expected = RuntimeException.class)
     public void testSafelyConsume() throws Exception {
-        KuteLambdas.safelyConsume((object) -> {
+        KuteLambdas.unsafeConsumer((object) -> {
             throw new IOException("expected io");
-        }).accept(new Object());
+        }).accept(Kute.resource("/path"));
     }
 
     @Test(expected = RuntimeException.class)
     public void testSafelyMapWithIO() throws Exception {
-        KuteLambdas.safelyMapWithIO((object) -> {
+        KuteLambdas.unsafeMap((object) -> {
             throw new IOException("expected io");
-        }).apply(new Object());
+        }).apply(Kute.resource("/path"));
     }
 
     @Test(expected = RuntimeException.class)
     public void testSafelySupply() throws Exception {
-        KuteLambdas.safelySupply(() -> {
+        KuteLambdas.unsafeSupply(() -> {
             throw new IOException("expected io");
         }).get();
     }

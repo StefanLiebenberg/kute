@@ -2,7 +2,7 @@ package slieb.kute.resources;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.utils.SupplierWithIO;
+import slieb.kute.api.SupplierWithIO;
 
 import java.io.*;
 

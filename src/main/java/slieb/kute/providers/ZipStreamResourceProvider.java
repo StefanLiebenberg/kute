@@ -4,11 +4,12 @@ import com.google.common.io.ByteStreams;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
+import slieb.kute.api.SupplierWithIO;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.function.Supplier;
+import java.util.Objects;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -16,21 +17,20 @@ import java.util.zip.ZipInputStream;
 
 public class ZipStreamResourceProvider implements Resource.Provider {
 
-    private final Supplier<ZipInputStream> zipInputStreamSupplier;
+    private final SupplierWithIO<ZipInputStream> zipInputStreamSupplier;
 
-    public ZipStreamResourceProvider(Supplier<ZipInputStream> zipInputStreamSupplier) {
+    public ZipStreamResourceProvider(SupplierWithIO<ZipInputStream> zipInputStreamSupplier) {
         this.zipInputStreamSupplier = zipInputStreamSupplier;
     }
 
     @Override
     public Stream<Resource.Readable> stream() {
         try {
-            try (ZipInputStream zipStream = zipInputStreamSupplier.get()) {
+            try (ZipInputStream zipStream = zipInputStreamSupplier.getWithIO()) {
                 Stream.Builder<Resource.Readable> builder = Stream.builder();
                 for (ZipEntry entry = zipStream.getNextEntry(); entry != null; entry = zipStream.getNextEntry()) {
                     if (!entry.isDirectory()) {
-                        InputStream inputStream = new BufferedInputStream(
-                                ByteStreams.limit(zipStream, entry.getSize()));
+                        InputStream inputStream = new BufferedInputStream(ByteStreams.limit(zipStream, entry.getSize()));
                         builder.add(Kute.resourceWithBytes("/" + entry.getName(), IOUtils.toByteArray(inputStream)));
                     }
                 }
@@ -41,5 +41,23 @@ public class ZipStreamResourceProvider implements Resource.Provider {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ZipStreamResourceProvider)) return false;
+        ZipStreamResourceProvider readables = (ZipStreamResourceProvider) o;
+        return Objects.equals(zipInputStreamSupplier, readables.zipInputStreamSupplier);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(zipInputStreamSupplier);
+    }
+
+    @Override
+    public String toString() {
+        return "ZipStreamResourceProvider{" +
+                "zipInputStreamSupplier=" + zipInputStreamSupplier +
+                '}';
+    }
 }

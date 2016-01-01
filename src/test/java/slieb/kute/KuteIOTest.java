@@ -6,7 +6,7 @@ import slieb.kute.api.Resource;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static slieb.kute.Kute.*;
-import static slieb.kute.utils.KutePredicates.*;
+import static slieb.kute.KutePredicates.*;
 
 
 public class KuteIOTest {
@@ -28,7 +28,7 @@ public class KuteIOTest {
     public void testEquals() throws Exception {
         Resource.Readable resource = stringResource("/path", "content");
         Resource.Readable alternative = stringResource("/path", "alternative");
-        Resource.Readable copiedResource = memoryResource(resource);
+        Resource.Readable copiedResource = immutableMemoryResource(resource);
         Resource.Readable renamed = renameResource("/other", resource);
 
         assertTrue(resourceEquals(resource, copiedResource));

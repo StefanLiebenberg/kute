@@ -1,7 +1,6 @@
 package slieb.kute.providers;
 
 import com.google.common.base.Preconditions;
-import slieb.kute.utils.KuteLambdas;
 import slieb.kute.api.Resource;
 import slieb.kute.resources.FileResource;
 
@@ -9,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -35,10 +35,13 @@ public final class FileResourceProvider implements Resource.Provider, Resource.C
     @Override
     public Stream<Resource.Readable> stream() {
         if (canProvideDirectory()) {
-            return KuteLambdas.safelySupply(this::streamInternal).get();
-        } else {
-            return Stream.empty();
+            try {
+                return streamInternal();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+        return Stream.empty();
     }
 
     private Stream<Resource.Readable> streamInternal() throws IOException {
@@ -74,4 +77,23 @@ public final class FileResourceProvider implements Resource.Provider, Resource.C
         return new File(directory, path);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FileResourceProvider)) return false;
+        FileResourceProvider readables = (FileResourceProvider) o;
+        return Objects.equals(directory, readables.directory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(directory);
+    }
+
+    @Override
+    public String toString() {
+        return "FileResourceProvider{" +
+                "directory=" + directory +
+                '}';
+    }
 }

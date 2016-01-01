@@ -1,33 +1,32 @@
 package slieb.kute.providers;
 
 import slieb.kute.api.Resource;
+import slieb.kute.api.ResourcePredicate;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public final class FilteredResourceProvider implements Resource.Provider, Serializable {
+public final class FilteredResourceProvider implements Resource.Provider {
 
     private final Resource.Provider resourceProvider;
 
-    private final Predicate<? super Resource> resourceFilter;
+    private final ResourcePredicate<? super Resource> resourceFilter;
 
-    public FilteredResourceProvider(Resource.Provider resourceProvider,
-                                    Predicate<? super Resource> resourceFilter) {
+    public FilteredResourceProvider(final Resource.Provider resourceProvider,
+                                    final ResourcePredicate<? super Resource> resourceFilter) {
         this.resourceProvider = resourceProvider;
         this.resourceFilter = resourceFilter;
     }
 
     @Override
     public Optional<Resource.Readable> getResourceByName(String path) {
-        return resourceProvider.getResourceByName(path).filter(resourceFilter::test);
+        return resourceProvider.getResourceByName(path).filter(resourceFilter);
     }
 
     @Override
     public Stream<Resource.Readable> stream() {
-        return resourceProvider.stream().filter(resourceFilter::test);
+        return resourceProvider.stream().filter(resourceFilter);
     }
 
     @Override

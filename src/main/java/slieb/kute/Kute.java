@@ -2,21 +2,19 @@ package slieb.kute;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.providers.CollectionResourceProvider;
-import slieb.kute.providers.FilteredResourceProvider;
-import slieb.kute.providers.MappedResourceProvider;
-import slieb.kute.providers.URLArrayResourceProvider;
+import slieb.kute.api.ResourceFunction;
+import slieb.kute.api.ResourcePredicate;
+import slieb.kute.api.SupplierWithIO;
+import slieb.kute.providers.*;
 import slieb.kute.resources.*;
-import slieb.kute.utils.KuteIO;
-import slieb.kute.utils.KuteLambdas;
-import slieb.kute.utils.SupplierWithIO;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -89,18 +87,18 @@ public class Kute {
 
     /**
      * @param resources A var_arg array of resources that the provider will contain.
-     * @return A {@link CollectionResourceProvider} that contains all of the specified resources.
+     * @return A {@link slieb.kute.api.Resource.Provider} that contains all of the specified resources.
      */
-    public static CollectionResourceProvider providerOf(Resource.Readable... resources) {
+    public static Resource.Provider providerOf(Resource.Readable... resources) {
         return providerOf(Arrays.asList(resources));
     }
 
     /**
      * @param resources A collection of resources that the provider will contain.
-     * @return A {@link CollectionResourceProvider} that contains all of the specified resources.
+     * @return A {@link slieb.kute.api.Resource.Provider} that contains all of the specified resources.
      */
-    public static CollectionResourceProvider providerOf(Collection<Resource.Readable> resources) {
-        return new CollectionResourceProvider(resources);
+    public static Resource.Provider providerOf(Collection<Resource.Readable> resources) {
+        return new CollectionProvider(resources);
     }
 
     /**
@@ -129,8 +127,19 @@ public class Kute {
     }
 
 
-    public static Resource.Readable memoryResource(Resource.Readable readable) throws IOException {
+    public static Resource.Readable immutableMemoryResource(Resource.Readable readable) throws IOException {
         return Kute.resourceWithBytes(readable.getPath(), KuteIO.readBytes(readable));
+    }
+
+
+    /**
+     * Creates a file resource provider.
+     *
+     * @param directory A directory
+     * @return A Resource Provider that provides files from directory with paths relative to the directory.
+     */
+    public static FileResourceProvider provideFrom(File directory) {
+        return new FileResourceProvider(directory);
     }
 
     /**
@@ -191,12 +200,9 @@ public class Kute {
     }
 
     public static Resource.Readable resourceWithBytes(final String path, final byte[] bytes) {
-        return resourceWithByteSupplier(path, SupplierWithIO.ofInstance(bytes));
+        return new BytesArrayResource(path, bytes);
     }
 
-    public static Resource.Readable resourceWithByteSupplier(final String path, final SupplierWithIO<byte[]> byteSupplier) {
-        return inputStreamResource(path, () -> new ByteArrayInputStream(byteSupplier.getWithIO()));
-    }
 
     /**
      * Create a resource that cache's its response.
@@ -215,7 +221,7 @@ public class Kute {
     }
 
     public static Resource.Readable stringResource(String path, Supplier<String> supplier) {
-        return resourceWithByteSupplier(path, () -> supplier.get().getBytes());
+        return new StringSupplierResource(path, supplier);
     }
 
     public static URLResource urlResource(final String path,
@@ -231,13 +237,11 @@ public class Kute {
     }
 
 
-    public static Resource.Provider mapResources(final Resource.Provider provider, final Function<Resource.Readable, Resource.Readable> function) {
+    public static Resource.Provider mapResources(final Resource.Provider provider, final ResourceFunction<Resource.Readable, Resource.Readable> function) {
         return new MappedResourceProvider(provider, function);
     }
 
-    public static Resource.Provider filterResources(Resource.Provider provider,
-                                                    Predicate<? super Resource>
-                                                            predicate) {
+    public static Resource.Provider filterResources(Resource.Provider provider, ResourcePredicate predicate) {
         return new FilteredResourceProvider(provider, predicate);
     }
 
@@ -277,7 +281,7 @@ public class Kute {
      * @return A stream without resource duplicates as determined by the passed function.
      */
     public static <R extends Resource, X> Stream<R> distinct(final Stream<R> stream,
-                                                             final Function<R, X> function) {
+                                                             final ResourceFunction<R, X> function) {
         return stream.filter(KuteLambdas.distinctFilter(function));
     }
 
@@ -290,7 +294,11 @@ public class Kute {
         return distinct(stream, Resource::getPath);
     }
 
-    public static MutableResource mutableResource(String s, String s1) {
-        return new MutableResource(s, s1.getBytes());
+    public static MutableBytesArrayResource mutableResource(String s, String s1) {
+        return new MutableBytesArrayResource(s, s1.getBytes());
+    }
+
+    public static Resource resource(String path) {
+        return new NamedResource(path);
     }
 }

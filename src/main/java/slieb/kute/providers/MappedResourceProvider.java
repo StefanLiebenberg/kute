@@ -1,27 +1,21 @@
 package slieb.kute.providers;
 
 import slieb.kute.api.Resource;
+import slieb.kute.api.ResourceFunction;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 public final class MappedResourceProvider implements Resource.Provider, Serializable {
 
     private final Resource.Provider provider;
-    private final Function<Resource.Readable, Resource.Readable> function;
+    private final ResourceFunction<Resource.Readable, Resource.Readable> function;
 
-    public MappedResourceProvider(Resource.Provider provider,
-                                  Function<Resource.Readable, Resource.Readable> function) {
+    public MappedResourceProvider(final Resource.Provider provider,
+                                  final ResourceFunction<Resource.Readable, Resource.Readable> function) {
         this.provider = provider;
         this.function = function;
-    }
-
-    @Override
-    public Optional<Resource.Readable> getResourceByName(String path) {
-        return provider.getResourceByName(path).map(function);
     }
 
     @Override

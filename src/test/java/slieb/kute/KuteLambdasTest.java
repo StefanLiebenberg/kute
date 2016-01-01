@@ -9,15 +9,14 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.KuteLambdas;
+import slieb.kute.api.ResourcePredicate;
 
-import java.util.function.Predicate;
 
 @RunWith(MockitoJUnitRunner.class)
 public class KuteLambdasTest {
 
     @Mock
-    Predicate<Resource> filterT, filterF, filterM;
+    ResourcePredicate<Resource> filterT, filterF, filterM;
 
     @Mock
     Resource.Readable resourceA, resourceB;

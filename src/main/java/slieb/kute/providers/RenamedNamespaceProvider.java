@@ -24,7 +24,6 @@ public final class RenamedNamespaceProvider implements Resource.Provider, Serial
         this.renamedRoot = renamedRoot;
     }
 
-
     @Override
     public Optional<Resource.Readable> getResourceByName(String path) {
         return resourceProvider.getResourceByName(getRenamedPath(path, renamedRoot, originalRoot))
@@ -42,7 +41,11 @@ public final class RenamedNamespaceProvider implements Resource.Provider, Serial
     }
 
     private static String getRenamedPath(String path, String origPath, String newPath) {
-        return path.replaceFirst(origPath, newPath);
+        if (path != null) {
+            return path.replaceFirst(origPath, newPath);
+        } else {
+            return null;
+        }
     }
 
     @Override

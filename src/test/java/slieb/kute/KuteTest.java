@@ -10,8 +10,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static slieb.kute.Kute.getDefaultProvider;
 import static slieb.kute.Kute.getProvider;
-import static slieb.kute.utils.KuteIO.readResource;
-import static slieb.kute.utils.KuteIO.readResourceWithInputStream;
+import static slieb.kute.KuteIO.readResource;
+import static slieb.kute.KuteIO.readResourceWithInputStream;
 
 
 public class KuteTest {

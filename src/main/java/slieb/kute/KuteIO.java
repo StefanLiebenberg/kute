@@ -1,6 +1,7 @@
-package slieb.kute.utils;
+package slieb.kute;
 
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
 
@@ -8,13 +9,44 @@ import java.io.*;
 
 public class KuteIO {
 
-    public void copyProviderToCreator(Resource.Provider provider,
-                                      Resource.Creator creator) {
-        provider.stream().forEach(KuteLambdas.safelyConsume(
-                resource -> copyResourceWithStreams(resource, creator.create(resource.getPath()))));
+
+    public static void serializeToStream(Serializable serializable, OutputStream outputStream) throws IOException {
+        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
+            objectOutputStream.writeObject(serializable);
+        }
     }
 
+    public static Serializable deserializeFromStream(InputStream inputStream) throws IOException, ClassNotFoundException {
+        try (ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
+            return (Serializable) objectInputStream.readObject();
+        }
+    }
 
+    public static <T> T deserialize(byte[] bytes, Class<T> classT) throws IOException, ClassNotFoundException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+        Serializable serializable = deserializeFromStream(bais);
+        Preconditions.checkState(classT.isInstance(serializable));
+        //noinspection unchecked
+        return (T) serializable;
+    }
+
+    public static byte[] serialize(Serializable object) throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        serializeToStream(object, baos);
+        return baos.toByteArray();
+    }
+
+    /**
+     * Copy all resource in provider over to some creator.
+     *
+     * @param provider The resource provider, or source location.
+     * @param creator  The resource creator, or destination location.
+     */
+    public void copyProviderToCreator(Resource.Provider provider,
+                                      Resource.Creator creator) {
+        provider.stream().forEach(KuteLambdas.unsafeConsumer(resource ->
+                copyResourceWithStreams(resource, creator.create(resource.getPath()))));
+    }
 
 
     /**
@@ -60,25 +92,19 @@ public class KuteIO {
      */
     public static void writeResource(final Resource.Writable resource,
                                      final CharSequence content) throws IOException {
-        try (Writer writer = resource.getWriter()) {
-            IOUtils.write(content.toString(), writer);
-        }
+        resource.useWriter(writer -> IOUtils.write(content.toString(), writer));
     }
 
 
     public static void writeResourceWithOutputStream(final Resource.Writable resource,
                                                      final CharSequence content) throws IOException {
-        try (OutputStream stream = resource.getOutputStream()) {
-            IOUtils.write(content.toString(), stream);
-        }
+        resource.useOutputStream(stream -> IOUtils.write(content.toString(), stream));
     }
 
     public static void writeResourceWithOutputStream(final Resource.Writable resource,
                                                      final CharSequence content,
                                                      final String encoding) throws IOException {
-        try (OutputStream stream = resource.getOutputStream()) {
-            IOUtils.write(content.toString(), stream, encoding);
-        }
+        resource.useOutputStream(stream -> IOUtils.write(content.toString(), stream, encoding));
     }
 
     /**
@@ -90,17 +116,12 @@ public class KuteIO {
      */
     public static void copyResource(Resource.Readable readable,
                                     Resource.Writable writable) throws IOException {
-        try (Reader reader = readable.getReader(); Writer writer = writable.getWriter()) {
-            IOUtils.copy(reader, writer);
-        }
+        readable.useReader(reader -> writable.useWriter(writer -> IOUtils.copy(reader, writer)));
     }
 
-    public static void copyResourceWithStreams(Resource.Readable inputStreaming,
-                                               Resource.Writable outputStreaming) throws IOException {
-        try (InputStream inputStream = inputStreaming.getInputStream();
-             OutputStream outputStream = outputStreaming.getOutputStream()) {
-            IOUtils.copy(inputStream, outputStream);
-        }
+    public static void copyResourceWithStreams(Resource.Readable readable,
+                                               Resource.Writable writable) throws IOException {
+        readable.useInputStream(istream -> writable.useOutputStream(ostream -> IOUtils.copy(istream, ostream)));
     }
 
     public static byte[] readBytes(Resource.Readable resource) throws IOException {
@@ -111,6 +132,10 @@ public class KuteIO {
         try (final Reader reader = resource.getReader()) {
             return IOUtils.toString(reader);
         }
+    }
+
+    public static String readResourceUnsafe(Resource.Readable readable) {
+        return KuteLambdas.unsafeMap(KuteIO::readResource).apply(readable);
     }
 
 

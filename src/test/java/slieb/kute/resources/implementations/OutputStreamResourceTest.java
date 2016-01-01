@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static slieb.kute.utils.KuteIO.writeResourceWithOutputStream;
+import static slieb.kute.KuteIO.writeResourceWithOutputStream;
 
 
 @RunWith(MockitoJUnitRunner.class)

@@ -12,14 +12,13 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
-import static slieb.kute.utils.KuteIO.readResource;
+import static slieb.kute.KuteIO.readResource;
 
 
 public class CachedResourceTest {
 
     @Test
     public void testThreadSafe() {
-
 
         Resource.Readable readable = getCounterResource();
         Resource.Readable cached = new CachedResource(readable);
@@ -52,13 +51,16 @@ public class CachedResourceTest {
     public void testCache() throws Throwable {
 
         Resource.Readable readable = getCounterResource();
-        Resource.Readable cached = new CachedResource(readable);
+        CachedResource cached = new CachedResource(readable);
 
         assertEquals("0", readResource(cached));
         assertEquals("0", readResource(cached));
         assertEquals("1", readResource(readable));
         assertEquals("2", readResource(readable));
         assertEquals("0", readResource(cached));
+
+        cached.clear();
+        assertEquals("3", readResource(cached));
 
     }
 

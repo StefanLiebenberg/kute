@@ -3,8 +3,8 @@ package slieb.kute.api;
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import org.junit.Test;
 import org.mockito.Mockito;
-import slieb.kute.utils.KuteDigest;
-import slieb.kute.utils.KuteIO;
+import slieb.kute.KuteDigest;
+import slieb.kute.KuteIO;
 
 import java.io.*;
 import java.nio.charset.Charset;

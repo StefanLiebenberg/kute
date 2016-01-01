@@ -4,101 +4,97 @@ import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import slieb.kute.Kute;
 import slieb.kute.api.Resource;
-import slieb.kute.resources.MutableBytesArrayResource;
-import slieb.kute.KuteDigest;
 import slieb.kute.KuteIO;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
-import static slieb.kute.KuteIO.readResource;
 import static slieb.kute.KuteLambdas.unsafeMap;
-import static slieb.kute.KutePredicates.resourceEquals;
 
+public class ConcurrentMapResourceProviderTest implements ProviderTestInterface {
 
-public class ChecksumCachedMapProviderTest implements ProviderTestInterface {
-
-    private MutableBytesArrayResource resourceA, resourceB;
-
-    private Resource.Provider rawProvider;
-
-    private ChecksumCachedMapProvider provider;
+    private ConcurrentMapResourceProvider provider;
 
     @Before
     public void setUp() throws Exception {
-        resourceA = Kute.mutableResource("/resources/a", "content A");
-        resourceB = Kute.mutableResource("/resources/b", "content B");
-        Resource.Checksumable checksumable = KuteDigest.join(resourceA, resourceB);
-        rawProvider = Kute.providerOf(resourceA, resourceB);
-        provider = new ChecksumCachedMapProvider(rawProvider, checksumable);
+        provider = new ConcurrentMapResourceProvider();
+        createContent("/directory/index.html", "index content");
+        createContent("/directory/other.html", "other content");
     }
 
-
-
-
-
-
     @Override
-    @Test
     public void shouldNotProvideDirectoriesInStream() throws Exception {
-        Assert.assertFalse(provider.stream().anyMatch(resource -> resource.getPath().equals("/resources")));
-        Assert.assertTrue(provider.stream().anyMatch(resource -> resource.getPath().startsWith("/resources")));
+        Assert.assertFalse(provider.stream().anyMatch(resource -> resource.getPath().equals("/directory")));
+        Assert.assertTrue(provider.stream().anyMatch(resource -> resource.getPath().startsWith("/directory")));
     }
 
     @Override
     @Test
     public void shouldNotProvideDirectoriesInGetByPath() throws Exception {
-        Assert.assertFalse(provider.getResourceByName("/resources").isPresent());
-        Assert.assertTrue(provider.getResourceByName("/resources/b").isPresent());
+        Assert.assertFalse(provider.getResourceByName("/directory").isPresent());
+    }
+
+    private void createContent(String path, String content) throws IOException {
+        KuteIO.writeResource(provider.create(path), content);
     }
 
     @Override
     @Test
     public void shouldNeverReturnNullOnGetByPath() throws Exception {
-        Assert.assertNotNull(provider.getResourceByName("does/not/exist"));
-        Assert.assertNotNull(provider.getResourceByName("att all"));
-        Assert.assertNotNull(provider.getResourceByName("$%@/243/52/45"));
+        Assert.assertNotNull(provider.getResourceByName(""));
+        Assert.assertNotNull(provider.getResourceByName("/no exist"));
+        Assert.assertNotNull(provider.getResourceByName("/no/exist"));
     }
 
     @Override
     @Test
     public void shouldReturnElementsInStream() throws Exception {
         Assert.assertEquals(2, provider.stream().count());
+        Assert.assertEquals(
+                Sets.newHashSet(provider.getResourceByName("/directory/index.html").get(),
+                        provider.getResourceByName("/directory/other.html").get())
+                , provider.stream().collect(toSet()));
+
     }
 
     @Override
     @Test
     public void shouldReturnPresentOptionalInGetByPath() throws Exception {
-        Assert.assertTrue(provider.getResourceByName("/resources/a").isPresent());
-        Assert.assertTrue(provider.getResourceByName("/resources/b").isPresent());
+        Assert.assertTrue(provider.getResourceByName("/directory/index.html").isPresent());
     }
 
     @Override
     @Test
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
-                Sets.newHashSet("content A", "content B"),
+                Sets.newHashSet("index content", "other content"),
                 provider.stream().map(unsafeMap(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override
     @Test
     public void shouldReturnResourceWithCorrectContentInGetByPath() throws Exception {
-        Assert.assertEquals("content A", readResource(provider.getResourceByName("/resources/a").get()));
-        Assert.assertEquals("content B", readResource(provider.getResourceByName("/resources/b").get()));
+        Assert.assertEquals("index content", KuteIO.readResource(provider.getResourceByName("/directory/index.html").get()));
+        Assert.assertEquals("other content", KuteIO.readResource(provider.getResourceByName("/directory/other.html").get()));
     }
 
     @Override
     @Test
     public void shouldReturnAllResourcesInStreamInGetByPath() throws Exception {
-        for (Resource.Readable readable : provider) {
+        provider.stream().forEach(readable -> {
             Optional<Resource.Readable> optional = provider.getResourceByName(readable.getPath());
             Assert.assertTrue(optional.isPresent());
             Assert.assertEquals(readable, optional.get());
-            Assert.assertTrue(resourceEquals(readable, optional.get()));
-        }
+        });
+    }
+
+    @Test
+    public void shouldClearStuff() throws Exception {
+        provider.clear();
+        Assert.assertEquals(0, provider.stream().count());
+        Assert.assertFalse(provider.getResourceByName("/directory/index.html").isPresent());
     }
 
     @Override

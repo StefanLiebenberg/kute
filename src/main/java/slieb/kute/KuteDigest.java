@@ -1,27 +1,21 @@
-package slieb.kute.utils;
+package slieb.kute;
 
 
 import slieb.kute.api.Resource;
+import slieb.kute.internal.JoinedChecksumable;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 public class KuteDigest {
 
     public static Resource.Checksumable join(Resource.Checksumable... checksumables) {
-        return digest -> {
-            for (Resource.Checksumable checksumable : checksumables) {
-                checksumable.updateDigest(digest);
-            }
-        };
+        return new JoinedChecksumable(checksumables);
     }
 
-    public static Resource.Checksumable join(Iterable<Resource.Checksumable> checksumables) {
-        return digest -> {
-            for (Resource.Checksumable checksumable : checksumables) {
-                checksumable.updateDigest(digest);
-            }
-        };
+    public static Resource.Checksumable join(List<Resource.Checksumable> checksumables) {
+        return new JoinedChecksumable(checksumables);
     }
 
     public static byte[] md5(Resource.Checksumable resourceProvider) {

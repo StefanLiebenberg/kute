@@ -11,8 +11,8 @@ import java.nio.file.Files;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static slieb.kute.utils.KuteIO.readResource;
-import static slieb.kute.utils.KuteIO.writeResource;
+import static slieb.kute.KuteIO.readResource;
+import static slieb.kute.KuteIO.writeResource;
 
 
 public class FileResourceTest {
@@ -56,10 +56,10 @@ public class FileResourceTest {
             IOUtils.writeLines(lines, System.lineSeparator(), outputStream);
         }
 
-        try (InputStream inputStream = fileResource.getInputStream()) {
+        fileResource.useInputStream(inputStream -> {
             assertNotNull(inputStream);
             assertEquals(lines, IOUtils.readLines(inputStream));
-        }
+        });
     }
 
     @Test
