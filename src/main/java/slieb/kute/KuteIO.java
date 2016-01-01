@@ -1,4 +1,4 @@
-package slieb.kute.utils;
+package slieb.kute;
 
 
 import com.google.common.base.Preconditions;
@@ -6,8 +6,6 @@ import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
 
 import java.io.*;
-
-import static slieb.kute.utils.KuteLambdas.unsafeConsumer;
 
 public class KuteIO {
 
@@ -46,7 +44,7 @@ public class KuteIO {
      */
     public void copyProviderToCreator(Resource.Provider provider,
                                       Resource.Creator creator) {
-        provider.stream().forEach(unsafeConsumer(resource ->
+        provider.stream().forEach(KuteLambdas.unsafeConsumer(resource ->
                 copyResourceWithStreams(resource, creator.create(resource.getPath()))));
     }
 

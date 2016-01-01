@@ -3,23 +3,19 @@ package slieb.kute.providers;
 import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.Mockito;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 import slieb.kute.resources.MutableBytesArrayResource;
-import slieb.kute.utils.KuteDigest;
-import slieb.kute.utils.KuteIO;
+import slieb.kute.KuteDigest;
+import slieb.kute.KuteIO;
 
-import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static slieb.kute.utils.KuteIO.readResource;
-import static slieb.kute.utils.KuteLambdas.unsafeMap;
-import static slieb.kute.utils.KutePredicates.resourceEquals;
+import static slieb.kute.KuteIO.readResource;
+import static slieb.kute.KuteLambdas.unsafeMap;
+import static slieb.kute.KutePredicates.resourceEquals;
 
 
 public class ChecksumCachedMapProviderTest implements ProviderTestInterface {

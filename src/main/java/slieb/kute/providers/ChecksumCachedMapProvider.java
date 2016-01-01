@@ -3,7 +3,7 @@ package slieb.kute.providers;
 
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.KuteDigest;
+import slieb.kute.KuteDigest;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static slieb.kute.utils.KuteLambdas.unsafeMap;
+import static slieb.kute.KuteLambdas.unsafeMap;
 
 public final class ChecksumCachedMapProvider implements Resource.Provider {
 

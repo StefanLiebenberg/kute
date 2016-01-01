@@ -1,4 +1,4 @@
-package slieb.kute.utils;
+package slieb.kute;
 
 
 import org.apache.commons.io.IOUtils;

@@ -1,7 +1,7 @@
 package slieb.kute.resources;
 
 import slieb.kute.api.Resource;
-import slieb.kute.utils.interfaces.SupplierWithIO;
+import slieb.kute.api.SupplierWithIO;
 
 import java.io.IOException;
 import java.io.InputStream;

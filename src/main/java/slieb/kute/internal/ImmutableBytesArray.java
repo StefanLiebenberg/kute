@@ -1,4 +1,4 @@
-package slieb.kute.utils.internal;
+package slieb.kute.internal;
 
 import java.io.Serializable;
 import java.util.Arrays;

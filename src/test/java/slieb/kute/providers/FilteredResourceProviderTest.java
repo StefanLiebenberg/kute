@@ -5,9 +5,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.KuteIO;
-import slieb.kute.utils.KuteLambdas;
-import slieb.kute.utils.interfaces.ResourcePredicate;
+import slieb.kute.KuteIO;
+import slieb.kute.KuteLambdas;
+import slieb.kute.api.ResourcePredicate;
 
 import java.util.Objects;
 import java.util.Optional;

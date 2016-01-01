@@ -1,7 +1,7 @@
 package slieb.kute.providers;
 
 import slieb.kute.api.Resource;
-import slieb.kute.utils.interfaces.ResourcePredicate;
+import slieb.kute.api.ResourcePredicate;
 
 import java.util.Objects;
 import java.util.Optional;

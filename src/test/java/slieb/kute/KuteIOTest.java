@@ -6,7 +6,7 @@ import slieb.kute.api.Resource;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static slieb.kute.Kute.*;
-import static slieb.kute.utils.KutePredicates.*;
+import static slieb.kute.KutePredicates.*;
 
 
 public class KuteIOTest {

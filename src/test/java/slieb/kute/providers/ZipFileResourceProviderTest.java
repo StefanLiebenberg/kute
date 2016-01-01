@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.KuteIO;
+import slieb.kute.KuteIO;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +16,8 @@ import java.util.zip.ZipFile;
 import static com.google.common.collect.Sets.newHashSet;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
-import static slieb.kute.utils.KuteIO.readResource;
-import static slieb.kute.utils.KuteIO.readResourceWithInputStream;
+import static slieb.kute.KuteIO.readResource;
+import static slieb.kute.KuteIO.readResourceWithInputStream;
 
 
 public class ZipFileResourceProviderTest implements ProviderTestInterface {

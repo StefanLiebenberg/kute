@@ -1,9 +1,8 @@
-package slieb.kute.utils;
+package slieb.kute;
 
 
 import com.google.common.collect.Maps;
-import slieb.kute.api.Resource;
-import slieb.kute.utils.interfaces.*;
+import slieb.kute.api.*;
 
 import java.io.IOException;
 import java.util.Map;

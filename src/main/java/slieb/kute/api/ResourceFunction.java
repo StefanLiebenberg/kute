@@ -1,4 +1,4 @@
-package slieb.kute.utils.interfaces;
+package slieb.kute.api;
 
 import slieb.kute.api.Resource;
 

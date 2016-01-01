@@ -1,7 +1,7 @@
 package slieb.kute.api;
 
 import slieb.kute.Kute;
-import slieb.kute.utils.KuteIO;
+import slieb.kute.KuteIO;
 
 import java.io.*;
 import java.security.MessageDigest;

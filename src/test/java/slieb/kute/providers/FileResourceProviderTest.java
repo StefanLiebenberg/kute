@@ -8,7 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.KuteIO;
+import slieb.kute.KuteIO;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
-import static slieb.kute.utils.KuteIO.readResource;
-import static slieb.kute.utils.KuteLambdas.unsafeMap;
+import static slieb.kute.KuteIO.readResource;
+import static slieb.kute.KuteLambdas.unsafeMap;
 
 public class FileResourceProviderTest implements ProviderTestInterface {
 

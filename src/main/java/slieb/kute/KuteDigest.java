@@ -1,8 +1,8 @@
-package slieb.kute.utils;
+package slieb.kute;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.utils.internal.JoinedChecksumable;
+import slieb.kute.internal.JoinedChecksumable;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;

@@ -1,7 +1,6 @@
 package slieb.kute;
 
 import org.junit.Test;
-import slieb.kute.utils.KuteLambdas;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package slieb.kute.utils.interfaces;
+package slieb.kute.api;
 
 import java.io.IOException;
 import java.io.Serializable;

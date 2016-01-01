@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 import slieb.kute.resources.MutableBytesArrayResource;
-import slieb.kute.utils.KuteDigest;
+import slieb.kute.KuteDigest;
 
 import java.util.List;
 import java.util.stream.Stream;

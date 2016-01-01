@@ -4,11 +4,9 @@ package slieb.kute;
 import slieb.kute.api.Resource;
 import slieb.kute.providers.*;
 import slieb.kute.resources.*;
-import slieb.kute.utils.KuteIO;
-import slieb.kute.utils.KuteLambdas;
-import slieb.kute.utils.interfaces.ResourceFunction;
-import slieb.kute.utils.interfaces.ResourcePredicate;
-import slieb.kute.utils.interfaces.SupplierWithIO;
+import slieb.kute.api.ResourceFunction;
+import slieb.kute.api.ResourcePredicate;
+import slieb.kute.api.SupplierWithIO;
 
 import java.io.File;
 import java.io.IOException;

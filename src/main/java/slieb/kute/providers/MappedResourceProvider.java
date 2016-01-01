@@ -1,7 +1,7 @@
 package slieb.kute.providers;
 
 import slieb.kute.api.Resource;
-import slieb.kute.utils.interfaces.ResourceFunction;
+import slieb.kute.api.ResourceFunction;
 
 import java.io.Serializable;
 import java.util.Objects;

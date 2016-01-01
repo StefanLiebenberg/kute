@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.KuteIO;
-import slieb.kute.utils.interfaces.SupplierWithIO;
+import slieb.kute.KuteIO;
+import slieb.kute.api.SupplierWithIO;
 
 import java.io.File;
 import java.io.FileInputStream;

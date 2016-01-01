@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.Assert.assertEquals;
-import static slieb.kute.utils.KuteIO.readResource;
+import static slieb.kute.KuteIO.readResource;
 
 
 public class CachedResourceTest {

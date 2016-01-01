@@ -9,8 +9,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.KuteLambdas;
-import slieb.kute.utils.interfaces.ResourcePredicate;
+import slieb.kute.api.ResourcePredicate;
 
 
 @RunWith(MockitoJUnitRunner.class)

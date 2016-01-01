@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import static slieb.kute.utils.KuteIO.readResource;
+import static slieb.kute.KuteIO.readResource;
 
 public class URLResourceTest {
 

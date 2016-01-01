@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static slieb.kute.Kute.*;
-import static slieb.kute.utils.KuteIO.*;
+import static slieb.kute.KuteIO.*;
 
 
 public class ResourcesTest {

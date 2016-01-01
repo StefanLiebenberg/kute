@@ -1,4 +1,4 @@
-package slieb.kute.utils.internal;
+package slieb.kute.internal;
 
 import slieb.kute.api.Resource;
 

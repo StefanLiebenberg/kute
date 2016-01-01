@@ -4,7 +4,7 @@ import com.google.common.io.ByteStreams;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.interfaces.SupplierWithIO;
+import slieb.kute.api.SupplierWithIO;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
