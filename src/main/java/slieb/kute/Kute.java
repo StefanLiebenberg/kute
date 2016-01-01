@@ -7,7 +7,7 @@ import slieb.kute.providers.MappedResourceProvider;
 import slieb.kute.providers.URLArrayResourceProvider;
 import slieb.kute.resources.*;
 import slieb.kute.utils.ByteInputStreamSupplier;
-import slieb.kute.utils.BytesSupplier;
+import slieb.kute.utils.ByteArraySupplier;
 import slieb.kute.utils.KuteIO;
 import slieb.kute.utils.KuteLambdas;
 import slieb.kute.utils.interfaces.ResourceFunction;
@@ -196,7 +196,7 @@ public class Kute {
     }
 
     public static Resource.Readable resourceWithBytes(final String path, final byte[] bytes) {
-        return resourceWithByteSupplier(path, new BytesSupplier(bytes));
+        return resourceWithByteSupplier(path, new ByteArraySupplier(bytes));
     }
 
     public static Resource.Readable resourceWithByteSupplier(final String path, final SupplierWithIO<byte[]> byteSupplier) {
