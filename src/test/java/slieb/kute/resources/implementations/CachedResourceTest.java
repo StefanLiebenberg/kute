@@ -19,8 +19,7 @@ public class CachedResourceTest {
 
     @Test
     public void testThreadSafe() {
-
-
+        
         Resource.Readable readable = getCounterResource();
         Resource.Readable cached = new CachedResource(readable);
 

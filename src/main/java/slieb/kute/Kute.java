@@ -6,7 +6,6 @@ import slieb.kute.providers.FilteredResourceProvider;
 import slieb.kute.providers.MappedResourceProvider;
 import slieb.kute.providers.URLArrayResourceProvider;
 import slieb.kute.resources.*;
-import slieb.kute.utils.ByteInputStreamSupplier;
 import slieb.kute.utils.KuteIO;
 import slieb.kute.utils.KuteLambdas;
 import slieb.kute.utils.interfaces.ResourceFunction;
@@ -198,9 +197,6 @@ public class Kute {
         return new BytesArrayResource(path, bytes);
     }
 
-    public static Resource.Readable resourceWithByteSupplier(final String path, final SupplierWithIO<byte[]> byteSupplier) {
-        return inputStreamResource(path, new ByteInputStreamSupplier(byteSupplier));
-    }
 
     /**
      * Create a resource that cache's its response.
@@ -218,8 +214,9 @@ public class Kute {
         return resourceWithBytes(path, content.getBytes());
     }
 
+    @Deprecated
     public static Resource.Readable stringResource(String path, Supplier<String> supplier) {
-        return resourceWithByteSupplier(path, () -> supplier.get().getBytes());
+        return new StringSupplierResource(path, supplier);
     }
 
     public static URLResource urlResource(final String path,
