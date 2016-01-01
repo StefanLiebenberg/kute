@@ -7,7 +7,6 @@ import slieb.kute.providers.MappedResourceProvider;
 import slieb.kute.providers.URLArrayResourceProvider;
 import slieb.kute.resources.*;
 import slieb.kute.utils.ByteInputStreamSupplier;
-import slieb.kute.utils.ByteArraySupplier;
 import slieb.kute.utils.KuteIO;
 import slieb.kute.utils.KuteLambdas;
 import slieb.kute.utils.interfaces.ResourceFunction;
@@ -134,7 +133,7 @@ public class Kute {
     }
 
 
-    public static Resource.Readable memoryResource(Resource.Readable readable) throws IOException {
+    public static Resource.Readable immutableMemoryResource(Resource.Readable readable) throws IOException {
         return Kute.resourceWithBytes(readable.getPath(), KuteIO.readBytes(readable));
     }
 
@@ -196,7 +195,7 @@ public class Kute {
     }
 
     public static Resource.Readable resourceWithBytes(final String path, final byte[] bytes) {
-        return resourceWithByteSupplier(path, new ByteArraySupplier(bytes));
+        return new BytesArrayResource(path, bytes);
     }
 
     public static Resource.Readable resourceWithByteSupplier(final String path, final SupplierWithIO<byte[]> byteSupplier) {
@@ -293,8 +292,8 @@ public class Kute {
         return distinct(stream, Resource::getPath);
     }
 
-    public static MutableResource mutableResource(String s, String s1) {
-        return new MutableResource(s, s1.getBytes());
+    public static MutableBytesArrayResource mutableResource(String s, String s1) {
+        return new MutableBytesArrayResource(s, s1.getBytes());
     }
 
     public static Resource resource(String path) {

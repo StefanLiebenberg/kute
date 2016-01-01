@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.Kute;
 import slieb.kute.utils.KuteDigest;
 import slieb.kute.api.Resource;
-import slieb.kute.resources.MutableResource;
+import slieb.kute.resources.MutableBytesArrayResource;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -22,7 +22,7 @@ import static java.util.stream.Collectors.toList;
 public class ChecksumCachedMapProviderTest {
 
 
-    private MutableResource resourceA, resourceB;
+    private MutableBytesArrayResource resourceA, resourceB;
 
     @Mock
     private Resource.Provider mockProvider;

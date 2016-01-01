@@ -2,7 +2,7 @@ package slieb.kute.providers;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.resources.MutableResource;
+import slieb.kute.resources.MutableBytesArrayResource;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class ConcurrentMapResourceProvider implements Resource.Provider, Resource.Creator {
 
-    private final ConcurrentHashMap<String, MutableResource> concurrentHashMap;
+    private final ConcurrentHashMap<String, MutableBytesArrayResource> concurrentHashMap;
 
     public ConcurrentMapResourceProvider() {
         this.concurrentHashMap = new ConcurrentHashMap<>();
@@ -20,7 +20,7 @@ public class ConcurrentMapResourceProvider implements Resource.Provider, Resourc
     @Override
     public Resource.Writable create(String path) {
         if (!concurrentHashMap.containsKey(path)) {
-            concurrentHashMap.put(path, new MutableResource(path));
+            concurrentHashMap.put(path, new MutableBytesArrayResource(path));
         }
         return concurrentHashMap.get(path);
     }

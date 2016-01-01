@@ -28,7 +28,7 @@ public class KuteIOTest {
     public void testEquals() throws Exception {
         Resource.Readable resource = stringResource("/path", "content");
         Resource.Readable alternative = stringResource("/path", "alternative");
-        Resource.Readable copiedResource = memoryResource(resource);
+        Resource.Readable copiedResource = immutableMemoryResource(resource);
         Resource.Readable renamed = renameResource("/other", resource);
 
         assertTrue(resourceEquals(resource, copiedResource));
