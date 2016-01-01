@@ -6,16 +6,22 @@ import slieb.kute.providers.FilteredResourceProvider;
 import slieb.kute.providers.MappedResourceProvider;
 import slieb.kute.providers.URLArrayResourceProvider;
 import slieb.kute.resources.*;
+import slieb.kute.utils.ByteInputStreamSupplier;
+import slieb.kute.utils.BytesSupplier;
 import slieb.kute.utils.KuteIO;
 import slieb.kute.utils.KuteLambdas;
-import slieb.kute.utils.SupplierWithIO;
+import slieb.kute.utils.interfaces.ResourceFunction;
+import slieb.kute.utils.interfaces.ResourcePredicate;
+import slieb.kute.utils.interfaces.SupplierWithIO;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -190,11 +196,11 @@ public class Kute {
     }
 
     public static Resource.Readable resourceWithBytes(final String path, final byte[] bytes) {
-        return resourceWithByteSupplier(path, SupplierWithIO.ofInstance(bytes));
+        return resourceWithByteSupplier(path, new BytesSupplier(bytes));
     }
 
     public static Resource.Readable resourceWithByteSupplier(final String path, final SupplierWithIO<byte[]> byteSupplier) {
-        return inputStreamResource(path, () -> new ByteArrayInputStream(byteSupplier.getWithIO()));
+        return inputStreamResource(path, new ByteInputStreamSupplier(byteSupplier));
     }
 
     /**
@@ -230,14 +236,12 @@ public class Kute {
     }
 
 
-    public static Resource.Provider mapResources(final Resource.Provider provider, final Function<Resource.Readable, Resource.Readable> function) {
+    public static Resource.Provider mapResources(final Resource.Provider provider, final ResourceFunction<Resource.Readable, Resource.Readable> function) {
         return new MappedResourceProvider(provider, function);
     }
 
-    public static Resource.Provider filterResources(Resource.Provider provider,
-                                                    Predicate<? super Resource>
-                                                            predicate) {
-        return new FilteredResourceProvider(provider, (Serializable & Predicate<? super Resource>) predicate);
+    public static Resource.Provider filterResources(Resource.Provider provider, ResourcePredicate predicate) {
+        return new FilteredResourceProvider(provider, predicate);
     }
 
     public static Resource.Readable zipEntryResource(final ZipFile zipFile,
@@ -291,5 +295,9 @@ public class Kute {
 
     public static MutableResource mutableResource(String s, String s1) {
         return new MutableResource(s, s1.getBytes());
+    }
+
+    public static Resource resource(String path) {
+        return new NamedResource(path);
     }
 }

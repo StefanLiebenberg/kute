@@ -7,7 +7,6 @@ import slieb.kute.utils.KuteLambdas;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
@@ -37,7 +36,7 @@ public final class FileResourceProvider implements Resource.Provider, Resource.C
     @Override
     public Stream<Resource.Readable> stream() {
         if (canProvideDirectory()) {
-            return KuteLambdas.safelySupply(this::streamInternal).get();
+            return KuteLambdas.unsafeSupply(this::streamInternal).get();
         } else {
             return Stream.empty();
         }

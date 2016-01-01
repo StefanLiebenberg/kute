@@ -27,7 +27,7 @@ public class InputStreamResourceTest {
 
     @Before
     public void setUp() throws Exception {
-        outputStreamResource = new InputStreamResource("/output", mockSupplier);
+        outputStreamResource = new InputStreamResource("/output", mockSupplier::get);
     }
 
 

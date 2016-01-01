@@ -7,10 +7,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import slieb.kute.utils.KuteLambdas;
 import slieb.kute.api.Resource;
+import slieb.kute.utils.KuteLambdas;
+import slieb.kute.utils.interfaces.ResourcePredicate;
 
-import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static java.util.stream.IntStream.range;
@@ -25,7 +25,7 @@ public class PatternFilterTest {
     private Resource mockResource;
 
 
-    private Predicate<Resource> patternFilter;
+    private ResourcePredicate<Resource> patternFilter;
 
     @Before
     public void setUp() throws Exception {

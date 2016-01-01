@@ -1,15 +1,18 @@
 package slieb.kute.providers;
 
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.api.Resource;
 import slieb.kute.utils.KuteIO;
+import slieb.kute.utils.interfaces.SupplierWithIO;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.zip.ZipInputStream;
 
 import static com.google.common.collect.Sets.newHashSet;
@@ -24,13 +27,7 @@ public class ZipStreamResourceProviderTest implements ProviderTestInterface {
     public void setup() throws Exception {
         URL url = getClass().getResource("/resources-sample.zip");
         File file = new File(url.getFile());
-        provider = new ZipStreamResourceProvider(() -> {
-            try {
-                return new ZipInputStream(new FileInputStream(file));
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        provider = new ZipStreamResourceProvider(new ZipSupplier(file));
     }
 
     @Test
@@ -87,22 +84,71 @@ public class ZipStreamResourceProviderTest implements ProviderTestInterface {
     }
 
     @Override
+    @Test
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
-
+        assertEquals(
+                Sets.newHashSet("resource content for /resource.txt\n", "resource content for /nested/resource.txt\n",
+                        "resource content for /nested/other.txt\n"),
+                provider.stream().map(KuteIO::readResourceUnsafe).collect(toSet()));
     }
 
     @Override
+    @Test
     public void shouldReturnResourceWithCorrectContentInGetByPath() throws Exception {
-
+        assertEquals("resource content for /resource.txt\n", KuteIO.readResource(provider.getResourceByName("/resource.txt").get()));
+        assertEquals("resource content for /nested/resource.txt\n", KuteIO.readResource(provider.getResourceByName("/nested/resource.txt").get()));
+        assertEquals("resource content for /nested/other.txt\n", KuteIO.readResource(provider.getResourceByName("/nested/other.txt").get()));
     }
 
     @Override
+    @Test
     public void shouldReturnAllResourcesInStreamInGetByPath() throws Exception {
-
+        provider.stream().forEach(resource -> {
+            assertEquals(Optional.of(resource), provider.getResourceByName(resource.getPath()));
+        });
     }
 
     @Override
+    @Test
     public void shouldBeSerializable() throws Exception {
+        final ZipStreamResourceProvider loaded = KuteIO.deserialize(KuteIO.serialize(provider), provider.getClass());
+        assertEquals(provider, loaded);
+        assertEquals(provider.toString(), loaded.toString());
+        assertEquals(provider.hashCode(), loaded.hashCode());
+        assertTrue(provider.equals(loaded));
+    }
+}
 
+class ZipSupplier implements SupplierWithIO<ZipInputStream> {
+
+    private final File file;
+
+    public ZipSupplier(File file) {
+        this.file = file;
+    }
+
+    @Override
+    public ZipInputStream getWithIO() throws IOException {
+        return new ZipInputStream(new FileInputStream(file));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ZipSupplier)) return false;
+        ZipSupplier that = (ZipSupplier) o;
+        return Objects.equals(file, that.file);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(file);
+    }
+
+    @Override
+    public String toString() {
+        return "ZipSupplier{" +
+                "file=" + file +
+                '}';
     }
 }

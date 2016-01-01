@@ -7,11 +7,10 @@ import org.junit.Test;
 import slieb.kute.api.Resource;
 import slieb.kute.utils.KuteIO;
 import slieb.kute.utils.KuteLambdas;
+import slieb.kute.utils.interfaces.ResourcePredicate;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 
@@ -19,7 +18,7 @@ public class FilteredResourceProviderTest implements ProviderTestInterface {
 
     private FilteredResourceProvider provider;
 
-    private Predicate<Resource> filter;
+    private ResourcePredicate filter;
 
     private ConcurrentMapResourceProvider memoryProvider;
 
@@ -82,7 +81,7 @@ public class FilteredResourceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content"),
-                provider.stream().map(KuteLambdas.safelyMapWithIO(KuteIO::readResource)).collect(Collectors.toSet()));
+                provider.stream().map(KuteLambdas.unsafeMap(KuteIO::readResource)::apply).collect(Collectors.toSet()));
     }
 
     @Override
@@ -114,7 +113,7 @@ public class FilteredResourceProviderTest implements ProviderTestInterface {
     }
 }
 
-class PassFilter implements Predicate<Resource>, Serializable {
+class PassFilter implements ResourcePredicate<Resource> {
 
     private final String value;
 

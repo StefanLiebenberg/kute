@@ -1,13 +1,12 @@
 package slieb.kute.resources;
 
 import slieb.kute.api.Resource;
-import slieb.kute.utils.SupplierWithIO;
+import slieb.kute.utils.interfaces.SupplierWithIO;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.function.Supplier;
 
 
 public class InputStreamResource implements Resource.Readable, Serializable {
@@ -15,16 +14,12 @@ public class InputStreamResource implements Resource.Readable, Serializable {
     private final String path;
     private final SupplierWithIO<InputStream> supplier;
 
-    public InputStreamResource(String path,
-                               SupplierWithIO<InputStream> supplierWithIO) {
+    public InputStreamResource(final String path,
+                               final SupplierWithIO<InputStream> resourceSupplierWithIO) {
         this.path = path;
-        this.supplier = supplierWithIO;
+        this.supplier = resourceSupplierWithIO;
     }
 
-    public InputStreamResource(String path,
-                               Supplier<InputStream> inputStream) {
-        this(path, (SupplierWithIO<InputStream>) inputStream::get);
-    }
 
     @Override
     public InputStream getInputStream() throws IOException {

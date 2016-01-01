@@ -5,12 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import slieb.kute.Kute;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.assertEquals;
@@ -38,8 +36,7 @@ public final class ResourceProviderTest {
 
     @Test
     public void testFilteredResourceProvider() throws Exception {
-        filterResources(providerOf(resourceA, resourceB, resourceC),
-                (Predicate<? super Resource> & Serializable) resource -> true);
+        filterResources(providerOf(resourceA, resourceB, resourceC), resource -> true);
     }
 
 

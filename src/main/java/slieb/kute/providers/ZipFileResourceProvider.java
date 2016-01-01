@@ -3,6 +3,7 @@ package slieb.kute.providers;
 import slieb.kute.Kute;
 import slieb.kute.api.Resource;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -39,6 +40,25 @@ public class ZipFileResourceProvider implements Resource.Provider {
         return Kute.zipEntryResource("/" + zipEntry.getName(), zipFile, zipEntry);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ZipFileResourceProvider)) return false;
+        ZipFileResourceProvider readables = (ZipFileResourceProvider) o;
+        return Objects.equals(zipFile, readables.zipFile);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(zipFile);
+    }
+
+    @Override
+    public String toString() {
+        return "ZipFileResourceProvider{" +
+                "zipFile=" + zipFile +
+                '}';
+    }
 }
 
 

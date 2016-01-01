@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
 import static slieb.kute.utils.KuteIO.readResource;
-import static slieb.kute.utils.KuteLambdas.safelyMapWithIO;
+import static slieb.kute.utils.KuteLambdas.unsafeMap;
 
 public class FileResourceProviderTest implements ProviderTestInterface {
 
@@ -83,7 +83,7 @@ public class FileResourceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content", "other content"),
-                provider.stream().map(safelyMapWithIO(KuteIO::readResource)).collect(toSet()));
+                provider.stream().map(unsafeMap(KuteIO::readResource)::apply).collect(toSet()));
     }
 
     @Override

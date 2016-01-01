@@ -4,8 +4,10 @@ package slieb.kute.utils;
 import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
+import slieb.kute.utils.interfaces.ResourceConsumerWithIO;
 
 import java.io.*;
+import java.util.function.Consumer;
 
 public class KuteIO {
 
@@ -36,11 +38,17 @@ public class KuteIO {
         return baos.toByteArray();
     }
 
-
+    /**
+     * Copy all resource in provider over to some creator.
+     *
+     * @param provider The resource provider, or source location.
+     * @param creator  The resource creator, or destination location.
+     */
     public void copyProviderToCreator(Resource.Provider provider,
                                       Resource.Creator creator) {
-        provider.stream().forEach(KuteLambdas.safelyConsume(
-                resource -> copyResourceWithStreams(resource, creator.create(resource.getPath()))));
+        final ResourceConsumerWithIO<Resource.Readable> resourceResourceConsumerWithIO = resource -> copyResourceWithStreams(resource, creator.create(resource.getPath()));
+        final Consumer<Resource.Readable> tResourceConsumer = KuteLambdas.unsafeConsumer(resourceResourceConsumerWithIO)::accept;
+        provider.stream().forEach(tResourceConsumer);
     }
 
 
@@ -138,6 +146,10 @@ public class KuteIO {
         try (final Reader reader = resource.getReader()) {
             return IOUtils.toString(reader);
         }
+    }
+
+    public static String readResourceUnsafe(Resource.Readable readable) {
+        return KuteLambdas.unsafeMap(KuteIO::readResource).apply(readable);
     }
 
 

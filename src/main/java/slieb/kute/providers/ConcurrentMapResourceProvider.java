@@ -4,7 +4,6 @@ package slieb.kute.providers;
 import slieb.kute.api.Resource;
 import slieb.kute.resources.MutableResource;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,7 +32,7 @@ public class ConcurrentMapResourceProvider implements Resource.Provider, Resourc
 
     @Override
     public Optional<Resource.Readable> getResourceByName(String path) {
-        if (concurrentHashMap.containsKey(path)) {
+        if (path != null && concurrentHashMap.containsKey(path)) {
             return Optional.of(concurrentHashMap.get(path));
         } else {
             return Optional.empty();
