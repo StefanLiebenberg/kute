@@ -2,7 +2,7 @@ package slieb.kute.resources;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.utils.ImmutableBytesArray;
+import slieb.kute.utils.internal.ImmutableBytesArray;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

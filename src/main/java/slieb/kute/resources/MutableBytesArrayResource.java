@@ -2,7 +2,7 @@ package slieb.kute.resources;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.utils.MutableBytesArray;
+import slieb.kute.utils.internal.MutableBytesArray;
 
 import java.io.*;
 import java.util.Objects;
