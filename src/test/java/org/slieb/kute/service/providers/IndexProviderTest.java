@@ -6,13 +6,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceProvider;
 
 import java.io.IOException;
 
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
-import static slieb.kute.Kute.*;
+import static slieb.kute.Kute.providerOf;
+import static slieb.kute.Kute.stringResource;
+import static slieb.kute.KuteIO.readResource;
 
 
 public class IndexProviderTest {
@@ -20,7 +21,7 @@ public class IndexProviderTest {
     @Test
     public void resourceProviderCanOverrideIndexes() throws IOException {
         Resource.Readable resource = stringResource("/index.html", "override content");
-        ResourceProvider<Resource.Readable> provider = providerOf(resource);
+        Resource.Provider provider = providerOf(resource);
         IndexProvider index = new IndexProvider(provider);
         assertNotNull(index.getResourceByName("/"));
         assertEquals(readResource(resource), readResource(index.getResourceByName("/").get()));
@@ -31,14 +32,15 @@ public class IndexProviderTest {
         Resource.Readable level1 = stringResource("/script.min.js", "alert('boo');");
         Resource.Readable level2 = stringResource("/css/style.min.css", ".color { red; }");
         Resource.Readable level3 = stringResource("/images/venice/yacht.jpg", "!!!!");
-        ResourceProvider<Resource.Readable> provider = providerOf(level1, level2, level3);
+        Resource.Provider provider = providerOf(level1, level2, level3);
         IndexProvider index = new IndexProvider(provider);
         assertEquals(Sets.newHashSet("/", "/css", "/images", "/images/venice"),
-                     index.stream().map(Resource::getPath).collect(toSet()));
+                index.stream().map(Resource::getPath).collect(toSet()));
     }
 
 
-    private boolean containsLinkTo(Document document, String path) {
+    private boolean containsLinkTo(Document document,
+                                   String path) {
         return document.getElementsByTag("a").stream().anyMatch(e -> e.attr("href").equals(path));
     }
 
@@ -49,8 +51,8 @@ public class IndexProviderTest {
         Resource.Readable level2_ie = stringResource("/css/ie.min.css", ".color { red; }");
         Resource.Readable level2_print = stringResource("/css/print.min.css", ".color { red; }");
         Resource.Readable level3 = stringResource("/images/venice/yacht.jpg", "!!!!");
-        ResourceProvider<Resource.Readable> provider = providerOf(level1, level2_style, level2_ie, level2_print,
-                                                                  level3);
+        Resource.Provider provider = providerOf(level1, level2_style, level2_ie, level2_print,
+                level3);
         IndexProvider index = new IndexProvider(provider);
 
         Resource.Readable level2Index = index.getResourceByName("/css").get();

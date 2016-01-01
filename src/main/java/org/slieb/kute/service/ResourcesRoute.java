@@ -1,9 +1,7 @@
 package org.slieb.kute.service;
 
 import org.apache.commons.io.IOUtils;
-import slieb.kute.Kute;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceProvider;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -17,9 +15,9 @@ import static org.slieb.sparks.Sparks.getContentType;
 
 public class ResourcesRoute implements Route {
 
-    private final ResourceProvider<? extends Resource.Readable> resourceProvider;
+    private final Resource.Provider resourceProvider;
 
-    public ResourcesRoute(ResourceProvider<? extends Resource.Readable> resourceProvider) {
+    public ResourcesRoute(Resource.Provider resourceProvider) {
         this.resourceProvider = resourceProvider;
     }
 
@@ -38,20 +36,13 @@ public class ResourcesRoute implements Route {
     private String handleReadable(Request request,
                                   Response response,
                                   Resource.Readable readable) {
-        while (readable instanceof Resource.Proxy) {
-            readable = (Resource.Readable) ((Resource.Proxy) readable).getResource();
-        }
         try {
-            if (readable instanceof Resource.InputStreaming) {
-                response.type(getContentType(request));
-                try (final InputStream inputStream = ((Resource.InputStreaming) readable).getInputStream();
-                     final OutputStream outputStream = response.raw().getOutputStream()) {
-                    IOUtils.copy(inputStream, outputStream);
-                }
-                return "";
-            } else {
-                return Kute.readResource(readable);
+            response.type(getContentType(request));
+            try (final InputStream inputStream = readable.getInputStream();
+                 final OutputStream outputStream = response.raw().getOutputStream()) {
+                IOUtils.copy(inputStream, outputStream);
             }
+            return "";
         } catch (IOException e) {
             throw new InvisibleException(e);
         }

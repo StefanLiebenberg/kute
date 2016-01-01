@@ -1,18 +1,17 @@
 package org.slieb.kute.service.resources;
 
-import java.io.IOException;
-
-public class ErrorResource extends AbstractResource {
+public class ErrorResource extends AbstractHTMLResource {
 
     private final Exception exception;
 
-    public ErrorResource(String path, Exception exception) {
+    public ErrorResource(String path,
+                         Exception exception) {
         super(path);
         this.exception = exception;
     }
 
     @Override
-    public String getContent() throws IOException {
+    public String getContent() {
         StringBuilder html = new StringBuilder();
 
         html.append("<!DOCTYPE html>");

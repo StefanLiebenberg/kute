@@ -3,7 +3,6 @@ package org.slieb.kute.service;
 
 import com.google.common.base.Preconditions;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceProvider;
 import spark.Spark;
 import spark.SparkInstance;
 
@@ -36,7 +35,7 @@ public class KuteService {
         node.accept(sparkInstance);
     }
 
-    public void addResourceProvider(ResourceProvider<? extends Resource.Readable> resourceProvider) {
+    public void addResourceProvider(Resource.Provider resourceProvider) {
         sparkInstance.get("/*", new ResourcesRoute(resourceProvider));
     }
 

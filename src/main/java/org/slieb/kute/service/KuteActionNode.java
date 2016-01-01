@@ -1,7 +1,6 @@
 package org.slieb.kute.service;
 
 
-import com.google.common.collect.ImmutableList;
 import org.slieb.kute.service.annotations.KuteAction;
 import spark.Filter;
 import spark.Route;
@@ -12,6 +11,9 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 public class KuteActionNode implements Consumer<SparkInstance> {
 
@@ -55,7 +57,7 @@ public class KuteActionNode implements Consumer<SparkInstance> {
     public Filter getActionFilter(final Method filterMethod) {
         return (request, response) -> {
             try {
-                filterMethod.invoke(controller, resolveArguments(filterMethod, ImmutableList.of(request, response)));
+                filterMethod.invoke(controller, resolveArguments(filterMethod, Stream.of(request, response).collect(toList())));
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalStateException(e);
             }
@@ -67,7 +69,7 @@ public class KuteActionNode implements Consumer<SparkInstance> {
         return ((request, response) -> {
             try {
                 return actionMethod.invoke(controller,
-                                           resolveArguments(actionMethod, ImmutableList.of(request, response)));
+                        resolveArguments(actionMethod, Stream.of(request, response).collect(toList())));
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new IllegalStateException(e);
             }

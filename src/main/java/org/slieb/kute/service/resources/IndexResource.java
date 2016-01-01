@@ -1,23 +1,25 @@
 package org.slieb.kute.service.resources;
 
-import slieb.kute.Kute;
+import slieb.kute.KuteIO;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceProvider;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 
-public class IndexResource extends AbstractResource {
+public class IndexResource extends AbstractHTMLResource {
 
-    private final ResourceProvider<? extends Resource.Readable> provider;
+    private final Resource.Provider provider;
 
     private final Resource.Readable indexResource;
 
-    public IndexResource(String path, ResourceProvider<? extends Readable> provider, Resource.Readable indexResource) {
+    public IndexResource(String path,
+                         Resource.Provider provider,
+                         Resource.Readable indexResource) {
         super(path);
         this.provider = provider;
         this.indexResource = indexResource;
@@ -31,7 +33,7 @@ public class IndexResource extends AbstractResource {
     public String getContent() throws IOException {
 
         if (indexResource != null) {
-            return Kute.readResource(indexResource);
+            return KuteIO.readResource(indexResource);
         }
 
         Path pathObj = Paths.get(getPath());
@@ -64,8 +66,14 @@ public class IndexResource extends AbstractResource {
                 ((Function<Path, Boolean>) path::equals).compose(Path::getParent)::apply).distinct().sorted();
     }
 
-    private String appendAnchor(String href, String name) {
+    private String appendAnchor(String href,
+                                String name) {
         return "<a href='" + href + "'>" + name + "</a>";
+    }
+
+    @Override
+    public Reader getReader() throws IOException {
+        return super.getReader();
     }
 }
 

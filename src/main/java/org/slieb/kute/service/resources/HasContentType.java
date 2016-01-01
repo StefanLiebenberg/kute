@@ -1,6 +1,6 @@
 package org.slieb.kute.service.resources;
 
 
-public interface ServiceResource {
+public interface HasContentType {
     String getContentType();
 }

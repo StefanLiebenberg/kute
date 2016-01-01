@@ -3,7 +3,6 @@ package org.slieb.kute.service.providers;
 
 import org.slieb.kute.service.resources.IndexResource;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourceProvider;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,15 +14,15 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.groupingBy;
 
-public class IndexProvider implements ResourceProvider<Resource.Readable> {
+public class IndexProvider implements Resource.Provider {
 
     protected final Comparator<IndexResource> INDEXED_COMPARATOR = Comparator.comparingInt(
             node -> node.hasIndexResource() ? -1 : 1);
     protected final Function<Stream<IndexResource>, Optional<IndexResource>> TO_INDEXED_NODE = stream -> stream.sorted(
             INDEXED_COMPARATOR).findFirst();
-    public final ResourceProvider<? extends Resource.Readable> provider;
+    public final Resource.Provider provider;
 
-    public IndexProvider(ResourceProvider<? extends Resource.Readable> provider) {
+    public IndexProvider(Resource.Provider provider) {
         this.provider = provider;
     }
 
