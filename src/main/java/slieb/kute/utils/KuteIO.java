@@ -4,10 +4,10 @@ package slieb.kute.utils;
 import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
-import slieb.kute.utils.interfaces.ResourceConsumerWithIO;
 
 import java.io.*;
-import java.util.function.Consumer;
+
+import static slieb.kute.utils.KuteLambdas.unsafeConsumer;
 
 public class KuteIO {
 
@@ -46,9 +46,8 @@ public class KuteIO {
      */
     public void copyProviderToCreator(Resource.Provider provider,
                                       Resource.Creator creator) {
-        final ResourceConsumerWithIO<Resource.Readable> resourceResourceConsumerWithIO = resource -> copyResourceWithStreams(resource, creator.create(resource.getPath()));
-        final Consumer<Resource.Readable> tResourceConsumer = KuteLambdas.unsafeConsumer(resourceResourceConsumerWithIO)::accept;
-        provider.stream().forEach(tResourceConsumer);
+        provider.stream().forEach(unsafeConsumer(resource ->
+                copyResourceWithStreams(resource, creator.create(resource.getPath()))));
     }
 
 

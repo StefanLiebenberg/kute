@@ -11,22 +11,22 @@ public final class FilteredResourceProvider implements Resource.Provider {
 
     private final Resource.Provider resourceProvider;
 
-    private final ResourcePredicate resourceFilter;
+    private final ResourcePredicate<? super Resource> resourceFilter;
 
     public FilteredResourceProvider(final Resource.Provider resourceProvider,
-                                    final ResourcePredicate resourceFilter) {
+                                    final ResourcePredicate<? super Resource> resourceFilter) {
         this.resourceProvider = resourceProvider;
         this.resourceFilter = resourceFilter;
     }
 
     @Override
     public Optional<Resource.Readable> getResourceByName(String path) {
-        return resourceProvider.getResourceByName(path).filter(resourceFilter::test);
+        return resourceProvider.getResourceByName(path).filter(resourceFilter);
     }
 
     @Override
     public Stream<Resource.Readable> stream() {
-        return resourceProvider.stream().filter(resourceFilter::test);
+        return resourceProvider.stream().filter(resourceFilter);
     }
 
     @Override

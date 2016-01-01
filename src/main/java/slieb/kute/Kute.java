@@ -2,9 +2,7 @@ package slieb.kute;
 
 
 import slieb.kute.api.Resource;
-import slieb.kute.providers.FilteredResourceProvider;
-import slieb.kute.providers.MappedResourceProvider;
-import slieb.kute.providers.URLArrayResourceProvider;
+import slieb.kute.providers.*;
 import slieb.kute.resources.*;
 import slieb.kute.utils.KuteIO;
 import slieb.kute.utils.KuteLambdas;
@@ -19,7 +17,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -103,7 +100,7 @@ public class Kute {
      * @return A {@link slieb.kute.api.Resource.Provider} that contains all of the specified resources.
      */
     public static Resource.Provider providerOf(Collection<Resource.Readable> resources) {
-        return resources::stream;
+        return new CollectionProvider(resources);
     }
 
     /**
@@ -134,6 +131,17 @@ public class Kute {
 
     public static Resource.Readable immutableMemoryResource(Resource.Readable readable) throws IOException {
         return Kute.resourceWithBytes(readable.getPath(), KuteIO.readBytes(readable));
+    }
+
+
+    /**
+     * Creates a file resource provider.
+     *
+     * @param directory
+     * @return
+     */
+    public static FileResourceProvider fileResourceProvider(File directory) {
+        return new FileResourceProvider(directory);
     }
 
     /**
@@ -276,7 +284,7 @@ public class Kute {
      * @return A stream without resource duplicates as determined by the passed function.
      */
     public static <R extends Resource, X> Stream<R> distinct(final Stream<R> stream,
-                                                             final Function<R, X> function) {
+                                                             final ResourceFunction<R, X> function) {
         return stream.filter(KuteLambdas.distinctFilter(function));
     }
 

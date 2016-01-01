@@ -70,7 +70,7 @@ public class ConcurrentMapResourceProviderTest implements ProviderTestInterface 
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content", "other content"),
-                provider.stream().map(unsafeMap(KuteIO::readResource)::apply).collect(toSet()));
+                provider.stream().map(unsafeMap(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override

@@ -81,7 +81,7 @@ public class FilteredResourceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content"),
-                provider.stream().map(KuteLambdas.unsafeMap(KuteIO::readResource)::apply).collect(Collectors.toSet()));
+                provider.stream().map(KuteLambdas.unsafeMap(KuteIO::readResource)).collect(Collectors.toSet()));
     }
 
     @Override

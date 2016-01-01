@@ -7,14 +7,12 @@ import slieb.kute.utils.interfaces.*;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static java.util.Arrays.stream;
 
 public class KuteLambdas {
+
 
     public static <T extends Resource> ResourceConsumer<T> unsafeConsumer(final ResourceConsumerWithIO<T> resourceConsumerWithIO) {
         return (object) -> {
@@ -36,7 +34,7 @@ public class KuteLambdas {
         };
     }
 
-    public static <T> Supplier<T> unsafeSupply(SupplierWithIO<T> resourceSupplier) {
+    public static <T extends Resource> ResourceSupplier<T> unsafeSupply(SupplierWithIO<T> resourceSupplier) {
         return () -> {
             try {
                 return resourceSupplier.getWithIO();
@@ -71,7 +69,7 @@ public class KuteLambdas {
      * @param <A> A implementation of resource.
      * @return A nonNull predicate.
      */
-    public static <A extends Resource> Predicate<A> nonNull() {
+    public static <A extends Resource> ResourcePredicate<A> nonNull() {
         return p -> p != null;
     }
 
@@ -81,29 +79,29 @@ public class KuteLambdas {
      * @return a single predicate.
      */
     @SafeVarargs
-    public static <A extends Resource> Predicate<A> all(Predicate<A>... predicates) {
-        return stream(predicates).reduce(Predicate::and).orElse((a) -> true);
+    public static <A extends Resource> ResourcePredicate<A> all(ResourcePredicate<A>... predicates) {
+        return (A resource) -> stream(predicates).allMatch(p -> p.test(resource));
     }
 
-//    /**
-//     * @param <A>        A implementation of resource.
-//     * @param predicates Predicates to string together.
-//     * @return a single predicate.
-//     */
-//    @SafeVarargs
-//    public static <A extends Resource> Predicate<A> any(final Predicate<A>... predicates) {
-//        return stream(predicates).reduce(Predicate::or).orElse((a) -> true);
-//    }
-//
-//    /**
-//     * @param <A>        A implementation of resource.
-//     * @param predicates Predicates to string together.
-//     * @return a single predicate.
-//     */
-//    @SafeVarargs
-//    public static <A extends Resource> Predicate<A> none(Predicate<A>... predicates) {
-//        return all(predicates).negate();
-//    }
+    /**
+     * @param <A>        A implementation of resource.
+     * @param predicates Predicates to string together.
+     * @return a single predicate.
+     */
+    @SafeVarargs
+    public static <A extends Resource> ResourcePredicate<A> any(final ResourcePredicate<A>... predicates) {
+        return (A resource) -> stream(predicates).anyMatch(p -> p.test(resource));
+    }
+
+    /**
+     * @param <A>        A implementation of resource.
+     * @param predicates Predicates to string together.
+     * @return a single predicate.
+     */
+    @SafeVarargs
+    public static <A extends Resource> ResourcePredicate<A> none(ResourcePredicate<A>... predicates) {
+        return (A resource) -> stream(predicates).noneMatch(p -> p.test(resource));
+    }
 
     /**
      * @param extensions A variable list of extension strings.
@@ -137,7 +135,7 @@ public class KuteLambdas {
      * @param <X>      The Value type.
      * @return A stateful predicate.
      */
-    public static <R extends Resource, X> Predicate<R> distinctFilter(Function<R, X> function) {
+    public static <R extends Resource, X> ResourcePredicate<R> distinctFilter(ResourceFunction<R, X> function) {
         final Map<X, Boolean> seen = Maps.newConcurrentMap();
         return resource -> seen.putIfAbsent(function.apply(resource), Boolean.TRUE) == null;
     }

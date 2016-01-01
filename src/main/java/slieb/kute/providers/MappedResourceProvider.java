@@ -20,7 +20,7 @@ public final class MappedResourceProvider implements Resource.Provider, Serializ
 
     @Override
     public Stream<Resource.Readable> stream() {
-        return provider.stream().map(function::apply);
+        return provider.stream().map(function);
     }
 
     @Override

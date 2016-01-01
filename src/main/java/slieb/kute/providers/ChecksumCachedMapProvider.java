@@ -41,7 +41,7 @@ public final class ChecksumCachedMapProvider implements Resource.Provider {
     }
 
     private Stream<Resource.Readable> streamInternal() {
-        return resourceProvider.stream().map(unsafeMap(Kute::immutableMemoryResource)::apply);
+        return resourceProvider.stream().map(unsafeMap(Kute::immutableMemoryResource));
     }
 
     @Override

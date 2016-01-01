@@ -77,7 +77,7 @@ public class MappedResourceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("176b689259e8d68ef0aa869fd3b3be45", "0c84751f0ca9c6886bb09f2dd1a66faa"),
-                provider.stream().map(unsafeMap(KuteIO::readResource)::apply).collect(toSet()));
+                provider.stream().map(unsafeMap(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override

@@ -3,7 +3,6 @@ package slieb.kute.providers;
 import com.google.common.base.Preconditions;
 import slieb.kute.api.Resource;
 import slieb.kute.resources.FileResource;
-import slieb.kute.utils.KuteLambdas;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,10 +35,13 @@ public final class FileResourceProvider implements Resource.Provider, Resource.C
     @Override
     public Stream<Resource.Readable> stream() {
         if (canProvideDirectory()) {
-            return KuteLambdas.unsafeSupply(this::streamInternal).get();
-        } else {
-            return Stream.empty();
+            try {
+                return streamInternal();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
+        return Stream.empty();
     }
 
     private Stream<Resource.Readable> streamInternal() throws IOException {
