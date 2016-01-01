@@ -1,16 +1,15 @@
 package org.slieb.kute.service;
 
-import org.apache.commons.io.IOUtils;
 import slieb.kute.api.Resource;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import static org.slieb.sparks.Sparks.getContentType;
+import static slieb.kute.Kute.outputStreamResource;
+import static slieb.kute.KuteIO.copyResourceWithStreams;
 
 
 public class ResourcesRoute implements Route {
@@ -38,10 +37,8 @@ public class ResourcesRoute implements Route {
                                   Resource.Readable readable) {
         try {
             response.type(getContentType(request));
-            try (final InputStream inputStream = readable.getInputStream();
-                 final OutputStream outputStream = response.raw().getOutputStream()) {
-                IOUtils.copy(inputStream, outputStream);
-            }
+            final Resource.Writable writable = outputStreamResource(readable.getPath(), response.raw()::getOutputStream);
+            copyResourceWithStreams(readable, writable);
             return "";
         } catch (IOException e) {
             throw new InvisibleException(e);

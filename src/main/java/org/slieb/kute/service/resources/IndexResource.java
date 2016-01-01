@@ -4,7 +4,6 @@ import slieb.kute.KuteIO;
 import slieb.kute.api.Resource;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.function.Function;
@@ -71,9 +70,6 @@ public class IndexResource extends AbstractHTMLResource {
         return "<a href='" + href + "'>" + name + "</a>";
     }
 
-    @Override
-    public Reader getReader() throws IOException {
-        return super.getReader();
-    }
+
 }
 

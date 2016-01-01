@@ -96,14 +96,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.slieb</groupId>
-            <artifactId>kute</artifactId>
-            <version>${dep.kute}</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${dep.guava}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slieb</groupId>
+            <artifactId>kute</artifactId>
+            <version>${dep.kute}</version>
         </dependency>
         <dependency>
             <groupId>org.slieb</groupId>
