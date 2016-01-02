@@ -10,6 +10,12 @@
     <packaging>jar</packaging>
     <url>https://stefanliebenberg.github.io/kute</url>
 
+    <parent>
+        <groupId>org.slieb</groupId>
+        <artifactId>kute-parent</artifactId>
+        <version>2.2-SNAPSHOT</version>
+    </parent>
+
     <licenses>
         <license>
             <name>MIT License</name>
@@ -17,69 +23,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <plugin.maven-compiler-plugin>3.3</plugin.maven-compiler-plugin>
-        <github.global.server>github</github.global.server>
-        <plugin.maven-javadoc-plugin>2.10.3</plugin.maven-javadoc-plugin>
-        <plugin.maven-site-plugin>3.4</plugin.maven-site-plugin>
-        <plugin.maven-release-plugin>2.5.2</plugin.maven-release-plugin>
-        <plugin.nexus-staging-maven-plugin>1.6.5</plugin.nexus-staging-maven-plugin>
-        <plugin.maven-gpg-plugin>1.6</plugin.maven-gpg-plugin>
-        <plugin.maven-deploy-plugin>2.8.2</plugin.maven-deploy-plugin>
-        <plugin.maven-install-plugin>2.5.2</plugin.maven-install-plugin>
-        <plugin.maven-jar-plugin>2.6</plugin.maven-jar-plugin>
-        <plugin.maven-surefire-plugin>2.18.1</plugin.maven-surefire-plugin>
-        <plugin.maven-clean-plugin>2.6.1</plugin.maven-clean-plugin>
-        <plugin.maven-source-plugin>2.4</plugin.maven-source-plugin>
-        <plugin.site-maven-plugin>0.12</plugin.site-maven-plugin>
-        <plugin.maven-resources-plugin>2.7</plugin.maven-resources-plugin>
-
-
-        <plugin.maven-project-info-reports-plugin>2.8</plugin.maven-project-info-reports-plugin>
-        <plugin.maven-shared-jar>1.1</plugin.maven-shared-jar>
-        <plugin.bcel-findbugs>6.0</plugin.bcel-findbugs>
-        <dep.maven>3.3.1</dep.maven>
-        <dep.commons-io>2.4</dep.commons-io>
-        <dep.guava>19.0-rc3</dep.guava>
-        <dep.junit>4.12</dep.junit>
-        <dep.mockito>2.0.2-beta</dep.mockito>
-        <dep.commons-codec>1.10</dep.commons-codec>
-    </properties>
-
-    <prerequisites>
-        <maven>${dep.maven}</maven>
-    </prerequisites>
-
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
-    <scm>
-        <url>https://github.com/StefanLiebenberg/kute</url>
-        <connection>
-            scm:git:git://github.com/StefanLiebenberg/kute.git
-        </connection>
-        <developerConnection>
-            scm:git:git@github.com:StefanLiebenberg/kute.git
-        </developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
-    <developers>
-        <developer>
-            <email>siga.fredo@gmail.com</email>
-            <name>Stefan Liebenberg</name>
-            <url>https://github.com/StefanLiebenberg</url>
-            <id>s.liebenberg</id>
-        </developer>
-    </developers>
-
+    
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
