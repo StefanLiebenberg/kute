@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
 
 public final class ChecksumCachedMapProvider implements Resource.Provider {
 
@@ -41,7 +41,7 @@ public final class ChecksumCachedMapProvider implements Resource.Provider {
     }
 
     private Stream<Resource.Readable> streamInternal() {
-        return resourceProvider.stream().map(castFunctionWithException(Kute::immutableMemoryResource));
+        return resourceProvider.stream().map(castFunctionWithThrowable(Kute::immutableMemoryResource));
     }
 
     @Override

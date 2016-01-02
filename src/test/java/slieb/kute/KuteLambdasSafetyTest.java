@@ -4,30 +4,30 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.slieb.throwables.ConsumerWithException.castConsumerWithException;
-import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
-import static org.slieb.throwables.SupplierWithException.castSupplierWithException;
+import static org.slieb.throwables.ConsumerWithThrowable.castConsumerWithThrowable;
+import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
+import static org.slieb.throwables.SupplierWithThrowable.castSupplierWithThrowable;
 
 
 public class KuteLambdasSafetyTest {
 
     @Test(expected = RuntimeException.class)
     public void testSafelyConsume() throws Exception {
-        castConsumerWithException((object) -> {
+        castConsumerWithThrowable((object) -> {
             throw new IOException("expected io");
         }).accept(Kute.resource("/path"));
     }
 
     @Test(expected = RuntimeException.class)
     public void testSafelyMapWithIO() throws Exception {
-        castFunctionWithException((object) -> {
+        castFunctionWithThrowable((object) -> {
             throw new IOException("expected io");
         }).apply(Kute.resource("/path"));
     }
 
     @Test(expected = RuntimeException.class)
     public void testSafelySupply() throws Exception {
-        castSupplierWithException(() -> {
+        castSupplierWithThrowable(() -> {
             throw new IOException("expected io");
         }).get();
     }

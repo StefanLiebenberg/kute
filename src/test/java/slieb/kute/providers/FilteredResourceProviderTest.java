@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
 
 
 public class FilteredResourceProviderTest implements ProviderTestInterface {
@@ -82,7 +82,7 @@ public class FilteredResourceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content"),
-                provider.stream().map(castFunctionWithException(KuteIO::readResource)).collect(Collectors.toSet()));
+                provider.stream().map(castFunctionWithThrowable(KuteIO::readResource)).collect(Collectors.toSet()));
     }
 
     @Override

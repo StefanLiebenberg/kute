@@ -10,7 +10,7 @@ import slieb.kute.api.Resource;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
-import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
 import static slieb.kute.KuteIO.readResource;
 
 
@@ -74,7 +74,7 @@ public class RenamedNamespaceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content", "other content"),
-                provider.stream().map(castFunctionWithException(KuteIO::readResource)).collect(toSet()));
+                provider.stream().map(castFunctionWithThrowable(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override

@@ -13,7 +13,7 @@ import slieb.kute.resources.MutableBytesArrayResource;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
-import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
 import static slieb.kute.KuteIO.readResource;
 import static slieb.kute.KutePredicates.resourceEquals;
 
@@ -76,7 +76,7 @@ public class ChecksumCachedMapProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("content A", "content B"),
-                provider.stream().map(castFunctionWithException(KuteIO::readResource)).collect(toSet()));
+                provider.stream().map(castFunctionWithThrowable(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override

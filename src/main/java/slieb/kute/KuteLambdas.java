@@ -2,7 +2,7 @@ package slieb.kute;
 
 
 import com.google.common.collect.Maps;
-import org.slieb.throwables.FunctionWithException;
+import org.slieb.throwables.FunctionWithThrowable;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourcePredicate;
 
@@ -84,7 +84,7 @@ public class KuteLambdas {
      * @param <X>      The Value type.
      * @return A stateful predicate.
      */
-    public static <R extends Resource, X> ResourcePredicate<R> distinctFilter(FunctionWithException<R, X, IOException> function) {
+    public static <R extends Resource, X> ResourcePredicate<R> distinctFilter(FunctionWithThrowable<R, X, IOException> function) {
         final Map<X, Boolean> seen = Maps.newConcurrentMap();
         return resource -> seen.putIfAbsent(function.apply(resource), Boolean.TRUE) == null;
     }

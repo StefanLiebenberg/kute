@@ -5,7 +5,7 @@ import org.apache.commons.codec.binary.Hex;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slieb.throwables.FunctionWithException;
+import org.slieb.throwables.FunctionWithThrowable;
 import slieb.kute.Kute;
 import slieb.kute.KuteDigest;
 import slieb.kute.KuteIO;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
-import static org.slieb.throwables.FunctionWithException.castFunctionWithException;
+import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
 import static slieb.kute.KuteIO.readResource;
 
 
@@ -78,7 +78,7 @@ public class MappedResourceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("176b689259e8d68ef0aa869fd3b3be45", "0c84751f0ca9c6886bb09f2dd1a66faa"),
-                provider.stream().map(castFunctionWithException(KuteIO::readResource)).collect(toSet()));
+                provider.stream().map(castFunctionWithThrowable(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override
@@ -109,11 +109,11 @@ public class MappedResourceProviderTest implements ProviderTestInterface {
 
 }
 
-class ChecksumMap implements FunctionWithException<Resource.Readable, Resource.Readable, IOException> {
+class ChecksumMap implements FunctionWithThrowable<Resource.Readable, Resource.Readable, IOException> {
 
 
     @Override
-    public Resource.Readable applyWithException(Resource.Readable readable) {
+    public Resource.Readable applyWithThrowable(Resource.Readable readable) {
         return Kute.stringResource(readable.getPath() + ".md5", Hex.encodeHexString(KuteDigest.md5(readable)));
     }
 

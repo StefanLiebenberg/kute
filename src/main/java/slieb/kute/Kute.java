@@ -1,8 +1,8 @@
 package slieb.kute;
 
 
-import org.slieb.throwables.FunctionWithException;
-import org.slieb.throwables.SupplierWithException;
+import org.slieb.throwables.FunctionWithThrowable;
+import org.slieb.throwables.SupplierWithThrowable;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourcePredicate;
 import slieb.kute.providers.*;
@@ -184,7 +184,7 @@ public class Kute {
      * @return a readable resource that reads from provided input stream.
      */
     public static InputStreamResource inputStreamResource(final String path,
-                                                          final SupplierWithException<InputStream, IOException> supplier) {
+                                                          final SupplierWithThrowable<InputStream, IOException> supplier) {
         return new InputStreamResource(path, supplier);
     }
 
@@ -196,7 +196,7 @@ public class Kute {
      * @return a readable resource that reads from provided input stream.
      */
     public static OutputStreamResource outputStreamResource(final String path,
-                                                            final SupplierWithException<OutputStream, IOException> supplier) {
+                                                            final SupplierWithThrowable<OutputStream, IOException> supplier) {
         return new OutputStreamResource(path, supplier);
     }
 
@@ -238,7 +238,7 @@ public class Kute {
     }
 
 
-    public static Resource.Provider mapResources(final Resource.Provider provider, final FunctionWithException<Resource.Readable, Resource.Readable, IOException> function) {
+    public static Resource.Provider mapResources(final Resource.Provider provider, final FunctionWithThrowable<Resource.Readable, Resource.Readable, IOException> function) {
         return new MappedResourceProvider(provider, function);
     }
 
@@ -282,7 +282,7 @@ public class Kute {
      * @return A stream without resource duplicates as determined by the passed function.
      */
     public static <R extends Resource, X> Stream<R> distinct(final Stream<R> stream,
-                                                             final FunctionWithException<R, X, IOException> function) {
+                                                             final FunctionWithThrowable<R, X, IOException> function) {
         return stream.filter(KuteLambdas.distinctFilter(function));
     }
 

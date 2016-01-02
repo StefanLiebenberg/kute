@@ -3,7 +3,7 @@ package slieb.kute;
 
 import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
-import org.slieb.throwables.ConsumerWithException;
+import org.slieb.throwables.ConsumerWithThrowable;
 import slieb.kute.api.Resource;
 
 import java.io.*;
@@ -45,7 +45,7 @@ public class KuteIO {
      */
     public void copyProviderToCreator(Resource.Provider provider,
                                       Resource.Creator creator) {
-        provider.stream().forEach((ConsumerWithException<Resource.Readable, IOException>) resource ->
+        provider.stream().forEach((ConsumerWithThrowable<Resource.Readable, IOException>) resource ->
                 copyResourceWithStreams(resource, creator.create(resource.getPath())));
     }
 

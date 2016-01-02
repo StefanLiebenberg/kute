@@ -3,7 +3,7 @@ package slieb.kute.providers;
 import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
-import org.slieb.throwables.SupplierWithException;
+import org.slieb.throwables.SupplierWithThrowable;
 import slieb.kute.KuteIO;
 import slieb.kute.api.Resource;
 
@@ -119,7 +119,7 @@ public class ZipStreamResourceProviderTest implements ProviderTestInterface {
     }
 }
 
-class ZipSupplier implements SupplierWithException<ZipInputStream, IOException> {
+class ZipSupplier implements SupplierWithThrowable<ZipInputStream, IOException> {
 
     private final File file;
 
@@ -128,7 +128,7 @@ class ZipSupplier implements SupplierWithException<ZipInputStream, IOException> 
     }
 
     @Override
-    public ZipInputStream getWithException() throws IOException {
+    public ZipInputStream getWithThrowable() throws IOException {
         return new ZipInputStream(new FileInputStream(file));
     }
 

@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.slieb.throwables.FunctionWithException;
+import org.slieb.throwables.FunctionWithThrowable;
 import slieb.kute.KuteIO;
 import slieb.kute.api.Resource;
 
@@ -70,7 +70,7 @@ public class ConcurrentMapResourceProviderTest implements ProviderTestInterface 
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         Assert.assertEquals(
                 Sets.newHashSet("index content", "other content"),
-                provider.stream().map(FunctionWithException.castFunctionWithException(KuteIO::readResource)).collect(toSet()));
+                provider.stream().map(FunctionWithThrowable.castFunctionWithThrowable(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override

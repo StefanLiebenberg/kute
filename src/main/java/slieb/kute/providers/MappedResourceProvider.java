@@ -1,6 +1,6 @@
 package slieb.kute.providers;
 
-import org.slieb.throwables.FunctionWithException;
+import org.slieb.throwables.FunctionWithThrowable;
 import slieb.kute.api.Resource;
 
 import java.io.IOException;
@@ -11,10 +11,10 @@ import java.util.stream.Stream;
 public final class MappedResourceProvider implements Resource.Provider, Serializable {
 
     private final Resource.Provider provider;
-    private final FunctionWithException<Resource.Readable, Resource.Readable, IOException> function;
+    private final FunctionWithThrowable<Resource.Readable, Resource.Readable, IOException> function;
 
     public MappedResourceProvider(final Resource.Provider provider,
-                                  final FunctionWithException<Resource.Readable, Resource.Readable, IOException> function) {
+                                  final FunctionWithThrowable<Resource.Readable, Resource.Readable, IOException> function) {
         this.provider = provider;
         this.function = function;
     }
