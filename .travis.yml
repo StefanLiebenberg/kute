@@ -2,5 +2,5 @@ language: java
 jdk:
   - oraclejdk8
 before_install:
-  - mkdir ~/.gnupg;
-  - echo allow-loopback-pinentry > ~/.gnupg/gpg-agent.conf
+  - mkdir -p ~/.gnup;
+  - echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
