@@ -298,7 +298,7 @@
     </reporting>
 
     <modules>
-        <module>kute</module>
+        <module>kute-core</module>
         <module>kute-service</module>
     </modules>
 
