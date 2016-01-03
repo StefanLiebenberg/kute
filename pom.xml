@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <description>A library that provides a easy way to get resources from multiple locations</description>
     <name>kute parent</name>
@@ -16,6 +17,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
+
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -96,195 +98,196 @@
     </distributionManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-release-plugin</artifactId>
-                    <version>${plugin.maven-release-plugin}</version>
-                    <configuration>
-                        <arguments>-Dgpg.passphrase="${gpg.passphrase}"</arguments>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.sonatype.plugins</groupId>
-                    <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${plugin.nexus-staging-maven-plugin}</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <serverId>ossrh</serverId>
-                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${plugin.maven-gpg-plugin}</version>
-                    <configuration>
-                        <gpgArguments>
-                            <arg>--pinentry-mode</arg>
-                            <arg>loopback</arg>
-                        </gpgArguments>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>${plugin.maven-deploy-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>${plugin.maven-install-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${plugin.maven-jar-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>${plugin.maven-resources-plugin}</version>
-                    <executions>
-                        <execution>
-                            <id>default-resources</id>
-                            <phase>none</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>${plugin.maven-site-plugin}</version>
-                    <configuration>
-                        <skipDeploy>true</skipDeploy>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${plugin.maven-compiler-plugin}</version>
-                    <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${plugin.maven-source-plugin}</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${plugin.maven-javadoc-plugin}</version>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <version>${plugin.maven-clean-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${plugin.maven-surefire-plugin}</version>
-                    <configuration>
-                        <useSystemClassLoader>false</useSystemClassLoader>
-                        <useManifestOnlyJar>true</useManifestOnlyJar>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>${plugin.maven-project-info-reports-plugin}</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.maven.shared</groupId>
-                            <artifactId>maven-shared-jar</artifactId>
-                            <version>${plugin.maven-shared-jar}</version>
-                            <exclusions>
-                                <exclusion>
-                                    <groupId>org.apache.bcel</groupId>
-                                    <artifactId>bcel</artifactId>
-                                </exclusion>
-                            </exclusions>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.google.code.findbugs</groupId>
-                            <artifactId>bcel-findbugs</artifactId>
-                            <version>${plugin.bcel-findbugs}</version>
-                        </dependency>
-                    </dependencies>
-                    <configuration>
-                        <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                    </configuration>
-                </plugin>
+        <!--<pluginManagement>-->
+        <!--<plugins>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-release-plugin</artifactId>-->
+        <!--<version>${plugin.maven-release-plugin}</version>-->
+        <!--<configuration>-->
+        <!--<arguments>-Dgpg.passphrase="${gpg.passphrase}"</arguments>-->
+        <!--</configuration>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.sonatype.plugins</groupId>-->
+        <!--<artifactId>nexus-staging-maven-plugin</artifactId>-->
+        <!--<version>${plugin.nexus-staging-maven-plugin}</version>-->
+        <!--<extensions>true</extensions>-->
+        <!--<configuration>-->
+        <!--<serverId>ossrh</serverId>-->
+        <!--<nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+        <!--<autoReleaseAfterClose>true</autoReleaseAfterClose>-->
+        <!--</configuration>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-gpg-plugin</artifactId>-->
+        <!--<version>${plugin.maven-gpg-plugin}</version>-->
+        <!--<configuration>-->
+        <!--<gpgArguments>-->
+        <!--<arg>&#45;&#45;pinentry-mode</arg>-->
+        <!--<arg>loopback</arg>-->
+        <!--</gpgArguments>-->
+        <!--</configuration>-->
+        <!--<executions>-->
+        <!--<execution>-->
+        <!--<id>sign-artifacts</id>-->
+        <!--<phase>verify</phase>-->
+        <!--<goals>-->
+        <!--<goal>sign</goal>-->
+        <!--</goals>-->
+        <!--</execution>-->
+        <!--</executions>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-deploy-plugin</artifactId>-->
+        <!--<version>${plugin.maven-deploy-plugin}</version>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-install-plugin</artifactId>-->
+        <!--<version>${plugin.maven-install-plugin}</version>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-jar-plugin</artifactId>-->
+        <!--<version>${plugin.maven-jar-plugin}</version>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-resources-plugin</artifactId>-->
+        <!--<version>${plugin.maven-resources-plugin}</version>-->
+        <!--<executions>-->
+        <!--<execution>-->
+        <!--<id>default-resources</id>-->
+        <!--<phase>none</phase>-->
+        <!--</execution>-->
+        <!--</executions>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-site-plugin</artifactId>-->
+        <!--<version>${plugin.maven-site-plugin}</version>-->
+        <!--<configuration>-->
+        <!--<skipDeploy>true</skipDeploy>-->
+        <!--</configuration>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-compiler-plugin</artifactId>-->
+        <!--<version>${plugin.maven-compiler-plugin}</version>-->
+        <!--<configuration>-->
+        <!--<source>${maven.compiler.source}</source>-->
+        <!--<target>${maven.compiler.target}</target>-->
+        <!--<encoding>${project.build.sourceEncoding}</encoding>-->
+        <!--</configuration>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-source-plugin</artifactId>-->
+        <!--<version>${plugin.maven-source-plugin}</version>-->
+        <!--<executions>-->
+        <!--<execution>-->
+        <!--<id>attach-sources</id>-->
+        <!--<goals>-->
+        <!--<goal>jar</goal>-->
+        <!--</goals>-->
+        <!--</execution>-->
+        <!--</executions>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+        <!--<version>${plugin.maven-javadoc-plugin}</version>-->
+        <!--<executions>-->
+        <!--<execution>-->
+        <!--<id>attach-javadocs</id>-->
+        <!--<goals>-->
+        <!--<goal>jar</goal>-->
+        <!--</goals>-->
+        <!--</execution>-->
+        <!--</executions>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-clean-plugin</artifactId>-->
+        <!--<version>${plugin.maven-clean-plugin}</version>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-surefire-plugin</artifactId>-->
+        <!--<version>${plugin.maven-surefire-plugin}</version>-->
+        <!--<configuration>-->
+        <!--<useSystemClassLoader>false</useSystemClassLoader>-->
+        <!--<useManifestOnlyJar>true</useManifestOnlyJar>-->
+        <!--</configuration>-->
+        <!--</plugin>-->
+        <!--<plugin>-->
+        <!--<groupId>org.apache.maven.plugins</groupId>-->
+        <!--<artifactId>maven-project-info-reports-plugin</artifactId>-->
+        <!--<version>${plugin.maven-project-info-reports-plugin}</version>-->
+        <!--<dependencies>-->
+        <!--<dependency>-->
+        <!--<groupId>org.apache.maven.shared</groupId>-->
+        <!--<artifactId>maven-shared-jar</artifactId>-->
+        <!--<version>${plugin.maven-shared-jar}</version>-->
+        <!--<exclusions>-->
+        <!--<exclusion>-->
+        <!--<groupId>org.apache.bcel</groupId>-->
+        <!--<artifactId>bcel</artifactId>-->
+        <!--</exclusion>-->
+        <!--</exclusions>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>com.google.code.findbugs</groupId>-->
+        <!--<artifactId>bcel-findbugs</artifactId>-->
+        <!--<version>${plugin.bcel-findbugs}</version>-->
+        <!--</dependency>-->
+        <!--</dependencies>-->
+        <!--<configuration>-->
+        <!--<dependencyLocationsEnabled>false</dependencyLocationsEnabled>-->
+        <!--</configuration>-->
+        <!--</plugin>-->
 
 
-            </plugins>
-        </pluginManagement>
+        <!--</plugins>-->
+        <!--</pluginManagement>-->
 
         <plugins>
+            <!-- Site Stuff
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-site-plugin</artifactId>
+                            <version>${plugin.maven-site-plugin}</version>
+                            <configuration>
+                                <skipDeploy>true</skipDeploy>
+                            </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>com.github.github</groupId>
+                            <artifactId>site-maven-plugin</artifactId>
+                            <version>${plugin.site-maven-plugin}</version>
+                            <configuration>
+                                <message>Creating site for ${project.version}</message>
+                                <noJekyll>true</noJekyll>
+                                <merge>true</merge>
+                                <repositoryOwner>StefanLiebenberg</repositoryOwner>
+                                <repositoryName>kute</repositoryName>
+                            </configuration>
+                            <executions>
+                                <execution>
+                                    <id>github-site</id>
+                                    <goals>
+                                        <goal>site</goal>
+                                    </goals>
+                                    <phase>site-deploy</phase>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        -->
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>${plugin.maven-site-plugin}</version>
-                <configuration>
-                    <skipDeploy>true</skipDeploy>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.github</groupId>
-                <artifactId>site-maven-plugin</artifactId>
-                <version>${plugin.site-maven-plugin}</version>
-                <configuration>
-                    <message>Creating site for ${project.version}</message>
-                    <noJekyll>true</noJekyll>
-                    <merge>true</merge>
-                    <repositoryOwner>StefanLiebenberg</repositoryOwner>
-                    <repositoryName>kute</repositoryName>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>github-site</id>
-                        <goals>
-                            <goal>site</goal>
-                        </goals>
-                        <phase>site-deploy</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- release stuff -->
+            <!-- release stuff
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
@@ -312,7 +315,7 @@
                 <version>${plugin.maven-gpg-plugin}</version>
                 <configuration>
                     <gpgArguments>
-                        <arg>--pinentry-mode</arg>
+                        <arg>pinentry-mode</arg> (double )
                         <arg>loopback</arg>
                     </gpgArguments>
                 </configuration>
@@ -377,19 +380,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${plugin.maven-javadoc-plugin}</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>${plugin.maven-clean-plugin}</version>
             </plugin>
@@ -424,24 +414,10 @@
                         <version>${plugin.bcel-findbugs}</version>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                </configuration>
             </plugin>
+            -->
         </plugins>
-
     </build>
-
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${plugin.maven-javadoc-plugin}</version>
-            </plugin>
-        </plugins>
-    </reporting>
 
     <modules>
         <module>kute-core</module>
