@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <description>A library that provides a easy way to get resources from multiple locations</description>
     <name>kute parent</name>
     <groupId>org.slieb</groupId>
     <artifactId>kute-parent</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.2</version>
     <packaging>pom</packaging>
     <url>https://github.com/StefanLiebenberg/kute</url>
 
@@ -68,7 +67,7 @@
         <url>https://github.com/StefanLiebenberg/kute</url>
         <connection>scm:git:git://github.com/StefanLiebenberg/kute.git</connection>
         <developerConnection>scm:git:git@github.com:StefanLiebenberg/kute.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>kute-parent-2.2</tag>
     </scm>
 
     <developers>
@@ -292,7 +291,9 @@
                 <version>${plugin.maven-release-plugin}</version>
                 <configuration>
                     <arguments>-Dgpg.passphrase="${gpg.passphrase}"</arguments>
-                    <branchName>development</branchName>
+                    <branchName>release-attempt1</branchName>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <pushChanges>false</pushChanges>
                 </configuration>
             </plugin>
             <plugin>
@@ -303,7 +304,8 @@
                 <configuration>
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
+
                 </configuration>
             </plugin>
             <plugin>
