@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import slieb.kute.KuteLambdas;
+import slieb.kute.KutePredicates;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourcePredicate;
 
@@ -29,7 +29,7 @@ public class PatternFilterTest {
 
     @Before
     public void setUp() throws Exception {
-        patternFilter = KuteLambdas.patternFilter(Pattern.compile(".*\\.java"));
+        patternFilter = KutePredicates.patternFilter(Pattern.compile(".*\\.java"));
     }
 
     @Test

@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static slieb.kute.KutePredicates.distinctFilter;
+
 
 public class Kute {
 
@@ -253,7 +255,7 @@ public class Kute {
 
 
     public static <R extends Resource> Optional<R> findFirstResource(Stream<R> stream) {
-        return stream.filter(KuteLambdas.nonNull()).findFirst();
+        return stream.filter(KutePredicates.nonNull()).findFirst();
     }
 
     public static <R extends Resource> Optional<R> findFirstOptionalResource(Stream<Optional<R>> optionalStream) {
@@ -283,7 +285,7 @@ public class Kute {
      */
     public static <R extends Resource, X> Stream<R> distinct(final Stream<R> stream,
                                                              final FunctionWithThrowable<R, X, IOException> function) {
-        return stream.filter(KuteLambdas.distinctFilter(function));
+        return stream.filter(distinctFilter(function));
     }
 
     /**
