@@ -9,8 +9,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class URLResource implements Resource.Readable, Serializable {
-
-
+    
     private final String path;
     private final URL url;
 

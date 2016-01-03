@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>kute</name>
+    <description>A library that provides a easy way to get resources from multiple locations</description>
+    <artifactId>kute-core</artifactId>
+    <packaging>jar</packaging>
+    <parent>
+        <groupId>org.slieb</groupId>
+        <artifactId>kute-parent</artifactId>
+        <version>2.3.8-SNAPSHOT</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slieb</groupId>
+            <artifactId>throwable-interfaces</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${dep.guava}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${dep.commons-io}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${dep.junit}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${dep.mockito}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${dep.commons-codec}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--<plugin>-->
+                <!--<groupId>com.github.github</groupId>-->
+                <!--<artifactId>site-maven-plugin</artifactId>-->
+                <!--<version>0.12</version>-->
+                <!--<inherited>true</inherited>-->
+                <!--<configuration>-->
+                    <!--<message>Creating site for ${project.version}</message>-->
+                    <!--<noJekyll>true</noJekyll>-->
+                    <!--<merge>true</merge>-->
+                    <!--<repositoryOwner>StefanLiebenberg</repositoryOwner>-->
+                    <!--<repositoryName>kute</repositoryName>-->
+                    <!--<path>/kute-core</path>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<inherited>true</inherited>-->
+                        <!--<id>github-site</id>-->
+                        <!--<goals>-->
+                            <!--<goal>site</goal>-->
+                        <!--</goals>-->
+                        <!--<phase>site-deploy</phase>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+        </plugins>
+    </build>
+
+</project>
+
+

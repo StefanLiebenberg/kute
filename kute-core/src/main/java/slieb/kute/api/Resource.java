@@ -1,8 +1,7 @@
 package slieb.kute.api;
 
+import org.apache.commons.io.IOUtils;
 import org.slieb.throwables.ConsumerWithThrowable;
-import slieb.kute.Kute;
-import slieb.kute.KuteIO;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -19,8 +18,6 @@ import java.util.stream.Stream;
  * Resources can also implement {@link Readable} or {@link Writable}
  * </p>
  * <p>Calling {@code resource.getPath()} will work on all resources.</p>
- *
- * @see slieb.kute.Kute
  */
 public interface Resource extends Serializable {
 
@@ -57,7 +54,6 @@ public interface Resource extends Serializable {
          *
          * @return A inputStream that will read from resource.
          * @throws IOException when there is an exception creating the InputStream.
-         * @see KuteIO#readResourceWithInputStream
          */
         InputStream getInputStream() throws IOException;
 
@@ -96,10 +92,9 @@ public interface Resource extends Serializable {
             }
         }
 
-
         @Override
         default void updateDigest(final MessageDigest digest) throws IOException {
-            digest.update(KuteIO.readResource(this).getBytes());
+            useInputStream(inputStream -> digest.update(IOUtils.toByteArray(inputStream)));
         }
 
     }
@@ -111,9 +106,9 @@ public interface Resource extends Serializable {
 
         void updateDigest(MessageDigest digest) throws IOException;
 
-        default byte[] checksum(String algorithm) throws IOException, NoSuchAlgorithmException {
+        default byte[] checksum(String algorithm) throws NoSuchAlgorithmException, IOException {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
-            updateDigest(digest);
+            this.updateDigest(digest);
             return digest.digest();
         }
     }
@@ -138,7 +133,6 @@ public interface Resource extends Serializable {
          *
          * @return A writer that will write to resource.
          * @throws IOException when the writer is created.
-         * @see KuteIO#writeResource
          */
         default Writer getWriter() throws IOException {
             return new OutputStreamWriter(getOutputStream());
@@ -220,7 +214,7 @@ public interface Resource extends Serializable {
         Stream<Resource.Readable> stream();
 
         default Optional<Resource.Readable> getResourceByName(String path) {
-            return Kute.findResource(stream(), path);
+            return stream().filter(resource -> path.equals(resource.getPath())).findFirst();
         }
 
         default <B> B collect(Collector<Resource.Readable, ?, B> collector) {

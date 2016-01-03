@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <description>A library that provides a easy way to get resources from multiple locations</description>
     <name>kute parent</name>
     <groupId>org.slieb</groupId>
     <artifactId>kute-parent</artifactId>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.3.8-SNAPSHOT</version>
     <packaging>pom</packaging>
     <url>https://github.com/StefanLiebenberg/kute</url>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
 
     <licenses>
         <license>
@@ -17,62 +22,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <plugin.maven-compiler-plugin>3.3</plugin.maven-compiler-plugin>
-        <github.global.server>github</github.global.server>
-        <plugin.maven-javadoc-plugin>2.10.3</plugin.maven-javadoc-plugin>
-        <plugin.maven-site-plugin>3.4</plugin.maven-site-plugin>
-        <plugin.maven-release-plugin>2.5.2</plugin.maven-release-plugin>
-        <plugin.nexus-staging-maven-plugin>1.6.5</plugin.nexus-staging-maven-plugin>
-        <plugin.maven-gpg-plugin>1.6</plugin.maven-gpg-plugin>
-        <plugin.maven-deploy-plugin>2.8.2</plugin.maven-deploy-plugin>
-        <plugin.maven-install-plugin>2.5.2</plugin.maven-install-plugin>
-        <plugin.maven-jar-plugin>2.6</plugin.maven-jar-plugin>
-        <plugin.maven-surefire-plugin>2.18.1</plugin.maven-surefire-plugin>
-        <plugin.maven-clean-plugin>2.6.1</plugin.maven-clean-plugin>
-        <plugin.maven-source-plugin>2.4</plugin.maven-source-plugin>
-        <plugin.site-maven-plugin>0.12</plugin.site-maven-plugin>
-        <plugin.maven-resources-plugin>2.7</plugin.maven-resources-plugin>
-
-
-        <plugin.maven-project-info-reports-plugin>2.8</plugin.maven-project-info-reports-plugin>
-        <plugin.maven-shared-jar>1.1</plugin.maven-shared-jar>
-        <plugin.bcel-findbugs>6.0</plugin.bcel-findbugs>
-        <dep.maven>3.3.1</dep.maven>
-        <dep.commons-io>2.4</dep.commons-io>
-        <dep.guava>19.0-rc3</dep.guava>
-        <dep.junit>4.12</dep.junit>
-        <dep.mockito>2.0.2-beta</dep.mockito>
-        <dep.commons-codec>1.10</dep.commons-codec>
-        <dep.sparkWrapper>1.1</dep.sparkWrapper>
-        <dep.jsoup>1.8.3</dep.jsoup>
-    </properties>
-
-    <prerequisites>
-        <maven>${dep.maven}</maven>
-    </prerequisites>
-
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
-
-    <scm>
-        <url>https://github.com/StefanLiebenberg/kute</url>
-        <connection>
-            scm:git:git://github.com/StefanLiebenberg/kute.git
-        </connection>
-        <developerConnection>
-            scm:git:git@github.com:StefanLiebenberg/kute.git
-        </developerConnection>
-        <tag>HEAD</tag>
-    </scm>
 
     <developers>
         <developer>
@@ -83,7 +32,45 @@
         </developer>
     </developers>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <github.global.server>github</github.global.server>
+
+        <dep.maven>3.3.1</dep.maven>
+        <dep.commons-io>2.4</dep.commons-io>
+        <dep.guava>19.0-rc3</dep.guava>
+        <dep.junit>4.12</dep.junit>
+        <dep.mockito>2.0.2-beta</dep.mockito>
+        <dep.commons-codec>1.10</dep.commons-codec>
+        <dep.sparkWrapper>1.1</dep.sparkWrapper>
+        <dep.jsoup>1.8.3</dep.jsoup>
+        <dep.throwable-interfaces>1.1</dep.throwable-interfaces>
+    </properties>
+
+    <prerequisites>
+        <maven>${dep.maven}</maven>
+    </prerequisites>
+
+
+    <scm>
+        <url>https://github.com/StefanLiebenberg/kute</url>
+        <connection>scm:git:git://github.com/StefanLiebenberg/kute.git</connection>
+        <developerConnection>scm:git:git@github.com:StefanLiebenberg/kute.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+
     <distributionManagement>
+        <site>
+            <id>github</id>
+            <name>Deployment through GitHub's site deployment plugin</name>
+            <url>git:ssh://git@github.com/StefanLiebenberg/kute.git?gh-pages#</url>
+        </site>
         <snapshotRepository>
             <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -94,23 +81,72 @@
         </repository>
     </distributionManagement>
 
+    <modules>
+        <module>kute-core</module>
+        <module>kute-service</module>
+    </modules>
+
 
     <build>
-        <pluginManagement>
+        <!--<pluginManagement>-->
             <plugins>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.3</version>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>site-compile</id>
+                            <phase>pre-site</phase>
+                            <goals>
+                                <goal>compile</goal>
+                            </goals>
+                            <inherited>true</inherited>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.4</version>
+                    <inherited>true</inherited>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.doxia</groupId>
+                            <artifactId>doxia-module-markdown</artifactId>
+                            <version>1.6</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.trajano.wagon</groupId>
+                            <artifactId>wagon-git</artifactId>
+                            <version>2.0.0</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>${plugin.maven-release-plugin}</version>
+                    <version>2.5.3</version>
+                    <inherited>true</inherited>
                     <configuration>
                         <arguments>-Dgpg.passphrase="${gpg.passphrase}"</arguments>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
                     </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>${plugin.nexus-staging-maven-plugin}</version>
+                    <version>1.6.6</version>
                     <extensions>true</extensions>
+                    <inherited>true</inherited>
                     <configuration>
                         <serverId>ossrh</serverId>
                         <nexusUrl>https://oss.sonatype.org/</nexusUrl>
@@ -120,7 +156,8 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${plugin.maven-gpg-plugin}</version>
+                    <version>1.6</version>
+                    <inherited>true</inherited>
                     <configuration>
                         <gpgArguments>
                             <arg>--pinentry-mode</arg>
@@ -140,24 +177,29 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-deploy-plugin</artifactId>
-                    <version>${plugin.maven-deploy-plugin}</version>
+                    <version>2.8.2</version>
+                    <inherited>true</inherited>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>${plugin.maven-install-plugin}</version>
+                    <version>2.5.2</version>
+                    <inherited>true</inherited>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
-                    <version>${plugin.maven-jar-plugin}</version>
+                    <version>2.6</version>
+                    <inherited>true</inherited>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>${plugin.maven-resources-plugin}</version>
+                    <version>2.7</version>
+                    <inherited>true</inherited>
                     <executions>
                         <execution>
+                            <inherited>true</inherited>
                             <id>default-resources</id>
                             <phase>none</phase>
                         </execution>
@@ -165,57 +207,9 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-site-plugin</artifactId>
-                    <version>${plugin.maven-site-plugin}</version>
-                    <configuration>
-                        <skipDeploy>true</skipDeploy>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>stage</id>
-                            <goals>
-                                <goal>site</goal>
-                            </goals>
-                            <phase>site</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>com.github.github</groupId>
-                    <artifactId>site-maven-plugin</artifactId>
-                    <version>${plugin.site-maven-plugin}</version>
-                    <configuration>
-                        <message>Creating site for ${project.version}</message>
-                        <noJekyll>true</noJekyll>
-                        <merge>false</merge>
-                        <repositoryOwner>StefanLiebenberg</repositoryOwner>
-                        <repositoryName>kute</repositoryName>
-                        <path>kute-parent</path>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>github-site</id>
-                            <goals>
-                                <goal>site</goal>
-                            </goals>
-                            <phase>site</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${plugin.maven-compiler-plugin}</version>
-                    <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>${plugin.maven-source-plugin}</version>
+                    <version>2.4</version>
+                    <inherited>true</inherited>
                     <executions>
                         <execution>
                             <id>attach-sources</id>
@@ -228,7 +222,8 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${plugin.maven-javadoc-plugin}</version>
+                    <version>2.10.3</version>
+                    <inherited>true</inherited>
                     <executions>
                         <execution>
                             <id>attach-javadocs</id>
@@ -241,12 +236,14 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
-                    <version>${plugin.maven-clean-plugin}</version>
+                    <version>2.6.1</version>
+                    <inherited>true</inherited>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${plugin.maven-surefire-plugin}</version>
+                    <version>2.19</version>
+                    <inherited>true</inherited>
                     <configuration>
                         <useSystemClassLoader>false</useSystemClassLoader>
                         <useManifestOnlyJar>true</useManifestOnlyJar>
@@ -255,12 +252,13 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>${plugin.maven-project-info-reports-plugin}</version>
+                    <version>2.8.1</version>
+                    <inherited>true</inherited>
                     <dependencies>
                         <dependency>
                             <groupId>org.apache.maven.shared</groupId>
                             <artifactId>maven-shared-jar</artifactId>
-                            <version>${plugin.maven-shared-jar}</version>
+                            <version>1.1</version>
                             <exclusions>
                                 <exclusion>
                                     <groupId>org.apache.bcel</groupId>
@@ -271,29 +269,19 @@
                         <dependency>
                             <groupId>com.google.code.findbugs</groupId>
                             <artifactId>bcel-findbugs</artifactId>
-                            <version>${plugin.bcel-findbugs}</version>
+                            <version>6.0</version>
                         </dependency>
                     </dependencies>
+                    <configuration>
+                        <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                    </configuration>
                 </plugin>
             </plugins>
-        </pluginManagement>
+        <!--</pluginManagement>-->
+
+
     </build>
 
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${plugin.maven-javadoc-plugin}</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
-    <modules>
-        <module>kute</module>
-        <module>kute-service</module>
-    </modules>
 
 </project>
 

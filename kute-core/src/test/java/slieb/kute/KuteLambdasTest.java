@@ -11,6 +11,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.api.Resource;
 import slieb.kute.api.ResourcePredicate;
 
+import static slieb.kute.KutePredicates.extensionFilter;
+import static slieb.kute.KutePredicates.patternFilter;
+
 
 @RunWith(MockitoJUnitRunner.class)
 public class KuteLambdasTest {
@@ -41,8 +44,8 @@ public class KuteLambdasTest {
         Mockito.when(resourceA.getPath()).thenReturn("/resourceA.txt");
         Mockito.when(resourceB.getPath()).thenReturn("/resourceB.log");
 
-        Assert.assertTrue(KuteLambdas.extensionFilter(".txt").test(resourceA));
-        Assert.assertFalse(KuteLambdas.extensionFilter(".txt").test(resourceB));
+        Assert.assertTrue(extensionFilter(".txt").test(resourceA));
+        Assert.assertFalse(extensionFilter(".txt").test(resourceB));
     }
 
     @Test
@@ -50,8 +53,8 @@ public class KuteLambdasTest {
         Mockito.when(resourceA.getPath()).thenReturn("/aaaab");
         Mockito.when(resourceB.getPath()).thenReturn("/aaababc");
 
-        Assert.assertTrue(KuteLambdas.patternFilter("/(a|b)*").test(resourceA));
-        Assert.assertFalse(KuteLambdas.patternFilter("(a|b)*").test(resourceB));
+        Assert.assertTrue(patternFilter("/(a|b)*").test(resourceA));
+        Assert.assertFalse(patternFilter("(a|b)*").test(resourceB));
     }
 
 
