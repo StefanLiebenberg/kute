@@ -5,6 +5,7 @@ import org.slieb.throwables.ConsumerWithThrowable;
 
 import java.io.*;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.stream.Collector;
@@ -105,7 +106,11 @@ public interface Resource extends Serializable {
 
         void updateDigest(MessageDigest digest) throws IOException;
 
-
+        default byte[] checksum(String algorithm) throws NoSuchAlgorithmException, IOException {
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            this.updateDigest(digest);
+            return digest.digest();
+        }
     }
 
 
