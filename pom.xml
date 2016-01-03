@@ -6,7 +6,7 @@
     <name>kute parent</name>
     <groupId>org.slieb</groupId>
     <artifactId>kute-parent</artifactId>
-    <version>2.3.1-SNAPSHOT</version>
+    <version>2.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <url>https://github.com/StefanLiebenberg/kute</url>
 
@@ -95,14 +95,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-release-plugin</artifactId>
-            <version>${plugin.maven-release-plugin}</version>
-        </dependency>
-    </dependencies>
 
     <build>
         <pluginManagement>
