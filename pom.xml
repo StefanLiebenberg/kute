@@ -292,8 +292,8 @@
                 <version>${plugin.maven-release-plugin}</version>
                 <configuration>
                     <arguments>-Dgpg.passphrase="${gpg.passphrase}"</arguments>
-                    <branchName>release-attempt1</branchName>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <releaseVersion
                     <pushChanges>false</pushChanges>
                 </configuration>
             </plugin>

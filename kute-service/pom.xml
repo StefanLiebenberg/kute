@@ -22,7 +22,7 @@
         </dependency>
         <dependency>
             <groupId>org.slieb</groupId>
-            <artifactId>kute</artifactId>
+            <artifactId>kute-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
