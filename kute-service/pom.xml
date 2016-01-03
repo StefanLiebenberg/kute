@@ -6,8 +6,8 @@
     <name>Kute Service</name>
     <description>A service wrapper around kute's resource provider</description>
     <artifactId>kute-service</artifactId>
-    <version>2.2-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <parent>
         <groupId>org.slieb</groupId>
         <artifactId>kute-parent</artifactId>
