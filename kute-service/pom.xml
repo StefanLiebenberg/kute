@@ -16,20 +16,23 @@
     <packaging>jar</packaging>
 
     <dependencies>
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${dep.guava}</version>
         </dependency>
+
         <dependency>
             <groupId>org.slieb</groupId>
             <artifactId>spark-wrapper</artifactId>
             <version>${dep.sparkWrapper}</version>
         </dependency>
+
         <dependency>
             <groupId>org.slieb</groupId>
             <artifactId>kute-core</artifactId>
-            <version>${project.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
 
         <dependency>
