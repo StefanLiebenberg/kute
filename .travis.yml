@@ -4,3 +4,4 @@ jdk:
 before_install:
   - mkdir -p ~/.gnup;
   - echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
+  - echo RELOADAGENT | gpg-connect-agent
