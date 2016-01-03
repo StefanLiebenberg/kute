@@ -1,7 +1,4 @@
 language: java
 jdk:
   - oraclejdk8
-before_install:
-  - mkdir -p ~/.gnup;
-  - echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
-  - echo RELOADAGENT | gpg-connect-agent
+script: mvn test -Dgpg.skip=true
