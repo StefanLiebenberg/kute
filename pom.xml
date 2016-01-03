@@ -68,9 +68,9 @@
 
     <distributionManagement>
         <site>
-            <id>github-pages-site</id>
+            <id>github</id>
             <name>Deployment through GitHub's site deployment plugin</name>
-            <url>https://stefanliebenberg.github.io/kute/</url>
+            <url>git:ssh://git@github.com/StefanLiebenberg/kute.git?gh-pages#</url>
         </site>
         <snapshotRepository>
             <id>ossrh</id>
@@ -111,39 +111,26 @@
                         </execution>
                     </executions>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.4</version>
-                    <configuration>
-                        <!--<skipDeploy>true</skipDeploy>-->
-                    </configuration>
                     <inherited>true</inherited>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.doxia</groupId>
+                            <artifactId>doxia-module-markdown</artifactId>
+                            <version>1.6</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.trajano.wagon</groupId>
+                            <artifactId>wagon-git</artifactId>
+                            <version>2.0.0</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
-                <!--<plugin>-->
-                    <!--<groupId>com.github.github</groupId>-->
-                    <!--<artifactId>site-maven-plugin</artifactId>-->
-                    <!--<version>0.12</version>-->
-                    <!--<inherited>true</inherited>-->
-                    <!--<configuration>-->
-                        <!--<message>Creating site for ${project.version}</message>-->
-                        <!--<noJekyll>true</noJekyll>-->
-                        <!--<merge>true</merge>-->
-                        <!--<repositoryOwner>StefanLiebenberg</repositoryOwner>-->
-                        <!--<repositoryName>kute</repositoryName>-->
-                        <!--<path>/${project.artifactId}</path>-->
-                    <!--</configuration>-->
-                    <!--<executions>-->
-                        <!--<execution>-->
-                            <!--<inherited>true</inherited>-->
-                            <!--<id>github-site</id>-->
-                            <!--<goals>-->
-                                <!--<goal>site</goal>-->
-                            <!--</goals>-->
-                            <!--<phase>site-deploy</phase>-->
-                        <!--</execution>-->
-                    <!--</executions>-->
-                <!--</plugin>-->
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
@@ -286,39 +273,6 @@
 
     </build>
 
-    <profiles>
-        <profile>
-            <id>exp</id>
-            <distributionManagement>
-                <site>
-                    <id>github</id>
-                    <name>Deployment through GitHub's site deployment plugin</name>
-                    <url>git:ssh://git@github.com/StefanLiebenberg/kute.git?gh-pages#</url>
-                </site>
-            </distributionManagement>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-site-plugin</artifactId>
-                        <version>3.4</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.apache.maven.doxia</groupId>
-                                <artifactId>doxia-module-markdown</artifactId>
-                                <version>1.6</version>
-                            </dependency>
-                            <dependency>
-                                <groupId>net.trajano.wagon</groupId>
-                                <artifactId>wagon-git</artifactId>
-                                <version>2.0.0</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
 
