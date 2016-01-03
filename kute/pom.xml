@@ -23,7 +23,7 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-    
+
     <distributionManagement>
         <snapshotRepository>
             <id>ossrh</id>
@@ -166,6 +166,7 @@
                     <merge>false</merge>
                     <repositoryOwner>StefanLiebenberg</repositoryOwner>
                     <repositoryName>kute</repositoryName>
+                    <path>kute</path>
                 </configuration>
                 <executions>
                     <execution>

@@ -162,7 +162,8 @@
                     <noJekyll>true</noJekyll>
                     <merge>false</merge>
                     <repositoryOwner>StefanLiebenberg</repositoryOwner>
-                    <repositoryName>kute-service</repositoryName>
+                    <repositoryName>kute</repositoryName>
+                    <path>kute-service</path>
                 </configuration>
                 <executions>
                     <execution>
