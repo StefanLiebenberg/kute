@@ -293,8 +293,6 @@
                 <configuration>
                     <arguments>-Dgpg.passphrase="${gpg.passphrase}"</arguments>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-
-                    <pushChanges>false</pushChanges>
                 </configuration>
             </plugin>
             <plugin>
