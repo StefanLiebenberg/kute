@@ -5,7 +5,7 @@
     <name>kute parent</name>
     <groupId>org.slieb</groupId>
     <artifactId>kute-parent</artifactId>
-    <version>2.5-SNAPSHOT</version>
+    <version>2.5</version>
     <packaging>pom</packaging>
     <url>https://github.com/StefanLiebenberg/kute</url>
 
@@ -61,7 +61,7 @@
         <url>https://github.com/StefanLiebenberg/kute</url>
         <connection>scm:git:git://github.com/StefanLiebenberg/kute.git</connection>
         <developerConnection>scm:git:git@github.com:StefanLiebenberg/kute.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>kute-parent-2.5</tag>
     </scm>
 
 
