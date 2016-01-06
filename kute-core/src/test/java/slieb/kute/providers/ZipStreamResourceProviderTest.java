@@ -10,6 +10,7 @@ import slieb.kute.api.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
@@ -119,7 +120,7 @@ public class ZipStreamResourceProviderTest implements ProviderTestInterface {
     }
 }
 
-class ZipSupplier implements SupplierWithThrowable<ZipInputStream, IOException> {
+class ZipSupplier implements SupplierWithThrowable<ZipInputStream, IOException>, Serializable {
 
     private final File file;
 
