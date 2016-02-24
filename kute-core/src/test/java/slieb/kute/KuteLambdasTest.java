@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourcePredicate;
 
 import static slieb.kute.KutePredicates.extensionFilter;
 import static slieb.kute.KutePredicates.patternFilter;
@@ -19,7 +18,7 @@ import static slieb.kute.KutePredicates.patternFilter;
 public class KuteLambdasTest {
 
     @Mock
-    ResourcePredicate<Resource> filterT, filterF, filterM;
+    Resource.Predicate filterT, filterF, filterM;
 
     @Mock
     Resource.Readable resourceA, resourceB;

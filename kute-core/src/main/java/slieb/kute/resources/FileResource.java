@@ -39,7 +39,6 @@ public class FileResource implements Resource.Readable, Resource.Writable {
 
     private final File file;
 
-
     /**
      * Specify a file and the path it will be available as.
      *
@@ -52,7 +51,6 @@ public class FileResource implements Resource.Readable, Resource.Writable {
         this.path = path;
     }
 
-
     /**
      * This constructor extracts the resource path from file.getPath().
      *
@@ -61,7 +59,6 @@ public class FileResource implements Resource.Readable, Resource.Writable {
     public FileResource(File file) {
         this(file.getPath(), file);
     }
-
 
     /**
      * @return The resource's file object.
@@ -113,7 +110,6 @@ public class FileResource implements Resource.Readable, Resource.Writable {
         return parentFile != null && (parentFile.exists() || parentFile.mkdirs());
     }
 
-
     @Override
     public String getPath() {
         return path;
@@ -129,8 +125,8 @@ public class FileResource implements Resource.Readable, Resource.Writable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof FileResource)) return false;
+        if (this == o) { return true; }
+        if (!(o instanceof FileResource)) { return false; }
         FileResource that = (FileResource) o;
         return Objects.equals(path, that.path) &&
                 Objects.equals(file, that.file);

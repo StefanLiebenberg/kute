@@ -1,16 +1,18 @@
 package slieb.kute.api;
 
-import org.apache.commons.io.IOUtils;
 import org.slieb.throwables.ConsumerWithThrowable;
+import org.slieb.throwables.PredicateWithThrowable;
 
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import static org.apache.commons.io.IOUtils.toByteArray;
 
 /**
  * The Resource class represents a entry on the class path.
@@ -19,7 +21,9 @@ import java.util.stream.Stream;
  * </p>
  * <p>Calling {@code resource.getPath()} will work on all resources.</p>
  */
-public interface Resource extends Serializable {
+public interface Resource extends Comparable<Resource> {
+
+    Comparator<Resource> RESOURCE_COMPARATOR = Comparator.nullsFirst(Comparator.comparing(Resource::getPath));
 
     /**
      * The path the the given resource. This path is not to be confused with system path of the filesystem, even some
@@ -29,11 +33,15 @@ public interface Resource extends Serializable {
      */
     String getPath();
 
+    @Override
+    default int compareTo(Resource o) {
+        return Objects.compare(this, o, RESOURCE_COMPARATOR);
+    }
 
     /**
      * Represents a readable resource. Provides getReader() and getInputStream() methods to read the resource with.
      */
-    interface Readable extends Resource, Checksumable, Serializable {
+    interface Readable extends Resource, Checksumable {
 
         /**
          * @return A reader that will give you the contents of resource.
@@ -56,7 +64,6 @@ public interface Resource extends Serializable {
          * @throws IOException when there is an exception creating the InputStream.
          */
         InputStream getInputStream() throws IOException;
-
 
         /**
          * <pre>{@code
@@ -94,15 +101,14 @@ public interface Resource extends Serializable {
 
         @Override
         default void updateDigest(final MessageDigest digest) throws IOException {
-            useInputStream(inputStream -> digest.update(IOUtils.toByteArray(inputStream)));
+            useInputStream(inputStream -> digest.update(toByteArray(inputStream)));
         }
-
     }
 
     /**
      *
      */
-    interface Checksumable extends Serializable {
+    interface Checksumable {
 
         void updateDigest(MessageDigest digest) throws IOException;
 
@@ -113,12 +119,11 @@ public interface Resource extends Serializable {
         }
     }
 
-
     /**
      * This represents a Writable resource. You can call {@link Writable#getWriter} on it to get a writer that will
      * write to the resource.
      */
-    interface Writable extends Resource, Serializable {
+    interface Writable extends Resource {
 
         OutputStream getOutputStream() throws IOException;
 
@@ -173,7 +178,6 @@ public interface Resource extends Serializable {
         }
     }
 
-
     /**
      * <p>The resource provider supplies a {@link java.lang.Iterable} of {@link slieb.kute.api.Resource}.</p>
      * <p>An example would be a directory resource that supplies its contents as resource objects.</p>
@@ -204,36 +208,58 @@ public interface Resource extends Serializable {
      *     });
      * </code></pre>
      */
-    interface Provider extends Iterable<Resource.Readable>, Resource.Checksumable, Serializable {
+    @FunctionalInterface
+    interface Provider extends Iterable<Resource.Readable>, Resource.Checksumable {
 
+        Stream<Resource.Readable> stream();
+
+        /**
+         * @return an iterator of readable resources.
+         */
         @Override
         default Iterator<Resource.Readable> iterator() {
             return stream().iterator();
         }
 
-        Stream<Resource.Readable> stream();
-
+        /**
+         * @param path The path on which to find resource.
+         * @return An optional resource, if it exists on the path.
+         */
         default Optional<Resource.Readable> getResourceByName(String path) {
             return stream().filter(resource -> path.equals(resource.getPath())).findFirst();
         }
 
-        default <B> B collect(Collector<Resource.Readable, ?, B> collector) {
-            return stream().collect(collector);
+        /**
+         * @param functionWithThrowable The function to use for each.
+         * @param <E>                   An exception that might be thrown
+         * @throws E A thrown exception of generic type.
+         */
+        default <E extends Throwable> void forEach(ConsumerWithThrowable<Resource.Readable, E> functionWithThrowable) throws E {
+            for (Resource.Readable readable : this) {
+                functionWithThrowable.acceptWithThrowable(readable);
+            }
         }
 
+        /**
+         * @param digest The message digest to update
+         * @throws IOException Throws an ioException from reading the readables.
+         */
         @Override
         default void updateDigest(final MessageDigest digest) throws IOException {
-            for (Resource.Readable readable : this) {
-                readable.updateDigest(digest);
-            }
+            this.forEach(readable -> readable.updateDigest(digest));
         }
     }
 
     /**
      * The opposite of {@link Provider}
      */
-    interface Creator extends Serializable {
+    @FunctionalInterface
+    interface Creator {
+
         Resource.Writable create(String path);
     }
 
+    @FunctionalInterface
+    interface Predicate extends PredicateWithThrowable<Resource, Throwable> {
+    }
 }

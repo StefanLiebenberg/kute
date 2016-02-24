@@ -1,8 +1,7 @@
 package slieb.kute.resources;
 
-
-import slieb.kute.api.Resource;
 import slieb.kute.KuteIO;
+import slieb.kute.api.Resource;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -47,8 +46,8 @@ public class CachedResource implements Resource.Readable, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CachedResource)) return false;
+        if (this == o) { return true; }
+        if (!(o instanceof CachedResource)) { return false; }
         CachedResource that = (CachedResource) o;
         return cached == that.cached &&
                 Arrays.equals(cachedValue, that.cachedValue) &&

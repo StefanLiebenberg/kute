@@ -9,21 +9,27 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import java.util.zip.ZipFile;
 
-
 public abstract class AbstractURLResourceProvider implements Resource.Provider {
 
-    private static final String PROTOCOL_ERROR = "Cannot produce ResourceProvider from protocol %s", FILE_ERROR =
-            "Cannot produce ResourceProvider from protocol %s";
+    private static final String
+            PROTOCOL_ERROR = "Cannot produce ResourceProvider from protocol %s",
+            FILE_ERROR = "Cannot produce ResourceProvider from file %s";
 
     @Override
     public Stream<Resource.Readable> stream() {
         return providerStream().flatMap(Resource.Provider::stream);
     }
 
+    /**
+     * @return A stream of built resource providers.
+     */
     public Stream<Resource.Provider> providerStream() {
         return urlStream().map(this::createResourceFromUrl).filter(Optional::isPresent).map(Optional::get);
     }
 
+    /**
+     * @return A stream of urls to jar files or directories.
+     */
     protected abstract Stream<URL> urlStream();
 
     protected Optional<Resource.Provider> createResourceFromUrl(URL url) {
@@ -37,7 +43,9 @@ public abstract class AbstractURLResourceProvider implements Resource.Provider {
     }
 
     protected Optional<Resource.Provider> createResourceFromFile(File file) {
-        if (!file.exists()) return Optional.empty(); // this could be a empty/non-existent directory
+        if (!file.exists()) {
+            return Optional.empty(); // this could be a empty/non-existent directory
+        }
 
         if (file.getPath().endsWith(".jar")) {
             try {
@@ -48,7 +56,6 @@ public abstract class AbstractURLResourceProvider implements Resource.Provider {
         }
 
         if (file.isDirectory()) {
-            //noinspection unchecked
             return Optional.of(new FileResourceProvider(file));
         }
 

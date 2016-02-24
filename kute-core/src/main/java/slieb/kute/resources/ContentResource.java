@@ -4,7 +4,9 @@ import slieb.kute.api.Resource;
 
 import java.io.*;
 
-
+/**
+ * Represents a String based Resource.
+ */
 public interface ContentResource extends Resource.Readable {
 
     String getContent() throws IOException;
@@ -18,5 +20,4 @@ public interface ContentResource extends Resource.Readable {
     default InputStream getInputStream() throws IOException {
         return new ByteArrayInputStream(getContent().getBytes());
     }
-
 }

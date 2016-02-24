@@ -17,7 +17,6 @@ import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowab
 import static slieb.kute.KuteIO.readResource;
 import static slieb.kute.KutePredicates.resourceEquals;
 
-
 public class ChecksumCachedMapProviderTest implements ProviderTestInterface {
 
     private MutableBytesArrayResource resourceA, resourceB;
@@ -34,7 +33,6 @@ public class ChecksumCachedMapProviderTest implements ProviderTestInterface {
         rawProvider = Kute.providerOf(resourceA, resourceB);
         provider = new ChecksumCachedMapProvider(rawProvider, checksumable);
     }
-
 
     @Override
     @Test
@@ -95,14 +93,5 @@ public class ChecksumCachedMapProviderTest implements ProviderTestInterface {
             Assert.assertEquals(readable, optional.get());
             Assert.assertTrue(resourceEquals(readable, optional.get()));
         }
-    }
-
-    @Override
-    @Test
-    public void shouldBeSerializable() throws Exception {
-        Resource.Provider loaded = KuteIO.deserialize(KuteIO.serialize(provider), Resource.Provider.class);
-        Assert.assertEquals(provider.toString(), loaded.toString());
-        Assert.assertEquals(provider.hashCode(), loaded.hashCode());
-        Assert.assertEquals(provider, loaded);
     }
 }

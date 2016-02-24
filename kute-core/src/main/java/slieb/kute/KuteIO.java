@@ -1,41 +1,40 @@
 package slieb.kute;
 
 
-import com.google.common.base.Preconditions;
 import org.apache.commons.io.IOUtils;
 import org.slieb.throwables.ConsumerWithThrowable;
+import org.slieb.throwables.SupplierWithThrowable;
 import slieb.kute.api.Resource;
 
 import java.io.*;
 
 public class KuteIO {
-
-
+    
     public static void serializeToStream(Serializable serializable, OutputStream outputStream) throws IOException {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
             objectOutputStream.writeObject(serializable);
         }
     }
-
-    public static Serializable deserializeFromStream(InputStream inputStream) throws IOException, ClassNotFoundException {
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
-            return (Serializable) objectInputStream.readObject();
-        }
-    }
-
-    public static <T> T deserialize(byte[] bytes, Class<T> classT) throws IOException, ClassNotFoundException {
-        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-        Serializable serializable = deserializeFromStream(bais);
-        Preconditions.checkState(classT.isInstance(serializable));
-        //noinspection unchecked
-        return (T) serializable;
-    }
-
-    public static byte[] serialize(Serializable object) throws IOException {
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        serializeToStream(object, baos);
-        return baos.toByteArray();
-    }
+//
+    //    public static Serializable deserializeFromStream(InputStream inputStream) throws IOException, ClassNotFoundException {
+    //        try (ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
+    //            return (Serializable) objectInputStream.readObject();
+    //        }
+    //    }
+//
+//    public static <T> T deserialize(byte[] bytes, Class<T> classT) throws IOException, ClassNotFoundException {
+//        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
+//        Serializable serializable = deserializeFromStream(bais);
+//        Preconditions.checkState(classT.isInstance(serializable));
+//        //noinspection unchecked
+//        return (T) serializable;
+//    }
+//
+//    public static byte[] serialize(Serializable object) throws IOException {
+//        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        serializeToStream(object, baos);
+//        return baos.toByteArray();
+//    }
 
     /**
      * Copy all resource in provider over to some creator.
@@ -117,7 +116,7 @@ public class KuteIO {
      */
     public static void copyResource(Resource.Readable readable,
                                     Resource.Writable writable) throws IOException {
-        readable.useReader(reader -> writable.useWriter(writer -> IOUtils.copy(reader, writer)));
+        writeResourceToStream(readable, writable::getOutputStream);
     }
 
     public static void copyResourceWithStreams(Resource.Readable readable,
@@ -145,4 +144,24 @@ public class KuteIO {
     }
 
 
+    public static void writeResourceToStream(Resource.Readable readable, OutputStream out) throws IOException {
+        readable.useInputStream(inputStream -> IOUtils.copy(inputStream, out));
+    }
+
+    public static void writeResourceToStream(Resource.Readable readable,
+                                             SupplierWithThrowable<OutputStream, IOException> out) throws IOException {
+        try (OutputStream withThrowable = out.getWithThrowable()) {
+            writeResourceToStream(readable, withThrowable);
+        }
+    }
+
+    public static void writeStreamToResource(SupplierWithThrowable<InputStream, IOException> inputSupplier,
+                                             Resource.Writable writable) throws IOException {
+        writeStreamToResource(inputSupplier.getWithThrowable(), writable);
+    }
+
+    public static void writeStreamToResource(InputStream inputStream,
+                                             Resource.Writable writable) throws IOException {
+        writable.useOutputStream(outputStream -> IOUtils.copy(inputStream, outputStream));
+    }
 }

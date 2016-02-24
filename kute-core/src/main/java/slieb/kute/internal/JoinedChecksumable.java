@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
+
 public class JoinedChecksumable implements Resource.Checksumable {
 
     private final List<Resource.Checksumable> collection;

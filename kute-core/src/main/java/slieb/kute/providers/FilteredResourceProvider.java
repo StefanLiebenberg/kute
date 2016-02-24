@@ -1,20 +1,20 @@
 package slieb.kute.providers;
 
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourcePredicate;
 
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+@Deprecated
 public final class FilteredResourceProvider implements Resource.Provider {
 
     private final Resource.Provider resourceProvider;
 
-    private final ResourcePredicate<? super Resource> resourceFilter;
+    private final Resource.Predicate resourceFilter;
 
     public FilteredResourceProvider(final Resource.Provider resourceProvider,
-                                    final ResourcePredicate<? super Resource> resourceFilter) {
+                                    final Resource.Predicate resourceFilter) {
         this.resourceProvider = resourceProvider;
         this.resourceFilter = resourceFilter;
     }

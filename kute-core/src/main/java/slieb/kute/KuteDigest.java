@@ -1,6 +1,5 @@
 package slieb.kute;
 
-
 import slieb.kute.api.Resource;
 import slieb.kute.internal.JoinedChecksumable;
 

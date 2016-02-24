@@ -24,12 +24,19 @@ public final class RenamedNamespaceProvider implements Resource.Provider, Serial
         this.renamedRoot = renamedRoot;
     }
 
+    private static String getRenamedPath(String path, String origPath, String newPath) {
+        if (path != null) {
+            return path.replaceFirst(origPath, newPath);
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public Optional<Resource.Readable> getResourceByName(String path) {
         return resourceProvider.getResourceByName(getRenamedPath(path, renamedRoot, originalRoot))
                 .map(resource -> Kute.renameResource(path, resource));
     }
-
 
     @Override
     public Stream<Resource.Readable> stream() {
@@ -38,14 +45,6 @@ public final class RenamedNamespaceProvider implements Resource.Provider, Serial
 
     private Resource.Readable renameResource(Resource.Readable resource) {
         return Kute.renameResource(getRenamedPath(resource.getPath(), originalRoot, renamedRoot), resource);
-    }
-
-    private static String getRenamedPath(String path, String origPath, String newPath) {
-        if (path != null) {
-            return path.replaceFirst(origPath, newPath);
-        } else {
-            return null;
-        }
     }
 
     @Override

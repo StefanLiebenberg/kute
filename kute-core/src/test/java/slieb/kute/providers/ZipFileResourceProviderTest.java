@@ -114,16 +114,16 @@ public class ZipFileResourceProviderTest implements ProviderTestInterface {
         });
     }
 
-    @Override
-    @Test
-    @Ignore
-    public void shouldBeSerializable() throws Exception {
-        final ZipFileResourceProvider loaded = KuteIO.deserialize(KuteIO.serialize(provider), provider.getClass());
-        assertEquals(provider, loaded);
-        assertEquals(provider.toString(), loaded.toString());
-        assertEquals(provider.hashCode(), loaded.hashCode());
-        assertTrue(provider.equals(loaded));
-    }
+//    @Override
+//    @Test
+//    @Ignore
+//    public void shouldBeSerializable() throws Exception {
+//        final ZipFileResourceProvider loaded = KuteIO.deserialize(KuteIO.serialize(provider), provider.getClass());
+//        assertEquals(provider, loaded);
+//        assertEquals(provider.toString(), loaded.toString());
+//        assertEquals(provider.hashCode(), loaded.hashCode());
+//        assertTrue(provider.equals(loaded));
+//    }
 
 
 }

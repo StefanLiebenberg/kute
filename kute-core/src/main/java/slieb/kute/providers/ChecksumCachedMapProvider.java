@@ -1,6 +1,5 @@
 package slieb.kute.providers;
 
-
 import slieb.kute.Kute;
 import slieb.kute.KuteDigest;
 import slieb.kute.api.Resource;
@@ -29,10 +28,9 @@ public final class ChecksumCachedMapProvider implements Resource.Provider {
         this.checksumable = checksumable;
     }
 
-
     @Override
     public Stream<Resource.Readable> stream() {
-        byte[] checksum = KuteDigest.md5(checksumable);
+        final byte[] checksum = KuteDigest.md5(checksumable);
         if (cachedResources == null || cachedChecksum == null || !Arrays.equals(cachedChecksum, checksum)) {
             cachedResources = streamInternal().collect(toList());
             cachedChecksum = checksum;
@@ -46,8 +44,8 @@ public final class ChecksumCachedMapProvider implements Resource.Provider {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ChecksumCachedMapProvider)) return false;
+        if (this == o) { return true; }
+        if (!(o instanceof ChecksumCachedMapProvider)) { return false; }
         ChecksumCachedMapProvider readables = (ChecksumCachedMapProvider) o;
         return Objects.equals(resourceProvider, readables.resourceProvider) &&
                 Objects.equals(checksumable, readables.checksumable) &&

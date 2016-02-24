@@ -1,6 +1,5 @@
 package slieb.kute.resources;
 
-
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import slieb.kute.Kute;
@@ -18,7 +17,6 @@ import static org.mockito.Mockito.when;
 import static slieb.kute.Kute.*;
 import static slieb.kute.KuteIO.*;
 
-
 public class ResourcesTest {
 
     @Test
@@ -27,7 +25,6 @@ public class ResourcesTest {
         when(readable.getReader()).thenAnswer(i -> new StringReader("content"));
         assertEquals("content", readResource(readable));
     }
-
 
     @Test
     public void testWriteResource() throws Exception {
@@ -43,7 +40,6 @@ public class ResourcesTest {
         copyResource(readable, writable);
         assertEquals("content", KuteIO.readResource(writable));
     }
-
 
     @Test
     public void testRename() throws Exception {
@@ -71,34 +67,32 @@ public class ResourcesTest {
         assertEquals("cache", readResource(cached));
 
         IntStream.range(0, 10000)
-                .parallel()
-                .forEach(i -> {
-                    try {
-                        when(readable.getReader()).thenAnswer(invocationOnMock -> new StringReader("clear"));
-                        assertEquals("cache", readResource(cached));
-                    } catch (IOException io) {
-                        throw new RuntimeException(io);
-                    }
-                });
+                 .parallel()
+                 .forEach(i -> {
+                     try {
+                         when(readable.getReader()).thenAnswer(invocationOnMock -> new StringReader("clear"));
+                         assertEquals("cache", readResource(cached));
+                     } catch (IOException io) {
+                         throw new RuntimeException(io);
+                     }
+                 });
 
         cached.clear();
         assertEquals("clear", readResource(cached));
-
     }
 
     @Test
     public void testStringResource() throws Exception {
         final Resource.Readable readable = stringResource("/path", "content");
         IntStream.range(0, 10000)
-                .parallel()
-                .forEach(i -> {
-                    try {
-                        assertEquals("content", readResource(readable));
-                        assertEquals("/path", readable.getPath());
-                    } catch (IOException ignored) {
-                        throw new RuntimeException(ignored);
-                    }
-                });
+                 .parallel()
+                 .forEach(i -> {
+                     try {
+                         assertEquals("content", readResource(readable));
+                         assertEquals("/path", readable.getPath());
+                     } catch (IOException ignored) {
+                         throw new RuntimeException(ignored);
+                     }
+                 });
     }
-
 }

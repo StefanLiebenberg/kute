@@ -99,14 +99,14 @@ public class MappedResourceProviderTest implements ProviderTestInterface {
         });
     }
 
-    @Override
-    @Test
-    public void shouldBeSerializable() throws Exception {
-        Resource.Provider loaded = KuteIO.deserialize(KuteIO.serialize(provider), Resource.Provider.class);
-        Assert.assertEquals(provider.toString(), loaded.toString());
-        Assert.assertEquals(provider.hashCode(), loaded.hashCode());
-        Assert.assertEquals(provider, loaded);
-    }
+//    @Override
+//    @Test
+//    public void shouldBeSerializable() throws Exception {
+//        Resource.Provider loaded = KuteIO.deserialize(KuteIO.serialize(provider), Resource.Provider.class);
+//        Assert.assertEquals(provider.toString(), loaded.toString());
+//        Assert.assertEquals(provider.hashCode(), loaded.hashCode());
+//        Assert.assertEquals(provider, loaded);
+//    }
 
 }
 

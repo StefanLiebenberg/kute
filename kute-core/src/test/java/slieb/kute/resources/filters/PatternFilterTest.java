@@ -9,7 +9,6 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import slieb.kute.KutePredicates;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourcePredicate;
 
 import java.util.regex.Pattern;
 
@@ -25,7 +24,7 @@ public class PatternFilterTest {
     private Resource mockResource;
 
 
-    private ResourcePredicate<Resource> patternFilter;
+    private Resource.Predicate patternFilter;
 
     @Before
     public void setUp() throws Exception {

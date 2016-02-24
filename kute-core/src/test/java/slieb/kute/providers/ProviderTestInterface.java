@@ -20,5 +20,5 @@ public interface ProviderTestInterface {
 
     void shouldReturnAllResourcesInStreamInGetByPath() throws Exception;
 
-    void shouldBeSerializable() throws Exception;
+//    void shouldBeSerializable() throws Exception;
 }

@@ -1,11 +1,11 @@
 package slieb.kute;
 
-
 import org.slieb.throwables.FunctionWithThrowable;
 import org.slieb.throwables.SupplierWithThrowable;
 import slieb.kute.api.Resource;
-import slieb.kute.api.ResourcePredicate;
-import slieb.kute.providers.*;
+import slieb.kute.providers.FileResourceProvider;
+import slieb.kute.providers.MappedResourceProvider;
+import slieb.kute.providers.URLArrayResourceProvider;
 import slieb.kute.resources.*;
 
 import java.io.File;
@@ -21,7 +21,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import static slieb.kute.KutePredicates.distinctFilter;
-
 
 public class Kute {
 
@@ -59,7 +58,6 @@ public class Kute {
         return new URLArrayResourceProvider(urls);
     }
 
-
     /**
      * @param classLoader The classloader from which to search for resources. Currently only implementations of
      *                    {@link URLClassLoader} are scanned.
@@ -76,7 +74,6 @@ public class Kute {
         return getProvider(urls);
     }
 
-
     /**
      * Returns a empty resource provider.
      *
@@ -85,7 +82,6 @@ public class Kute {
     public static Resource.Provider emptyProvider() {
         return Stream::empty;
     }
-
 
     /**
      * @param resources A var_arg array of resources that the provider will contain.
@@ -100,7 +96,7 @@ public class Kute {
      * @return A {@link slieb.kute.api.Resource.Provider} that contains all of the specified resources.
      */
     public static Resource.Provider providerOf(Collection<Resource.Readable> resources) {
-        return new CollectionProvider(resources);
+        return resources::stream;
     }
 
     /**
@@ -123,16 +119,13 @@ public class Kute {
         return group(providers::stream);
     }
 
-
     public static Resource.Provider group(Supplier<Stream<Resource.Provider>> providers) {
         return () -> distinctPath(providers.get().flatMap(Resource.Provider::stream));
     }
 
-
     public static Resource.Readable immutableMemoryResource(Resource.Readable readable) throws IOException {
         return Kute.resourceWithBytes(readable.getPath(), KuteIO.readBytes(readable));
     }
-
 
     /**
      * Creates a file resource provider.
@@ -202,10 +195,10 @@ public class Kute {
         return new OutputStreamResource(path, supplier);
     }
 
-    public static Resource.Readable resourceWithBytes(final String path, final byte[] bytes) {
+    public static Resource.Readable resourceWithBytes(final String path,
+                                                      final byte[] bytes) {
         return new BytesArrayResource(path, bytes);
     }
-
 
     /**
      * Create a resource that cache's its response.
@@ -218,12 +211,13 @@ public class Kute {
         return new CachedResource(resource);
     }
 
-
-    public static Resource.Readable stringResource(String path, String content) {
+    public static Resource.Readable stringResource(String path,
+                                                   String content) {
         return resourceWithBytes(path, content.getBytes());
     }
 
-    public static Resource.Readable stringResource(String path, Supplier<String> supplier) {
+    public static Resource.Readable stringResource(String path,
+                                                   Supplier<String> supplier) {
         return new StringSupplierResource(path, supplier);
     }
 
@@ -232,27 +226,26 @@ public class Kute {
         return new URLResource(path, url);
     }
 
-
     public static RenamedPathResource zipEntryResource(String path,
                                                        ZipFile zipFile,
                                                        ZipEntry zipEntry) {
         return renameResource(path, zipEntryResource(zipFile, zipEntry));
     }
 
-
-    public static Resource.Provider mapResources(final Resource.Provider provider, final FunctionWithThrowable<Resource.Readable, Resource.Readable, IOException> function) {
+    public static Resource.Provider mapResources(final Resource.Provider provider,
+                                                 final FunctionWithThrowable<Resource.Readable, Resource.Readable, IOException> function) {
         return new MappedResourceProvider(provider, function);
     }
 
-    public static Resource.Provider filterResources(Resource.Provider provider, ResourcePredicate<Resource> predicate) {
-        return new FilteredResourceProvider(provider, predicate);
+    public static Resource.Provider filterResources(Resource.Provider provider,
+                                                    Resource.Predicate predicate) {
+        return () -> provider.stream().filter(predicate);
     }
 
     public static Resource.Readable zipEntryResource(final ZipFile zipFile,
                                                      ZipEntry zipEntry) {
         return inputStreamResource(zipEntry.getName(), () -> zipFile.getInputStream(zipEntry));
     }
-
 
     public static <R extends Resource> Optional<R> findFirstResource(Stream<R> stream) {
         return stream.filter(KutePredicates.nonNull()).findFirst();
@@ -261,7 +254,6 @@ public class Kute {
     public static <R extends Resource> Optional<R> findFirstOptionalResource(Stream<Optional<R>> optionalStream) {
         return optionalStream.filter(Optional::isPresent).map(Optional::get).findFirst();
     }
-
 
     /**
      * Finds the first resource in stream that matches given path.
@@ -284,7 +276,7 @@ public class Kute {
      * @return A stream without resource duplicates as determined by the passed function.
      */
     public static <R extends Resource, X> Stream<R> distinct(final Stream<R> stream,
-                                                             final FunctionWithThrowable<R, X, IOException> function) {
+                                                             final FunctionWithThrowable<Resource, X, IOException> function) {
         return stream.filter(distinctFilter(function));
     }
 
@@ -297,7 +289,8 @@ public class Kute {
         return distinct(stream, Resource::getPath);
     }
 
-    public static MutableBytesArrayResource mutableResource(String s, String s1) {
+    public static MutableBytesArrayResource mutableResource(String s,
+                                                            String s1) {
         return new MutableBytesArrayResource(s, s1.getBytes());
     }
 

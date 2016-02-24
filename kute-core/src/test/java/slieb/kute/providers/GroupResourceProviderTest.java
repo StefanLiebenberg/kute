@@ -18,12 +18,12 @@ import static slieb.kute.Kute.group;
 
 @RunWith(MockitoJUnitRunner.class)
 public class GroupResourceProviderTest {
-//
-//    public GroupResourceProvider<? extends Resource.Readable> createReadableGroup() {
-//        List<ResourceProvider<? extends Resource.Readable>> list = new ArrayList<>();
-//        list.add(new FileResourceProvider(null));
-//        return new GroupResourceProvider<>(list);
-//    }
+    //
+    //    public GroupResourceProvider<? extends Resource.Readable> createReadableGroup() {
+    //        List<ResourceProvider<? extends Resource.Readable>> list = new ArrayList<>();
+    //        list.add(new FileResourceProvider(null));
+    //        return new GroupResourceProvider<>(list);
+    //    }
 
     @Mock
     Resource.Readable resourceA, resourceB, resourceC, resourceD;
@@ -34,14 +34,12 @@ public class GroupResourceProviderTest {
         Mockito.when(resourceB.getPath()).thenReturn("/resourceB");
         Mockito.when(resourceC.getPath()).thenReturn("/resourceC");
         Mockito.when(resourceD.getPath()).thenReturn("/resourceD");
-
     }
 
-
-//    @Test
-//    public void createGroupedFileResources() throws Exception {
-//        ResourceProvider<? extends Resource.Readable> readable = createReadableGroup();
-//    }
+    //    @Test
+    //    public void createGroupedFileResources() throws Exception {
+    //        ResourceProvider<? extends Resource.Readable> readable = createReadableGroup();
+    //    }
 
     @Test
     public void testGetDistinctResources() throws Exception {
@@ -56,8 +54,7 @@ public class GroupResourceProviderTest {
         assertEquals(Optional.of(resourceC), all.getResourceByName("/resourceC"));
         assertEquals(Optional.of(resourceD), all.getResourceByName("/resourceD"));
 
-        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC, resourceD), all.collect(toSet()));
-
+        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceC, resourceD), all.stream().collect(toSet()));
     }
 
     @Test
@@ -70,8 +67,6 @@ public class GroupResourceProviderTest {
         assertEquals(Optional.of(resourceB), all.getResourceByName("/resourceB"));
         assertEquals(Optional.empty(), all.getResourceByName("/resourceC"));
         assertEquals(Optional.of(resourceD), all.getResourceByName("/resourceD"));
-        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceD), all.collect(toSet()));
+        assertEquals(ImmutableSet.of(resourceA, resourceB, resourceD), all.stream().collect(toSet()));
     }
-
-
 }
