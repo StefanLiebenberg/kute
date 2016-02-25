@@ -84,8 +84,8 @@
 
     <modules>
         <module>kute-core</module>
-        <module>kute-service</module>
         <module>kute-api</module>
+        <module>kute-cache</module>
     </modules>
 
 

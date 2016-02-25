@@ -1,0 +1,70 @@
+package org.slieb.kute.providers;
+
+import org.slieb.kute.api.Resource;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.zip.ZipFile;
+
+import static org.slieb.kute.Kute.distinctPath;
+
+public abstract class AbstractURLResourceProvider implements Resource.Provider {
+
+    private static final String
+            PROTOCOL_ERROR = "Cannot produce ResourceProvider from protocol %s",
+            FILE_ERROR = "Cannot produce ResourceProvider from file %s";
+
+    @Override
+    public Stream<Resource.Readable> stream() {
+        return distinctPath(providerStream().flatMap(Resource.Provider::stream));
+    }
+
+    /**
+     * @return A stream of built resource providers.
+     */
+    public Stream<Resource.Provider> providerStream() {
+        return urlStream().map(this::createResourceFromUrl).filter(Optional::isPresent).map(Optional::get);
+    }
+
+    /**
+     * @return A stream of urls to jar files or directories.
+     */
+    protected abstract Stream<URL> urlStream();
+
+    /**
+     * @param url The url to construct
+     * @return An optional resource provider.
+     */
+    protected Optional<Resource.Provider> createResourceFromUrl(URL url) {
+        String protocol = url.getProtocol();
+        switch (protocol) {
+            case "file":
+                return createResourceFromFile(new File(url.getFile()));
+            default:
+                throw new IllegalStateException(String.format(PROTOCOL_ERROR, protocol));
+        }
+    }
+
+    protected Optional<Resource.Provider> createResourceFromFile(File file) {
+        if (!file.exists()) {
+            return Optional.empty(); // this could be a empty/non-existent directory
+        }
+
+        if (file.getPath().endsWith(".jar")) {
+            try {
+                return Optional.of(new ZipFileResourceProvider(new ZipFile(file)));
+            } catch (IOException io) {
+                throw new RuntimeException(io);
+            }
+        }
+
+        if (file.isDirectory()) {
+            return Optional.of(new DirectoryProvider(file));
+        }
+
+        throw new IllegalStateException(String.format(FILE_ERROR, file.toString()));
+    }
+}
