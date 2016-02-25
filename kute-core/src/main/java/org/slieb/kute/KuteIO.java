@@ -1,40 +1,19 @@
 package org.slieb.kute;
 
 import org.apache.commons.io.IOUtils;
-import org.slieb.throwables.ConsumerWithThrowable;
-import org.slieb.throwables.SupplierWithThrowable;
 import org.slieb.kute.api.Resource;
+import org.slieb.throwables.SupplierWithThrowable;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+
+import static org.slieb.throwables.ConsumerWithThrowable.castConsumerWithThrowable;
 
 public class KuteIO {
 
-    public static void serializeToStream(Serializable serializable,
-                                         OutputStream outputStream) throws IOException {
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
-            objectOutputStream.writeObject(serializable);
-        }
-    }
-    //
-    //    public static Serializable deserializeFromStream(InputStream inputStream) throws IOException, ClassNotFoundException {
-    //        try (ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
-    //            return (Serializable) objectInputStream.readObject();
-    //        }
-    //    }
-    //
-    //    public static <T> T deserialize(byte[] bytes, Class<T> classT) throws IOException, ClassNotFoundException {
-    //        ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-    //        Serializable serializable = deserializeFromStream(bais);
-    //        Preconditions.checkState(classT.isInstance(serializable));
-    //        //noinspection unchecked
-    //        return (T) serializable;
-    //    }
-    //
-    //    public static byte[] serialize(Serializable object) throws IOException {
-    //        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    //        serializeToStream(object, baos);
-    //        return baos.toByteArray();
-    //    }
+    private KuteIO() {}
 
     /**
      * Copy all resource in provider over to some creator.
@@ -42,10 +21,9 @@ public class KuteIO {
      * @param provider The resource provider, or source location.
      * @param creator  The resource creator, or destination location.
      */
-    public void copyProviderToCreator(Resource.Provider provider,
-                                      Resource.Creator creator) {
-        provider.stream().forEach((ConsumerWithThrowable<Resource.Readable, IOException>) resource ->
-                copyResourceWithStreams(resource, creator.create(resource.getPath())));
+    public static void copyProviderToCreator(final Resource.Provider provider,
+                                             final Resource.Creator creator) {
+        provider.stream().forEach(castConsumerWithThrowable((resource) -> copyResourceWithStreams(resource, creator.create(resource.getPath()))));
     }
 
     /**
@@ -156,8 +134,13 @@ public class KuteIO {
         writeStreamToResource(inputSupplier.getWithThrowable(), writable);
     }
 
-    public static void writeStreamToResource(InputStream inputStream,
-                                             Resource.Writable writable) throws IOException {
+    /**
+     * @param inputStream The input stream.
+     * @param writable    The writable resource.
+     * @throws IOException
+     */
+    public static void writeStreamToResource(final InputStream inputStream,
+                                             final Resource.Writable writable) throws IOException {
         writable.useOutputStream(outputStream -> IOUtils.copy(inputStream, outputStream));
     }
 }

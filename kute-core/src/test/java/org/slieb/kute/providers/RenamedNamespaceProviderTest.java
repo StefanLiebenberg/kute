@@ -13,9 +13,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
 import static org.slieb.kute.KuteIO.readResource;
 
-
 public class RenamedNamespaceProviderTest implements ProviderTestInterface {
-
 
     private RenamedNamespaceProvider provider;
     private ConcurrentMapResourceProvider rawProvider;
@@ -28,10 +26,10 @@ public class RenamedNamespaceProviderTest implements ProviderTestInterface {
         createContent("/directory/other.html", "other content");
     }
 
-    private void createContent(String path, String content) throws Exception {
+    private void createContent(String path,
+                               String content) throws Exception {
         KuteIO.writeResource(rawProvider.create(path), content);
     }
-
 
     @Override
     @Test
@@ -93,14 +91,4 @@ public class RenamedNamespaceProviderTest implements ProviderTestInterface {
             Assert.assertEquals(readable, optional.get());
         });
     }
-
-//    @Override
-//    @Test
-//    public void shouldBeSerializable() throws Exception {
-//        Resource.Provider loaded = KuteIO.deserialize(KuteIO.serialize(provider), Resource.Provider.class);
-//        Assert.assertEquals(provider.toString(), loaded.toString());
-//        Assert.assertEquals(provider.hashCode(), loaded.hashCode());
-//        Assert.assertEquals(provider, loaded);
-//    }
-
 }

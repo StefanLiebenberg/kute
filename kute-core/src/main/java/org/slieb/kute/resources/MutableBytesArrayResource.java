@@ -3,13 +3,16 @@ package org.slieb.kute.resources;
 import org.slieb.kute.api.Resource;
 import org.slieb.kute.internal.SyncedOutputStream;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MutableBytesArrayResource implements Resource.Readable, Resource.Writable {
 
     private final String path;
+
     private final AtomicReference<byte[]> bytes;
 
     public MutableBytesArrayResource(final String path,
@@ -29,6 +32,10 @@ public class MutableBytesArrayResource implements Resource.Readable, Resource.Wr
 
     public void setBytes(byte[] bytes) {
         this.bytes.set(bytes);
+    }
+
+    public void setContent(String content) {
+        setBytes(content.getBytes(getCharset()));
     }
 
     @Override

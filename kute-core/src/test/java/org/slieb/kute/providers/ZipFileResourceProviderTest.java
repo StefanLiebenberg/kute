@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 import static org.slieb.kute.KuteIO.readResource;
 import static org.slieb.kute.KuteIO.readResourceWithInputStream;
 
-
 public class ZipFileResourceProviderTest implements ProviderTestInterface {
 
     private ZipFileResourceProvider provider;
@@ -53,9 +52,8 @@ public class ZipFileResourceProviderTest implements ProviderTestInterface {
     @Test
     public void testStream() throws IOException {
         assertEquals(newHashSet("/resource.txt", "/nested/resource.txt", "/nested/other.txt"),
-                provider.stream().map(Resource::getPath).collect(toSet()));
+                     provider.stream().map(Resource::getPath).collect(toSet()));
     }
-
 
     @Override
     @Test
@@ -93,7 +91,7 @@ public class ZipFileResourceProviderTest implements ProviderTestInterface {
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         assertEquals(
                 Sets.newHashSet("resource content for /resource.txt\n", "resource content for /nested/resource.txt\n",
-                        "resource content for /nested/other.txt\n"),
+                                "resource content for /nested/other.txt\n"),
                 provider.stream().map(KuteIO::readResourceUnsafe).collect(toSet()));
     }
 
@@ -113,17 +111,4 @@ public class ZipFileResourceProviderTest implements ProviderTestInterface {
             assertEquals(Optional.of(resource), provider.getResourceByName(resource.getPath()));
         });
     }
-
-//    @Override
-//    @Test
-//    @Ignore
-//    public void shouldBeSerializable() throws Exception {
-//        final ZipFileResourceProvider loaded = KuteIO.deserialize(KuteIO.serialize(provider), provider.getClass());
-//        assertEquals(provider, loaded);
-//        assertEquals(provider.toString(), loaded.toString());
-//        assertEquals(provider.hashCode(), loaded.hashCode());
-//        assertTrue(provider.equals(loaded));
-//    }
-
-
 }

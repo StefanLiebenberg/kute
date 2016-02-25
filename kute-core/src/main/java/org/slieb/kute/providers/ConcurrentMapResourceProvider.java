@@ -1,9 +1,8 @@
 package org.slieb.kute.providers;
 
-import org.slieb.kute.resources.MutableBytesArrayResource;
 import org.slieb.kute.api.Resource;
+import org.slieb.kute.resources.MutableBytesArrayResource;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -45,19 +44,6 @@ public class ConcurrentMapResourceProvider implements Resource.Provider, Resourc
 
     public void clear() {
         concurrentHashMap.clear();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (!(o instanceof ConcurrentMapResourceProvider)) { return false; }
-        ConcurrentMapResourceProvider readables = (ConcurrentMapResourceProvider) o;
-        return Objects.equals(concurrentHashMap, readables.concurrentHashMap);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(concurrentHashMap);
     }
 
     @Override

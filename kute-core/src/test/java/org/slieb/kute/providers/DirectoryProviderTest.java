@@ -1,6 +1,5 @@
 package org.slieb.kute.providers;
 
-
 import com.google.common.collect.Sets;
 import com.google.common.io.Files;
 import org.apache.commons.io.IOUtils;
@@ -34,8 +33,8 @@ public class DirectoryProviderTest implements ProviderTestInterface {
         createContent("other content", "directory/other.html");
     }
 
-
-    private void createContent(String content, String path) throws IOException {
+    private void createContent(String content,
+                               String path) throws IOException {
         File resourceFile = new File(tempDirectory, path);
         resourceFile.deleteOnExit();
         Assert.assertTrue(resourceFile.getParentFile().exists() || resourceFile.getParentFile().mkdirs());
@@ -102,13 +101,4 @@ public class DirectoryProviderTest implements ProviderTestInterface {
             Assert.assertEquals(readable, optional.get());
         });
     }
-
-//    @Override
-//    @Test
-//    public void shouldBeSerializable() throws Exception {
-//        Resource.Provider loaded = KuteIO.deserialize(KuteIO.serialize(provider), Resource.Provider.class);
-//        Assert.assertEquals(provider.toString(), loaded.toString());
-//        Assert.assertEquals(provider.hashCode(), loaded.hashCode());
-//        Assert.assertEquals(provider, loaded);
-//    }
 }

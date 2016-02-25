@@ -4,6 +4,7 @@ import org.slieb.throwables.ConsumerWithThrowable;
 import org.slieb.throwables.PredicateWithThrowable;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Comparator;
@@ -44,11 +45,18 @@ public interface Resource extends Comparable<Resource> {
     interface Readable extends Resource, Checksumable {
 
         /**
+         * @return The charset used for the reader of this resource.
+         */
+        default Charset getCharset() {
+            return Charset.defaultCharset();
+        }
+
+        /**
          * @return A reader that will give you the contents of resource.
          * @throws IOException an IO exception.
          */
         default Reader getReader() throws IOException {
-            return new InputStreamReader(getInputStream());
+            return new InputStreamReader(getInputStream(), getCharset());
         }
 
         /**

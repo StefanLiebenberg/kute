@@ -3,12 +3,11 @@ package org.slieb.kute.providers;
 import org.slieb.kute.Kute;
 import org.slieb.kute.api.Resource;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public final class RenamedNamespaceProvider implements Resource.Provider, Serializable {
+public final class RenamedNamespaceProvider implements Resource.Provider {
 
     private final Resource.Provider resourceProvider;
 

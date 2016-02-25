@@ -36,7 +36,8 @@ public class ConcurrentMapResourceProviderTest implements ProviderTestInterface 
         Assert.assertFalse(provider.getResourceByName("/directory").isPresent());
     }
 
-    private void createContent(String path, String content) throws IOException {
+    private void createContent(String path,
+                               String content) throws IOException {
         KuteIO.writeResource(provider.create(path), content);
     }
 
@@ -54,9 +55,8 @@ public class ConcurrentMapResourceProviderTest implements ProviderTestInterface 
         Assert.assertEquals(2, provider.stream().count());
         Assert.assertEquals(
                 Sets.newHashSet(provider.getResourceByName("/directory/index.html").get(),
-                        provider.getResourceByName("/directory/other.html").get())
+                                provider.getResourceByName("/directory/other.html").get())
                 , provider.stream().collect(toSet()));
-
     }
 
     @Override
@@ -96,13 +96,4 @@ public class ConcurrentMapResourceProviderTest implements ProviderTestInterface 
         Assert.assertEquals(0, provider.stream().count());
         Assert.assertFalse(provider.getResourceByName("/directory/index.html").isPresent());
     }
-
-//    @Override
-//    @Test
-//    public void shouldBeSerializable() throws Exception {
-//        Resource.Provider loaded = KuteIO.deserialize(KuteIO.serialize(provider), Resource.Provider.class);
-//        Assert.assertEquals(provider.toString(), loaded.toString());
-//        Assert.assertEquals(provider.hashCode(), loaded.hashCode());
-//        Assert.assertEquals(provider, loaded);
-//    }
 }

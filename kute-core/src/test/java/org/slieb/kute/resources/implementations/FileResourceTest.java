@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.slieb.kute.Kute;
 import org.slieb.kute.resources.FileResource;
 
 import java.io.*;
@@ -13,7 +14,6 @@ import java.util.List;
 import static org.junit.Assert.*;
 import static org.slieb.kute.KuteIO.readResource;
 import static org.slieb.kute.KuteIO.writeResource;
-
 
 public class FileResourceTest {
 
@@ -25,7 +25,7 @@ public class FileResourceTest {
     public void setUp() throws Exception {
         temporaryFile = Files.createTempFile("temp", ".txt").toFile();
         temporaryFile.deleteOnExit();
-        fileResource = new FileResource(temporaryFile);
+        fileResource = Kute.fileResource(temporaryFile);
     }
 
     @Test
@@ -45,8 +45,8 @@ public class FileResourceTest {
 
     @Test
     public void testEquals() throws Exception {
-        assertEquals(fileResource, new FileResource(temporaryFile));
-        assertNotEquals(fileResource, new FileResource("/example.jpg", temporaryFile));
+        assertEquals(fileResource, Kute.fileResource(temporaryFile));
+        assertNotEquals(fileResource, Kute.fileResource("/example.jpg", temporaryFile));
     }
 
     @Test
@@ -76,6 +76,4 @@ public class FileResourceTest {
             assertEquals(lines, IOUtils.readLines(inputStream));
         }
     }
-
-
 }

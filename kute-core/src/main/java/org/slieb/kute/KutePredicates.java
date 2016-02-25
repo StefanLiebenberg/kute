@@ -145,7 +145,7 @@ public class KutePredicates {
         final Iterator<Resource.Readable> iteratorLeft = providerLeft.stream().sorted().iterator();
         final Iterator<Resource.Readable> iteratorRight = providerRight.stream().sorted().iterator();
 
-        while (iteratorLeft.hasNext() || iteratorRight.hasNext()) {
+        while (iteratorLeft.hasNext() && iteratorRight.hasNext()) {
             if (!resourceEquals(iteratorLeft.next(), iteratorRight.next())) {
                 return false;
             }

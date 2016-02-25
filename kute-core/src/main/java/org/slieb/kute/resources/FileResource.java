@@ -3,7 +3,7 @@ package org.slieb.kute.resources;
 import org.slieb.kute.api.Resource;
 
 import java.io.*;
-import java.util.Objects;
+import java.nio.charset.Charset;
 
 /**
  * <p>A Resource Object to represent file objects. The FileResource is readable and writable and supports getInputStream
@@ -33,9 +33,7 @@ import java.util.Objects;
  * }
  * </code></pre>
  */
-public class FileResource implements Resource.Readable, Resource.Writable {
-
-    private final String path;
+public class FileResource extends AbstractResource implements Resource.Readable, Resource.Writable {
 
     private final File file;
 
@@ -46,18 +44,18 @@ public class FileResource implements Resource.Readable, Resource.Writable {
      * @param path The path under which this resource will be available as.
      */
     public FileResource(final String path,
-                        final File file) {
+                        final File file,
+                        final Charset charset) {
+        super(path, charset);
         this.file = file;
-        this.path = path;
     }
 
     /**
-     * This constructor extracts the resource path from file.getPath().
-     *
-     * @param file The file resource to use.
+     * @param path The resource path.
      */
-    public FileResource(File file) {
-        this(file.getPath(), file);
+    public FileResource(final String path,
+                        final File file) {
+        this(path, file, Charset.defaultCharset());
     }
 
     /**
@@ -65,15 +63,6 @@ public class FileResource implements Resource.Readable, Resource.Writable {
      */
     public File getFile() {
         return file;
-    }
-
-    /**
-     * @return a FileReader that will read the file object of this resource.
-     * @throws IOException when there is a error creating the reader.
-     */
-    @Override
-    public FileReader getReader() throws IOException {
-        return new FileReader(this.file);
     }
 
     /**
@@ -111,29 +100,27 @@ public class FileResource implements Resource.Readable, Resource.Writable {
     }
 
     @Override
-    public String getPath() {
-        return path;
+    public boolean equals(final Object o) {
+        if (this == o) { return true; }
+        if (!(o instanceof FileResource)) { return false; }
+        if (!super.equals(o)) { return false; }
+
+        final FileResource that = (FileResource) o;
+
+        return file != null ? file.equals(that.file) : that.file == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (file != null ? file.hashCode() : 0);
+        return result;
     }
 
     @Override
     public String toString() {
         return "FileResource{" +
-                "path='" + path + '\'' +
-                ", file=" + file +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (!(o instanceof FileResource)) { return false; }
-        FileResource that = (FileResource) o;
-        return Objects.equals(path, that.path) &&
-                Objects.equals(file, that.file);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(path, file);
+                "file=" + file +
+                "} " + super.toString();
     }
 }

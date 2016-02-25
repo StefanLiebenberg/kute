@@ -1,12 +1,15 @@
 package org.slieb.kute;
 
-import org.slieb.throwables.FunctionWithThrowable;
-import org.slieb.throwables.SupplierWithThrowable;
 import org.slieb.kute.api.Resource;
 import org.slieb.kute.providers.DirectoryProvider;
 import org.slieb.kute.providers.MappedResourceProvider;
 import org.slieb.kute.providers.URLArrayResourceProvider;
-import org.slieb.kute.resources.*;
+import org.slieb.kute.resources.BytesArrayResource;
+import org.slieb.kute.resources.ContentSupplierResource;
+import org.slieb.kute.resources.FileResource;
+import org.slieb.kute.resources.RenamedPathResource;
+import org.slieb.throwables.FunctionWithThrowable;
+import org.slieb.throwables.SupplierWithThrowable;
 
 import java.io.File;
 import java.io.IOException;
@@ -141,7 +144,7 @@ public class Kute {
      * @return A file resource that will provide the file contents when needed.
      */
     public static FileResource fileResource(File file) {
-        return new FileResource(file);
+        return fileResource(file.getPath(), file);
     }
 
     /**
@@ -173,9 +176,9 @@ public class Kute {
         return new BytesArrayResource(path, bytes);
     }
 
-    public static Resource.Readable stringResource(String path,
-                                                   String content) {
-        return resourceWithBytes(path, content.getBytes());
+    public static Resource.Readable stringResource(final String path,
+                                                   final String content) {
+        return new ContentSupplierResource(path, () -> content);
     }
 
     public static Resource.Readable stringResource(String path,

@@ -10,7 +10,6 @@ import org.slieb.kute.api.Resource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
@@ -108,19 +107,9 @@ public class ZipStreamResourceProviderTest implements ProviderTestInterface {
             assertEquals(Optional.of(resource), provider.getResourceByName(resource.getPath()));
         });
     }
-
-//    @Override
-//    @Test
-//    public void shouldBeSerializable() throws Exception {
-//        final ZipStreamResourceProvider loaded = KuteIO.deserialize(KuteIO.serialize(provider), provider.getClass());
-//        assertEquals(provider, loaded);
-//        assertEquals(provider.toString(), loaded.toString());
-//        assertEquals(provider.hashCode(), loaded.hashCode());
-//        assertTrue(provider.equals(loaded));
-//    }
 }
 
-class ZipSupplier implements SupplierWithThrowable<ZipInputStream, IOException>, Serializable {
+class ZipSupplier implements SupplierWithThrowable<ZipInputStream, IOException> {
 
     private final File file;
 

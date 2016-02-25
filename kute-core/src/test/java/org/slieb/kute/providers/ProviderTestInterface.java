@@ -1,6 +1,5 @@
 package org.slieb.kute.providers;
 
-
 @SuppressWarnings("unused")
 public interface ProviderTestInterface {
 
@@ -19,6 +18,4 @@ public interface ProviderTestInterface {
     void shouldReturnResourceWithCorrectContentInGetByPath() throws Exception;
 
     void shouldReturnAllResourcesInStreamInGetByPath() throws Exception;
-
-//    void shouldBeSerializable() throws Exception;
 }

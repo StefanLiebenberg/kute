@@ -1,19 +1,33 @@
 package org.slieb.kute.resources;
 
-import org.slieb.kute.api.Resource;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 
-public class URLResource implements Resource.Readable {
+public class URLResource extends AbstractResource {
 
-    private final String path;
     private final URL url;
 
+    /**
+     * @param path The resource path.
+     * @param url  The resource url.
+     */
     public URLResource(final String path,
                        final URL url) {
-        this.path = path;
+        super(path);
+        this.url = url;
+    }
+
+    /**
+     * @param path    The resource path.
+     * @param url     The resource url.
+     * @param charset The resource charset.
+     */
+    public URLResource(final String path,
+                       final URL url,
+                       final Charset charset) {
+        super(path, charset);
         this.url = url;
     }
 
@@ -23,25 +37,27 @@ public class URLResource implements Resource.Readable {
     }
 
     @Override
-    public String getPath() {
-        return path;
-    }
-
-    @Override
     public boolean equals(final Object o) {
         if (this == o) { return true; }
         if (!(o instanceof URLResource)) { return false; }
+        if (!super.equals(o)) { return false; }
 
         final URLResource that = (URLResource) o;
 
-        if (path != null ? !path.equals(that.path) : that.path != null) { return false; }
         return url != null ? url.equals(that.url) : that.url == null;
     }
 
     @Override
     public int hashCode() {
-        int result = path != null ? path.hashCode() : 0;
+        int result = super.hashCode();
         result = 31 * result + (url != null ? url.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "URLResource{" +
+                "url=" + url +
+                "} " + super.toString();
     }
 }

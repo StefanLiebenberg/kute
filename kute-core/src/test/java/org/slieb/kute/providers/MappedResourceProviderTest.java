@@ -12,7 +12,6 @@ import org.slieb.throwables.FunctionWithThrowable;
 import org.slieb.kute.api.Resource;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toSet;
@@ -104,7 +103,7 @@ public class MappedResourceProviderTest implements ProviderTestInterface {
     }
 }
 
-class ChecksumMap implements FunctionWithThrowable<Resource.Readable, Resource.Readable, IOException>, Serializable {
+class ChecksumMap implements FunctionWithThrowable<Resource.Readable, Resource.Readable, IOException> {
 
     @Override
     public Resource.Readable applyWithThrowable(Resource.Readable readable) {

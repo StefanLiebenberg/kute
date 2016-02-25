@@ -1,15 +1,13 @@
 package org.slieb.kute.resources;
 
-import org.slieb.throwables.SupplierWithThrowable;
 import org.slieb.kute.api.Resource;
+import org.slieb.throwables.SupplierWithThrowable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.Objects;
 
-
-public class InputStreamResource implements Resource.Readable, Serializable {
+public class InputStreamResource implements Resource.Readable {
 
     private final String path;
     private final SupplierWithThrowable<InputStream, IOException> supplier;
@@ -19,7 +17,6 @@ public class InputStreamResource implements Resource.Readable, Serializable {
         this.path = path;
         this.supplier = resourceSupplierWithIO;
     }
-
 
     @Override
     public InputStream getInputStream() throws IOException {
@@ -33,8 +30,8 @@ public class InputStreamResource implements Resource.Readable, Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof InputStreamResource)) return false;
+        if (this == o) { return true; }
+        if (!(o instanceof InputStreamResource)) { return false; }
         InputStreamResource that = (InputStreamResource) o;
         return Objects.equals(path, that.path) &&
                 Objects.equals(supplier, that.supplier);
@@ -52,6 +49,5 @@ public class InputStreamResource implements Resource.Readable, Serializable {
                 ", supplier=" + supplier +
                 '}';
     }
-
 }
 
