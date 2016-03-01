@@ -7,7 +7,6 @@ import org.slieb.kute.KuteFactory;
 import org.slieb.kute.KuteIO;
 import org.slieb.kute.api.Resource;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.util.stream.IntStream;
@@ -15,8 +14,10 @@ import java.util.stream.IntStream;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.slieb.kute.Kute.*;
+import static org.slieb.kute.Kute.renameResource;
+import static org.slieb.kute.Kute.stringResource;
 import static org.slieb.kute.KuteIO.*;
+import static org.slieb.throwables.IntConsumerWithThrowable.castIntConsumerWithThrowable;
 
 public class ResourcesTest {
 
@@ -62,15 +63,11 @@ public class ResourcesTest {
     @Test
     public void testStringResource() throws Exception {
         final Resource.Readable readable = stringResource("/path", "content");
-        IntStream.range(0, 10000)
+        IntStream.range(0, 100000)
                  .parallel()
-                 .forEach(i -> {
-                     try {
-                         assertEquals("content", readResource(readable));
-                         assertEquals("/path", readable.getPath());
-                     } catch (IOException ignored) {
-                         throw new RuntimeException(ignored);
-                     }
-                 });
+                 .forEach(castIntConsumerWithThrowable(i -> {
+                     assertEquals("content", readResource(readable));
+                     assertEquals("/path", readable.getPath());
+                 }));
     }
 }

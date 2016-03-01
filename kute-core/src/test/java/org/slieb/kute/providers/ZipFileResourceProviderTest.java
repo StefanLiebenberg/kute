@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slieb.kute.api.Resource;
 import org.slieb.kute.KuteIO;
+import org.slieb.kute.api.Resource;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,6 +18,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
 import static org.slieb.kute.KuteIO.readResource;
 import static org.slieb.kute.KuteIO.readResourceWithInputStream;
+import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
 
 public class ZipFileResourceProviderTest implements ProviderTestInterface {
 
@@ -92,7 +93,7 @@ public class ZipFileResourceProviderTest implements ProviderTestInterface {
         assertEquals(
                 Sets.newHashSet("resource content for /resource.txt\n", "resource content for /nested/resource.txt\n",
                                 "resource content for /nested/other.txt\n"),
-                provider.stream().map(KuteIO::readResourceUnsafe).collect(toSet()));
+                provider.stream().map(castFunctionWithThrowable(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override

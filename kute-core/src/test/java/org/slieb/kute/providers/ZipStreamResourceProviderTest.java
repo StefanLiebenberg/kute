@@ -1,11 +1,11 @@
 package org.slieb.kute.providers;
 
-import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
-import org.slieb.throwables.SupplierWithThrowable;
 import org.slieb.kute.KuteIO;
 import org.slieb.kute.api.Resource;
+import org.slieb.throwables.FunctionWithThrowable;
+import org.slieb.throwables.SupplierWithThrowable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -87,9 +87,9 @@ public class ZipStreamResourceProviderTest implements ProviderTestInterface {
     @Test
     public void shouldReturnResourceWithCorrectContentInStream() throws Exception {
         assertEquals(
-                Sets.newHashSet("resource content for /resource.txt\n", "resource content for /nested/resource.txt\n",
-                                "resource content for /nested/other.txt\n"),
-                provider.stream().map(KuteIO::readResourceUnsafe).collect(toSet()));
+                newHashSet("resource content for /resource.txt\n", "resource content for /nested/resource.txt\n",
+                           "resource content for /nested/other.txt\n"),
+                provider.stream().map(FunctionWithThrowable.castFunctionWithThrowable(KuteIO::readResource)).collect(toSet()));
     }
 
     @Override

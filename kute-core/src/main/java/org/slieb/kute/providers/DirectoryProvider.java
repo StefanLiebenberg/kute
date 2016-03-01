@@ -1,8 +1,9 @@
 package org.slieb.kute.providers;
 
 import com.google.common.base.Preconditions;
-import org.slieb.kute.resources.FileResource;
 import org.slieb.kute.api.Resource;
+import org.slieb.kute.resources.FileResource;
+import org.slieb.throwables.FunctionWithThrowable;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,51 +19,30 @@ public final class DirectoryProvider implements Resource.Provider, Resource.Crea
 
     public final File directory;
 
-    public DirectoryProvider(File directory) {
+    public DirectoryProvider(final File directory) {
         this.directory = directory;
-    }
-
-    private File getFileForPath(String path) {
-        return new File(directory, path);
-    }
-
-    private boolean canProvideDirectory() {
-        return directory.exists() && directory.canRead();
-    }
-
-    private Stream<Resource.Readable> streamWithIO() throws IOException {
-        if (canProvideDirectory()) {
-            return Files.walk(directory.toPath())
-                        .map(Path::toFile)
-                        .filter(this::shouldProvideFile)
-                        .map(this::createFileResource);
-        } else {
-            return Stream.empty();
-        }
-    }
-
-    @Override
-    public Stream<Resource.Readable> stream() {
-        try {
-            return distinctPath(streamWithIO());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public Optional<Resource.Readable> getResourceByName(String path) {
-        if (canProvideDirectory()) {
-            return Optional.of(getFileForPath(path))
-                           .filter(this::shouldProvideFile)
-                           .map(file -> fileResource(path, file));
-        } else {
-            return Optional.empty();
-        }
     }
 
     private boolean shouldProvideFile(File file) {
         return file != null && file.exists() && file.isFile();
+    }
+
+    private Stream<Resource.Readable> getStream(final FunctionWithThrowable<File, Stream<File>, IOException> directoryFunction) {
+        return distinctPath(Stream.of(directory)
+                                  .filter((dir) -> dir.exists() && dir.canRead())
+                                  .flatMap(directoryFunction)
+                                  .filter(this::shouldProvideFile)
+                                  .map(this::createFileResource));
+    }
+
+    @Override
+    public Stream<Resource.Readable> stream() {
+        return getStream(dir -> Files.walk(dir.toPath()).map(Path::toFile));
+    }
+
+    @Override
+    public Optional<Resource.Readable> getResourceByName(String path) {
+        return getStream(dir -> Stream.of(new File(dir, path))).findFirst();
     }
 
     private FileResource createFileResource(File file) {
@@ -74,6 +54,6 @@ public final class DirectoryProvider implements Resource.Provider, Resource.Crea
 
     @Override
     public Resource.Writable create(String path) {
-        return createFileResource(getFileForPath(path));
+        return createFileResource(new File(directory, path));
     }
 }

@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 
 import static org.slieb.throwables.ConsumerWithThrowable.castConsumerWithThrowable;
+import static org.slieb.throwables.FunctionWithThrowable.castFunctionWithThrowable;
 
 public class KuteIO {
 
@@ -103,18 +104,25 @@ public class KuteIO {
         return readResource(resource).getBytes();
     }
 
+    /**
+     * @param resource A readable resource.
+     * @return The string content of resource.
+     * @throws IOException
+     */
     public static String readResource(Resource.Readable resource) throws IOException {
         try (final Reader reader = resource.getReader()) {
             return IOUtils.toString(reader);
         }
     }
 
+    /**
+     * @param readable The readable resource.
+     * @return The resource content.
+     * @deprecated The method will be removed.
+     */
+    @Deprecated
     public static String readResourceUnsafe(Resource.Readable readable) {
-        try {
-            return KuteIO.readResource(readable);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return castFunctionWithThrowable(KuteIO::readResource).apply(readable);
     }
 
     public static void writeResourceToStream(Resource.Readable readable,

@@ -50,7 +50,7 @@
         <dep.commons-codec>1.10</dep.commons-codec>
         <dep.sparkWrapper>1.1</dep.sparkWrapper>
         <dep.jsoup>1.8.3</dep.jsoup>
-        <dep.throwable-interfaces>1.7</dep.throwable-interfaces>
+        <dep.throwable-interfaces>1.8</dep.throwable-interfaces>
     </properties>
 
     <prerequisites>
